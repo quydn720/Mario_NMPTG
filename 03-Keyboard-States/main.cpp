@@ -70,6 +70,8 @@ void CSampleKeyHander::KeyState(BYTE* states)
 		mario->SetState(MARIO_STATE_WALKING_RIGHT);
 	else if (game->IsKeyDown(DIK_LEFT))
 		mario->SetState(MARIO_STATE_WALKING_LEFT);
+	else if (game->IsKeyDown(DIK_DOWN))
+		mario->SetState(MARIO_STATE_SIT);
 	else mario->SetState(MARIO_STATE_IDLE);
 }
 
@@ -114,10 +116,15 @@ void LoadResources()
 
 	// Mario tail attack: idle-right -> up-tail-right -> front -> up-tail-left -> back -> idle-right
 	sprites->Add(10014, 242, 794, 264, 822, texMario); // idle right
-	sprites->Add(10015, 331, 634, 355, 662, texMario); // up-tail-right // NOTE: In real game, Mario doesn't raise his hands like this sprite
+	sprites->Add(10015, 331, 634, 355, 662, texMario); // up-tail-right 
+	// TODO: NOTE: In real game, Mario doesn't raise his hands like this sprite
 	sprites->Add(10016, 215, 633, 231, 662, texMario); // front
 	sprites->Add(10017, 91, 634, 115, 662, texMario); // up-tail-left
 	sprites->Add(10018, 215, 674, 231, 702, texMario); // back
+
+	// Mario tail jumping
+	sprites->Add(10019, 392, 754, 415, 781, texMario); // jumping
+	sprites->Add(10020, 302, 874, 324, 902, texMario); // falling
 
 
 	LPANIMATION ani;
@@ -134,9 +141,17 @@ void LoadResources()
 	ani->Add(10017);
 	animations->Add(405, ani);
 
-	ani = new CAnimation(100);
+	ani = new CAnimation(100); // attack 4
 	ani->Add(10018);
 	animations->Add(406, ani);
+
+	ani = new CAnimation(100); // jumping
+	ani->Add(10019);
+	animations->Add(407, ani);
+
+	ani = new CAnimation(100); // falling
+	ani->Add(10020);
+	animations->Add(408, ani);
 
 	//------------------------
 	ani = new CAnimation(100);
@@ -170,6 +185,9 @@ void LoadResources()
 	CMario::AddAnimation(404);		// tail attack 2
 	CMario::AddAnimation(405);		// tail attack 3
 	CMario::AddAnimation(406);		// tail attack 4
+
+	CMario::AddAnimation(407);		// jumping
+	CMario::AddAnimation(408);		// falling
 
 
 	mario->SetPosition(0.0f, 100.0f);

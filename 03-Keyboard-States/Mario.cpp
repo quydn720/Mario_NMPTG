@@ -4,17 +4,23 @@
 void CMario::Update(DWORD dt)
 {
 	CGameObject::Update(dt);
-	DebugOut(L"time_attack = %d\n", time_attack);
+
+	// This example, y == 100 means Mario is on the ground.
 	// simple fall down
 	vy += MARIO_GRAVITY;
-	if (y > 100)
+
+	//DebugOut(L"vy: %f\n", vy);
+	if (y >= 100)
 	{
+		if (isSitting) {
+			vy = 0;
+		}
 		vy = 0; y = 100.0f;
 	}
-	else if (isAttack) {
+	else if (isAttacking) {
 		if (time_attack >= 4 * MARIO_ATTACK_EACH_ANI_TIME) {
 			time_attack = 0;
-			isAttack = false;
+			isAttacking = false;
 		}
 		else {
 			time_attack++;
@@ -29,10 +35,18 @@ void CMario::Update(DWORD dt)
 void CMario::Render()
 {
 	int ani;
-	if (vx == 0)
-	{
+
+	if (vy > 0) {
+		isJumping = true;
+		ani = MARIO_ANI_JUMPING;
+	}
+	else if (vy < 0) {
+		isFalling = true;
+		ani = MARIO_ANI_FALLING;
+	}
+	else if (vx == 0) { // Idle
 		if (nx > 0) {
-			if (isAttack) {
+			if (isAttacking) {
 				if (time_attack <= MARIO_ATTACK_EACH_ANI_TIME)
 					ani = MARIO_ANI_TAIL_ATTACK_1;
 				else if (time_attack > MARIO_ATTACK_EACH_ANI_TIME && time_attack <= 2 * MARIO_ATTACK_EACH_ANI_TIME)
@@ -67,12 +81,12 @@ void CMario::SetState(int state)
 		nx = -1;
 		break;
 	case MARIO_STATE_ATTACK:
-		isAttack = true;
+		isAttacking = true;
 		break;
 	case MARIO_STATE_JUMP:
-		if (y == 100)
-			vy = -MARIO_JUMP_SPEED_Y;
-
+		isJumping = true;
+		vy = -MARIO_JUMP_SPEED_Y;
+		vy = -0.8f;
 	case MARIO_STATE_IDLE:
 		vx = 0;
 		break;

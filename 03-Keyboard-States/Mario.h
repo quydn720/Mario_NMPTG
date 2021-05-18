@@ -9,7 +9,12 @@
 #define MARIO_STATE_WALKING_RIGHT	100
 #define MARIO_STATE_WALKING_LEFT	200
 #define MARIO_STATE_JUMP			300
+
 #define MARIO_STATE_ATTACK			400
+#define MARIO_STATE_JUMP			500
+#define MARIO_STATE_SIT				600
+
+#define MARIO_TAIL_IDLE				700
 
 #define MARIO_ANI_IDLE_RIGHT		0
 #define MARIO_ANI_IDLE_LEFT			1
@@ -21,12 +26,20 @@
 #define MARIO_ANI_TAIL_ATTACK_3		6
 #define MARIO_ANI_TAIL_ATTACK_4		7
 
-#define MARIO_ATTACK_EACH_ANI_TIME	50
+#define MARIO_ANI_JUMPING			8
+#define MARIO_ANI_FALLING			9
+#define MARIO_ANI_SITTING			10
+
+#define MARIO_TAIL_ANI_IDLE_RIGHT	10
+
+#define MARIO_ATTACK_EACH_ANI_TIME	10
 
 class CMario : public CGameObject
 {
 	CAnimation* animation;
-	bool isAttack, endAttack;
+	bool isAttacking;
+	bool isJumping, isFalling;
+	bool isSitting;
 	int time_attack = 0;
 public: 
 

@@ -43,9 +43,10 @@ class CMario : public CGameObject
 	bool isAttacking = false;
 	int time_attack = 0;
 
-	bool isJumping = false;
-	bool isFalling = false;
-	bool isSitting = false;
+	bool isOnGround; // Mario can only jump if he's on ground.
+	bool isJumping;
+	bool isFalling;
+	bool isSitting;
 public: 
 	void Debug();
 	void Update(DWORD dt);

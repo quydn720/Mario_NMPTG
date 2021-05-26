@@ -12,6 +12,8 @@ void CMario::Update(DWORD dt)
 	//DebugOut(L"y: %f\n", y);
 	if (y >= 100)
 	{
+		isOnGround = true;
+		isJumping = false;
 		if (isSitting) {
 			vy = 0;
 			y = 110;
@@ -19,8 +21,12 @@ void CMario::Update(DWORD dt)
 		else {
 			vy = 0;
 			y = 100.0f;
-			// la khuc nay` ne` sao no k = 100 ta
 		}
+	}
+	else {
+		isJumping = true;
+		isOnGround = false;
+		isSitting = false;
 	}
 
 	if (isAttacking) {
@@ -32,8 +38,6 @@ void CMario::Update(DWORD dt)
 			time_attack++;
 		}
 	}
-
-
 
 	if (this->GetState() == MARIO_STATE_SIT) {
 
@@ -92,7 +96,7 @@ void CMario::Render()
 	else if (vx > 0)
 		ani = MARIO_ANI_WALKING_RIGHT;
 	else ani = MARIO_ANI_WALKING_LEFT;
-	if (this->GetState() == MARIO_STATE_SIT) {
+	if (this->GetState() == MARIO_STATE_SIT && this->isSitting) {
 		ani = MARIO_ANI_SITTING;
 	}
 
@@ -105,6 +109,12 @@ void CMario::SetState(int state)
 
 	this->state = state;// :))
 	switch (state) {
+	case MARIO_STATE_JUMP:
+		if (isOnGround && !isSitting) {
+			isJumping = true;
+			vy = -MARIO_JUMP_SPEED_Y;
+			vy = -0.2f;
+		}
 	case MARIO_STATE_WALKING_RIGHT:
 		vx = MARIO_WALKING_SPEED;
 		isSitting = false;
@@ -119,12 +129,10 @@ void CMario::SetState(int state)
 		isAttacking = true;
 		break;
 	case MARIO_STATE_SIT:
-		isSitting = true;
+		if (!isJumping) {
+			isSitting = true;
+		}
 		break;
-	case MARIO_STATE_JUMP:
-		isJumping = true;
-		vy = -MARIO_JUMP_SPEED_Y;
-		vy = -0.2f;
 	case MARIO_STATE_IDLE:
 		vx = 0;
 		isSitting = false;
@@ -147,7 +155,7 @@ void CMario::Debug()
 	case MARIO_STATE_SIT:
 		DebugOut(L"State = SIT\t"); break;
 	}
-	
+
 	if (isSitting == true)
 		DebugOut(L"isSitting == true\t");
 	else

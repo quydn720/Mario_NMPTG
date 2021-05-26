@@ -61,7 +61,15 @@ void CSampleKeyHander::OnKeyDown(int KeyCode)
 
 void CSampleKeyHander::OnKeyUp(int KeyCode)
 {
-	DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
+	
+	switch (KeyCode)
+	{
+	case DIK_DOWN:
+		DebugOut(L"Up Down\n");
+		break;
+	default:
+		break;
+	}
 }
 
 void CSampleKeyHander::KeyState(BYTE* states)
@@ -126,6 +134,11 @@ void LoadResources()
 	sprites->Add(10019, 392, 754, 415, 781, texMario); // jumping
 	sprites->Add(10020, 302, 874, 324, 902, texMario); // falling
 
+	// sitting
+	sprites->Add(10021, 422, 719, 444, 737, texMario);
+	//idle
+	sprites->Add(10022, 243, 634, 264, 661, texMario);
+
 
 	LPANIMATION ani;
 
@@ -153,6 +166,13 @@ void LoadResources()
 	ani->Add(10020);
 	animations->Add(408, ani);
 
+	ani = new CAnimation(100);	//sitting
+	ani->Add(10021);
+	animations->Add(409, ani);
+
+	ani = new CAnimation(100); // idle
+	ani->Add(10022);
+	animations->Add(410, ani);
 	//------------------------
 	ani = new CAnimation(100);
 	ani->Add(10001);
@@ -188,6 +208,10 @@ void LoadResources()
 
 	CMario::AddAnimation(407);		// jumping
 	CMario::AddAnimation(408);		// falling
+
+	CMario::AddAnimation(409);		// sitting
+	CMario::AddAnimation(410);		// idle
+
 
 
 	mario->SetPosition(0.0f, 100.0f);

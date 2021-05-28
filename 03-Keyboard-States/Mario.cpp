@@ -61,7 +61,6 @@ void CMario::Update(DWORD dt)
 	// simple screen edge collision!!!
 	if (vx > 0 && x > 290) x = 290;
 	if (vx < 0 && x < 0) x = 0;
-	DebugOut(L"y: %f\n", y);
 	Debug();
 }
 
@@ -115,6 +114,7 @@ void CMario::SetState(int state)
 			vy = -MARIO_JUMP_SPEED_Y;
 			vy = -0.2f;
 		}
+		break; 
 	case MARIO_STATE_WALKING_RIGHT:
 		vx = MARIO_WALKING_SPEED;
 		isSitting = false;
@@ -166,7 +166,7 @@ void CMario::Debug()
 		DebugOut(L"isJumping == false\t");
 
 
-	DebugOut(L"\nMario vy = %f\n", vy);
+	DebugOut(L"\nMario y = %f\n",y);
 	//DebugOut(L"ani = %i", ani);
 	DebugOut(L"\n");
 

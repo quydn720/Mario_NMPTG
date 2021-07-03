@@ -73,6 +73,14 @@ void CGame::Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top
 	r.bottom = bottom;
 	spriteHandler->Draw(texture, &r, NULL, &p, D3DCOLOR_ARGB(alpha, 255, 255, 255));
 }
+/*
+* Overload for easy drawing on the screen
+*/
+void CGame::Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, RECT r, int alpha)
+{
+	D3DXVECTOR3 p(x - cam_x, y - cam_y, 0);
+	spriteHandler->Draw(texture, &r, NULL, &p, D3DCOLOR_ARGB(alpha, 255, 255, 255));
+}
 
 int CGame::IsKeyDown(int KeyCode)
 {

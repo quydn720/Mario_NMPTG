@@ -2,6 +2,15 @@
 #include "Game.h"
 #include "debug.h"
 
+/// <summary>
+/// A portion of an image
+/// </summary>
+/// <param name="id">sprite id get</param>
+/// <param name="left"></param>
+/// <param name="top"></param>
+/// <param name="right"></param>
+/// <param name="bottom"></param>
+/// <param name="tex">big image</param>
 CSprite::CSprite(int id, int left, int top, int right, int bottom, LPDIRECT3DTEXTURE9 tex)
 {
 	this->id = id;
@@ -42,8 +51,9 @@ LPSPRITE CSprites::Get(int id)
 void CAnimation::Add(int spriteId, DWORD time)
 {
 	int t = time;
-	if (time == 0) t=this->defaultTime;
-
+	if (time == 0) {
+		t = this->defaultTime;
+	}
 	LPSPRITE sprite = CSprites::GetInstance()->Get(spriteId);
 	LPANIMATION_FRAME frame = new CAnimationFrame(sprite, t);
 	frames.push_back(frame);

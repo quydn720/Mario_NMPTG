@@ -2,7 +2,6 @@
 #include "GameObject.h"
 
 #define MARIO_WALKING_SPEED		0.15f 
-//0.1f
 #define MARIO_JUMP_SPEED_Y		0.5f
 #define MARIO_JUMP_DEFLECT_SPEED 0.2f
 #define MARIO_GRAVITY			0.002f
@@ -13,6 +12,8 @@
 #define MARIO_STATE_WALKING_LEFT	200
 #define MARIO_STATE_JUMP			300
 #define MARIO_STATE_DIE				400
+
+#define MARIO_TAIL_STATE_IDLE		500
 
 #define MARIO_ANI_BIG_IDLE_RIGHT		0
 #define MARIO_ANI_BIG_IDLE_LEFT			1
@@ -26,8 +27,11 @@
 
 #define MARIO_ANI_DIE				8
 
+#define MARIO_TAIL_ANI_IDLE_RIGHT	9
+
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
+#define MARIO_LEVEL_TAIL	3
 
 #define MARIO_BIG_BBOX_WIDTH  15
 #define MARIO_BIG_BBOX_HEIGHT 27
@@ -38,16 +42,24 @@
 #define MARIO_UNTOUCHABLE_TIME 5000
 
 
-class CMario : public CGameObject
+class Mario : public CGameObject
 {
+	// we can't have two Mario at a time
+	static Mario* _instance;
+
 	int level;
 	int untouchable;
 	DWORD untouchable_start;
 
+	
 	float start_x;			// initial position of Mario at scene
 	float start_y; 
+
+	Animation* animation;
 public: 
-	CMario(float x = 0.0f, float y = 0.0f);
+	static Mario* GetInstance();
+
+	Mario(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);
 	virtual void Render();
 

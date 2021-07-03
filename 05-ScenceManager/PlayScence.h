@@ -7,16 +7,22 @@
 #include "Mario.h"
 #include "Goomba.h"
 #include "Koopas.h"
+#include "Map.h"
+
+#define TILE_SIZE 16
+
 
 
 class CPlayScene: public CScene
 {
 protected: 
-	CMario *player;					// A play scene has to have player, right? 
+	Mario* player;					// A play scene has to have player, right? 
+	Map* map;
 
 	vector<LPGAMEOBJECT> objects;
 
 	void _ParseSection_TEXTURES(string line);
+	void _ParseSection_MAP(string line);
 	void _ParseSection_SPRITES(string line);
 	void _ParseSection_ANIMATIONS(string line);
 	void _ParseSection_ANIMATION_SETS(string line);
@@ -31,7 +37,7 @@ public:
 	virtual void Render();
 	virtual void Unload();
 
-	CMario * GetPlayer() { return player; } 
+	Mario * GetPlayer() { return player; } 
 
 	//friend class CPlayScenceKeyHandler;
 };

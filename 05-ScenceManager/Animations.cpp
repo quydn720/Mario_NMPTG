@@ -3,7 +3,7 @@
 
 CAnimationSets * CAnimationSets::__instance = NULL;
 
-void CAnimation::Add(int spriteId, DWORD time)
+void Animation::Add(int spriteId, DWORD time)
 {
 	int t = time;
 	if (time == 0) t = this->defaultTime;
@@ -15,12 +15,12 @@ void CAnimation::Add(int spriteId, DWORD time)
 		DebugOut(L"[ERROR] Sprite ID %d cannot be found!\n", spriteId);
 	}
 
-	LPANIMATION_FRAME frame = new CAnimationFrame(sprite, t);
+	LPANIMATION_FRAME frame = new AnimationFrame(sprite, t);
 	frames.push_back(frame);
 }
 
 // NOTE: sometimes Animation object is NULL ??? HOW ??? 
-void CAnimation::Render(float x, float y, int alpha)
+void Animation::Render(float x, float y, int alpha)
 {
 	DWORD now = GetTickCount();
 	if (currentFrame == -1)

@@ -1,14 +1,23 @@
 #include <algorithm>
 #include <assert.h>
 #include "Utils.h"
-
 #include "Mario.h"
 #include "Game.h"
-
 #include "Goomba.h"
 #include "Portal.h"
+#include "Ground.h"
 
-CMario::CMario(float x, float y) : CGameObject()
+// initialize Mario instance
+Mario* Mario::_instance = NULL;
+Mario* Mario::GetInstance()
+{
+	if (_instance == NULL) {
+		_instance = new Mario();
+	}
+	return _instance;
+}
+
+Mario::Mario(float x, float y) : CGameObject()
 {
 	level = MARIO_LEVEL_BIG;
 	untouchable = 0;
@@ -20,7 +29,7 @@ CMario::CMario(float x, float y) : CGameObject()
 	this->y = y; 
 }
 
-void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
+void Mario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 {
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
@@ -78,6 +87,12 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 		{
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
+			if (dynamic_cast<Ground*>(e->obj)) {
+				Ground* ground= dynamic_cast<Ground*>(e->obj);
+				if (e->ny != 0) {
+					vy = 0;
+				}
+			}
 			if (dynamic_cast<CGoomba *>(e->obj)) // if e->obj is Goomba 
 			{
 				CGoomba *goomba = dynamic_cast<CGoomba *>(e->obj);
@@ -120,17 +135,19 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
 
-void CMario::Render()
+void Mario::Render()
 {
 	int ani = -1;
 	if (state == MARIO_STATE_DIE)
 		ani = MARIO_ANI_DIE;
+	else if (state == MARIO_TAIL_STATE_IDLE)
+		ani = MARIO_TAIL_ANI_IDLE_RIGHT;
 	else
 	if (level == MARIO_LEVEL_BIG)
 	{
 		if (vx == 0)
 		{
-			if (nx>0) ani = MARIO_ANI_BIG_IDLE_RIGHT;
+			if (nx>0) ani = MARIO_TAIL_ANI_IDLE_RIGHT;
 			else ani = MARIO_ANI_BIG_IDLE_LEFT;
 		}
 		else if (vx > 0) 
@@ -148,6 +165,7 @@ void CMario::Render()
 			ani = MARIO_ANI_SMALL_WALKING_RIGHT;
 		else ani = MARIO_ANI_SMALL_WALKING_LEFT;
 	}
+	
 
 	int alpha = 255;
 	if (untouchable) alpha = 128;
@@ -157,7 +175,7 @@ void CMario::Render()
 	RenderBoundingBox();
 }
 
-void CMario::SetState(int state)
+void Mario::SetState(int state)
 {
 	CGameObject::SetState(state);
 
@@ -184,7 +202,7 @@ void CMario::SetState(int state)
 	}
 }
 
-void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom)
+void Mario::GetBoundingBox(float &left, float &top, float &right, float &bottom)
 {
 	left = x;
 	top = y; 
@@ -204,7 +222,7 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 /*
 	Reset Mario status to the beginning state of a scene
 */
-void CMario::Reset()
+void Mario::Reset()
 {
 	SetState(MARIO_STATE_IDLE);
 	SetLevel(MARIO_LEVEL_BIG);

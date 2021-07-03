@@ -5,36 +5,36 @@
 
 #include "Sprites.h"
 
-/*
-Sprite animation
-*/
-class CAnimationFrame
+/// <summary>
+/// Frame is a sprite + a time period that sprite is displayed (frame time)
+/// </summary>
+class AnimationFrame
 {
 	LPSPRITE sprite;
 	DWORD time;
 
 public:
-	CAnimationFrame(LPSPRITE sprite, int time) { this->sprite = sprite; this->time = time; }
+	AnimationFrame(LPSPRITE sprite, int time) { this->sprite = sprite; this->time = time; }
 	DWORD GetTime() { return time; }
 	LPSPRITE GetSprite() { return sprite; }
 };
 
-typedef CAnimationFrame *LPANIMATION_FRAME;
+typedef AnimationFrame *LPANIMATION_FRAME;
 
-class CAnimation
+class Animation
 {
 	DWORD lastFrameTime;
 	int currentFrame;
 	int defaultTime;
 	vector<LPANIMATION_FRAME> frames;
 public:
-	CAnimation(int defaultTime = 100) { this->defaultTime = defaultTime; lastFrameTime = -1; currentFrame = -1; }
+	Animation(int defaultTime = 100) { this->defaultTime = defaultTime; lastFrameTime = -1; currentFrame = -1; }
 	void Add(int spriteId, DWORD time = 0);
 
 	void Render(float x, float y, int alpha = 255);
 };
 
-typedef CAnimation *LPANIMATION;
+typedef Animation *LPANIMATION;
 
 class CAnimations
 {

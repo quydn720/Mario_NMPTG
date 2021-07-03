@@ -1,7 +1,7 @@
 [SETTINGS]
-start	3
+start	1
 #scene list
 [SCENES]
-1	scene1.txt
-2	scene2.txt
-3	scene-test.txt
+1	data/scene/scene1.txt
+2	data/scene/scene2.txt
+3	data/scene/scene-test.txt

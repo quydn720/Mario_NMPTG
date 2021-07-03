@@ -61,6 +61,7 @@ public:
 	DWORD dt; 
 
 	LPANIMATION_SET animation_set;
+	float widthBoundingBox, heightBoundingBox;
 
 public: 
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
@@ -70,6 +71,10 @@ public:
 
 	int GetState() { return this->state; }
 
+	virtual void SetBoundingBox(float w, float h) {
+		widthBoundingBox = w;
+		heightBoundingBox = h;
+	}
 	void RenderBoundingBox();
 
 	void SetAnimationSet(LPANIMATION_SET ani_set) { animation_set = ani_set; }

@@ -10,6 +10,8 @@
 #define MAP_SECTION_UNKNOWN		-1
 
 class Map {
+	static Map* __instance;
+
 	int column, row;
 	int tileSize;
 	int tileColumn, tileRow;
@@ -18,6 +20,8 @@ class Map {
 public:
 	Map();
 	~Map();
+
+	static Map* GetInstance();
 	void Load(wstring path);
 	void Render();
 	void _ParseSection_ROWS(string line);

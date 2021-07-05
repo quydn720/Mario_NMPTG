@@ -7,6 +7,7 @@
 #include "Sprites.h"
 #include "Portal.h"
 #include "Ground.h"
+#include "Game.h"
 
 using namespace std;
 
@@ -14,7 +15,6 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	CScene(id, filePath)
 {
 	key_handler = new CPlayScenceKeyHandler(this);
-	map = new Map();
 }
 
 /*
@@ -174,7 +174,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
 	case OBJECT_TYPE_GROUND:
-		obj = new Ground((float) atof(tokens[4].c_str()) * TILE_SIZE, (float)atof(tokens[5].c_str()) * TILE_SIZE);
+		obj = new Ground((float)atof(tokens[4].c_str()) * TILE_SIZE, (float)atof(tokens[5].c_str()) * TILE_SIZE);
 		break;
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;

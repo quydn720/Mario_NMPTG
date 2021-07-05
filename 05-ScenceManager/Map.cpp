@@ -1,5 +1,13 @@
 #include "Map.h"
 
+Map* Map::__instance = NULL;
+Map* Map::GetInstance()
+{
+	if (__instance == NULL)
+		__instance = new Map();
+	return __instance;
+}
+
 Map::Map()
 {
 	currentRow = column = row = tileSize = tileColumn = tileRow = 0;
@@ -48,15 +56,14 @@ void Map::Render()
 	for (int i = 0; i < row; i++) {
 		for (int j = 0; j < column; j++) {
 			int id = tileId[i][j];
-			RECT r = {
-			   id % tileColumn * tileSize,								// left
-			   (id / tileColumn) * tileSize,							// top
-			   id % tileColumn * tileSize + tileSize,					// right
-			   (id / tileColumn) * tileSize + tileSize 					// bottom
-			};
+			RECT r;
 
-			// Draw -- HARD-CODE Map texture ID, need to put it inside file txt.
-			CGame::GetInstance()->Draw(j * tileSize, i * tileSize, CTextures::GetInstance()->Get(30), r);
+			r.left = id % tileColumn * tileSize;
+			r.top = (id / tileColumn) * tileSize;
+			r.right = r.left + tileSize;
+			r.bottom = r.top + tileSize;
+
+			CGame::GetInstance()->Draw((float)(j * tileSize), (float)(i * tileSize), CTextures::GetInstance()->Get(30), r.left, r.top, r.right, r.bottom);
 		}
 	}
 }

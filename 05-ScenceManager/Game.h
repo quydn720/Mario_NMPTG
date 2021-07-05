@@ -11,6 +11,7 @@
 #include <dinput.h>
 
 #include "Scence.h"
+#define map Map::GetInstance()
 
 using namespace std;
 

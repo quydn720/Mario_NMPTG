@@ -6,6 +6,9 @@
 
 [MAPS]
 30	textures\NES_SuperMarioBros3_Stage1_1_bank.png	255	255	255	data\NES_SuperMarioBros3_Stage1_1_bank.txt
+#30	textures\SMB3_1-1_map_bank.png	255	255	255	data\SMB3_1-1_map_bank.txt
+#30	textures\map1.1.png	255	255	255	data\map1.1.txt
+
 
 #	id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -149,11 +152,13 @@
 #	type	x	y	ani_set_id	extra_settings	per	object	type
 #	type:	0	=	Mario	,	1	=	Brick,	2	=	Goomba, 3 = Ground
 #	MARIO
-0	50.0	300	1
+0	300.0	300	1
 
 # GROUND -- take the ani_set of brick for testing
 4	0	416	2	39	1
-4	624	400	2	29	2	
+4	624	400	2	29	2
+4	1158	416	2	21	1
+
 #	GOOMBA
 2	200	135	3
 2	260	135	3

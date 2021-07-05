@@ -17,7 +17,7 @@ class CPlayScene: public CScene
 {
 protected: 
 	Mario* player;					// A play scene has to have player, right? 
-	Map* map;
+	//Map* map;
 
 	vector<LPGAMEOBJECT> objects;
 

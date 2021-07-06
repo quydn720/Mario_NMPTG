@@ -1,5 +1,6 @@
 #include "Ground.h"
 Ground::Ground(float width, float height){
+	blockType = GROUND;
 	SetBoundingBox(width, height);
 }
 

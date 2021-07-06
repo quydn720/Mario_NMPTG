@@ -1,7 +1,7 @@
 #pragma once
 
 #include "GameObject.h"
-
+#include "Enemy.h"
 #define KOOPAS_WALKING_SPEED 0.03f;
 
 #define KOOPAS_BBOX_WIDTH 16
@@ -15,7 +15,7 @@
 #define KOOPAS_ANI_WALKING_RIGHT 1
 #define KOOPAS_ANI_DIE 2
 
-class CKoopas : public CGameObject
+class CKoopas : public Enemy
 {
 	virtual void GetBoundingBox(float &left, float &top, float &right, float &bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects);

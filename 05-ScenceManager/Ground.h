@@ -1,6 +1,6 @@
 #pragma once
-#include "GameObject.h"
-class Ground : public CGameObject {
+#include "Block.h"
+class Ground : public Block {
 public:
 	Ground(float width, float height);
 	~Ground() {};

@@ -7,6 +7,11 @@
 #include "Sprites.h"
 #include "Animations.h"
 
+enum ObjectType {
+	PLAYER,
+	ENEMY,
+	BLOCK,
+};
 
 using namespace std;
 
@@ -40,36 +45,33 @@ struct CCollisionEvent
 	}
 };
 
-
 class CGameObject
 {
+private:
+	ObjectType type;
 public:
-
-	float x; 
-	float y;
-
-	float dx;	// dx = vx*dt
-	float dy;	// dy = vy*dt
-
-	float vx;
-	float vy;
+	float x, y; 
+	float dx, dy;	// dx = vx * dt;	dy = vy * dt
+	float vx, vy;
 
 	int nx;	 
-
 	int state;
 
 	DWORD dt; 
 
 	LPANIMATION_SET animation_set;
+
+	// setting the bounding box
 	float widthBoundingBox, heightBoundingBox;
 
-public: 
+	ObjectType getType() { return this->type; }
+
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
 	void GetPosition(float &x, float &y) { x = this->x; y = this->y; }
 	void GetSpeed(float &vx, float &vy) { vx = this->vx; vy = this->vy; }
 
-	int GetState() { return this->state; }
+	int getState() { return this->state; }
 
 	virtual void SetBoundingBox(float w, float h) {
 		widthBoundingBox = w;

@@ -8,6 +8,8 @@
 #include "Portal.h"
 #include "Ground.h"
 #include "Game.h"
+#include "ColorBlock.h"
+#include "Block.h"
 
 using namespace std;
 
@@ -31,12 +33,8 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 #define SCENE_SECTION_MAP	7
 
 #define OBJECT_TYPE_MARIO	0
-#define OBJECT_TYPE_BRICK	1
-#define OBJECT_TYPE_GOOMBA	2
+#define OBJECT_TYPE_GOOMBA	5
 #define OBJECT_TYPE_KOOPAS	3
-
-
-#define OBJECT_TYPE_GROUND	4
 
 #define OBJECT_TYPE_PORTAL	50
 
@@ -163,7 +161,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	CGameObject* obj = NULL;
 
 	switch (object_type) {
-	case OBJECT_TYPE_MARIO:
+	case ObjectType::PLAYER: {
 		if (player != NULL) {
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
 			return;
@@ -173,11 +171,26 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
-	case OBJECT_TYPE_GROUND:
-		obj = new Ground((float)atof(tokens[4].c_str()) * TILE_SIZE, (float)atof(tokens[5].c_str()) * TILE_SIZE);
+	}
+	case ObjectType::BLOCK: {
+		int blockType = atoi(tokens[6].c_str());
+		switch (blockType) {
+		case BlockType::GROUND: {
+			obj = new Ground((float)atof(tokens[4].c_str()) * TILE_SIZE, (float)atof(tokens[5].c_str()) * TILE_SIZE);
+			break;
+		}
+		case BlockType::COLOR_BLOCK: {
+			obj = new ColorBlock((float)atof(tokens[4].c_str()) * TILE_SIZE, (float)atof(tokens[5].c_str()) * TILE_SIZE);
+			break;
+		}
+		case BlockType::BRICK: {
+			obj = new CBrick();
+			break;
+		}
+		}
 		break;
+	}
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(); break;
-	case OBJECT_TYPE_BRICK: obj = new CBrick(); break;
 	case OBJECT_TYPE_KOOPAS: obj = new CKoopas(); break;
 	case OBJECT_TYPE_PORTAL:
 	{
@@ -341,7 +354,7 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	Mario* mario = ((CPlayScene*)scence)->GetPlayer();
 
 	// disable control key when Mario die 
-	if (mario->GetState() == MARIO_STATE_DIE) return;
+	if (mario->getState() == MARIO_STATE_DIE) return;
 	if (game->IsKeyDown(DIK_RIGHT))
 		mario->SetState(MARIO_STATE_WALKING_RIGHT);
 	else if (game->IsKeyDown(DIK_LEFT))

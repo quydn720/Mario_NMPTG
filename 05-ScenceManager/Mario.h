@@ -54,6 +54,7 @@ class Mario : public CGameObject
 	
 	float start_x;			// initial position of Mario at scene
 	float start_y; 
+	unordered_map<string, bool> marioState;
 
 	Animation* animation;
 public: 
@@ -63,9 +64,10 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);
 	virtual void Render();
 
-	void SetState(int state);
+	void SetState(int stateP);
 	void SetLevel(int l) { level = l; }
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
+	
 
 	void Reset();
 

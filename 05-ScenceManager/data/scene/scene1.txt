@@ -5,8 +5,8 @@
 10	textures\enemies.png	3	26	110
 
 [MAPS]
-30	textures\NES_SuperMarioBros3_Stage1_1_bank.png	255	255	255	data\NES_SuperMarioBros3_Stage1_1_bank.txt
-#30	textures\SMB3_1-1_map_bank.png	255	255	255	data\SMB3_1-1_map_bank.txt
+#30	textures\NES_SuperMarioBros3_Stage1_1_bank.png	255	255	255	data\NES_SuperMarioBros3_Stage1_1_bank.txt
+30	textures\SMB3_1-1_map_bank.png	255	255	255	data\map1.1.txt
 #30	textures\map1.1.png	255	255	255	data\map1.1.txt
 
 
@@ -151,39 +151,42 @@
 [OBJECTS]
 #	type	x	y	ani_set_id	extra_settings	per	object	type
 #	type:	0	=	Mario	,	1	=	Brick,	2	=	Goomba, 3 = Ground
-#	MARIO
-0	300.0	300	1
 
-# GROUND -- take the ani_set of brick for testing
-4	0	416	2	39	1
-4	624	400	2	29	2
-4	1158	416	2	21	1
+#	MARIO
+0	100.0	300	1
+
+# GROUND - ani_set doesn't matter, so just take the brick. // change if have issues
+# type	x	y	ani_set_id	width	height	specificType	(unit = tile size)
+2	0	416	2	38	1	1
+2	608	400	2	29	2	1
+2	1136	416	2	22	1	1
+2	1520	416	2	5	1	1
+2	1648	416	2	36	1	1
+2	1648	416	2	36	1	1
+2	2240	416	2	35	1	1
+
+# ColorBlock
+2	224	368	2	3	3	0
+2	256	336	2	3	5	0
+#6	224	368	2	3	3	0
+#6	224	368	2	3	3	0
+#6	224	368	2	3	3	0
 
 #	GOOMBA
-2	200	135	3
-2	260	135	3
-2	320	135	3
-2	480	135	3
-2	500	135	3
+#5	200	400	3
+#5	260	400	3
+#5	320	400	3
+#5	480	400	3
+#5	500	400	3
 
 #	BRICK	
 #	---	platform	(hint:	I	created	the	list	using	Excel!)	----
 #1	0	375	2
 #1	16	375	2
 #1	32	375	2
-#1	48	375	2
-#1	64	375	2
-#1	80	375	2
-#1	96	375	2
-#1	112	375	2
-#1	128	375	2
-#1	144	375	2
-#1	160	375	2
-#1	176	375	2
-#1	192	375	2
-#1	208	375	2
-#1	224	375	2
 
+# testing
+2	160	336	2	1	1	2
 
 #	----	brick	group	1	----
 1	100	74	2

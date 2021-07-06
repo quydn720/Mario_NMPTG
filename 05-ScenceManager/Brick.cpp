@@ -1,7 +1,9 @@
-#include "Brick.h"
+﻿#include "Brick.h"
 
 void CBrick::Render()
 {
+	blockType = BRICK;
+	// only 1 animation/frame
 	animation_set->at(0)->Render(x, y);
 	RenderBoundingBox();
 }

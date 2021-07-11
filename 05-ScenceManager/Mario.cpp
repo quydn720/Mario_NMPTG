@@ -7,8 +7,10 @@
 #include "Portal.h"
 #include "Ground.h"
 #include "ColorBlock.h"
+#include "QuestionBlock.h"
+#include "Item.h"
+#include "Coin.h"
 
-// initialize Mario instance
 Mario* Mario::_instance = NULL;
 Mario* Mario::GetInstance()
 {
@@ -88,14 +90,14 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		for (UINT i = 0; i < coEventsResult.size(); i++)
 		{
 
-			DebugOut(L"\n[ON_GROUND]: %d", marioState["onGround"]);
 			LPCOLLISIONEVENT e = coEventsResult[i];
-			DebugOut(L"\n[OBJ]: %d", dynamic_cast<Block*>(e->obj)->getBlockType());
+			//DebugOut(L"\n[ON_GROUND]: %d", marioState["onGround"]);
+			//DebugOut(L"\n[OBJ]: %d", dynamic_cast<Block*>(e->obj)->getBlockType());
 
 			if (dynamic_cast<Block*>(e->obj)) {
 				switch (dynamic_cast<Block*>(e->obj)->getBlockType()) {
-				case GROUND:
-				case BRICK: {
+				case BlockType::GROUND:
+				case BlockType::BRICK: {
 					marioState["onGround"] = true;
 					Ground* ground = dynamic_cast<Ground*>(e->obj);
 					if (e->ny > 0) {
@@ -106,13 +108,37 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 					break;
 				}
-				// Mario can go through color block horizontally
-				case COLOR_BLOCK: {
+									 // Mario can go through color block horizontally
+				case BlockType::COLOR_BLOCK: {
 					marioState["onGround"] = true;
 					ColorBlock* colorBlock = dynamic_cast<ColorBlock*>(e->obj);
 					if (e->nx != 0) {
 						x += dx;
 					}
+					break;
+				}
+				case BlockType::QUESTION_BLOCK: {
+					marioState["onGround"] = true;
+					QuestionBlock* questionBlock = dynamic_cast<QuestionBlock*>(e->obj);
+					if (e->ny > 0) {
+						if (questionBlock->getItemType() == ItemType::COIN) {
+							// Item khởi tạo khi xảy ra va chạm
+							/*Coin* c = new Coin(ItemType::COIN, questionBlock->x, questionBlock->y);
+							c->RenderBoundingBox();*/
+						}
+						else DebugOut(L"\nhit something");
+					}
+					break;
+				}
+				}
+			}
+			if (dynamic_cast<Item*>(e->obj)) {
+				switch (dynamic_cast<Item*>(e->obj)->getItemType()) {
+				case ItemType::COIN: {
+					Coin* coin = dynamic_cast<Coin*>(e->obj);
+					coin->y += dy;
+					//testing -> idea: khởi tạo coin nằm yên trong ?brick, khi mario cụng, thì câu lệnh này làm đồng tiền nảy lên, sau đó biến mất
+					DebugOut(L"\n[COIN]: %s", "+1000000000000");
 					break;
 				}
 				}

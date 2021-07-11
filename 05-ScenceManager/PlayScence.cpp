@@ -6,16 +6,18 @@
 #include "Textures.h"
 #include "Sprites.h"
 #include "Portal.h"
-#include "Ground.h"
 #include "Game.h"
+
+// Block - to 1 file
+#include "Ground.h"
 #include "ColorBlock.h"
 #include "Block.h"
+#include "QuestionBlock.h"
+#include "Coin.h"
 
 using namespace std;
 
-CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
-	CScene(id, filePath)
-{
+CPlayScene::CPlayScene(int id, LPCWSTR filePath) : CScene(id, filePath) {
 	key_handler = new CPlayScenceKeyHandler(this);
 }
 
@@ -69,7 +71,7 @@ void CPlayScene::_ParseSection_MAP(string line) {
 	wstring map_path = ToWSTR(tokens[5]);
 
 	CTextures::GetInstance()->Add(texID, path.c_str(), D3DCOLOR_XRGB(R, G, B));
-	map->Load(map_path);
+	Map::GetInstance()->Load(map_path);
 }
 
 void CPlayScene::_ParseSection_SPRITES(string line)
@@ -84,6 +86,9 @@ void CPlayScene::_ParseSection_SPRITES(string line)
 	int r = atoi(tokens[3].c_str());
 	int b = atoi(tokens[4].c_str());
 	int texID = atoi(tokens[5].c_str());
+
+	objectWidth = abs(r - l);
+	objectHeight = abs(t - b);
 
 	LPDIRECT3DTEXTURE9 tex = CTextures::GetInstance()->Get(texID);
 	if (tex == NULL)
@@ -173,33 +178,52 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case ObjectType::BLOCK: {
-		int blockType = atoi(tokens[6].c_str());
+		BlockType blockType = BlockType(atoi(tokens[6].c_str()));
+
+		float width = (float)atof(tokens[4].c_str()) * TILE_SIZE;
+		float height = (float)atof(tokens[5].c_str()) * TILE_SIZE;
 		switch (blockType) {
 		case BlockType::GROUND: {
-			obj = new Ground((float)atof(tokens[4].c_str()) * TILE_SIZE, (float)atof(tokens[5].c_str()) * TILE_SIZE);
+			obj = new Ground(width, height);
 			break;
 		}
 		case BlockType::COLOR_BLOCK: {
-			obj = new ColorBlock((float)atof(tokens[4].c_str()) * TILE_SIZE, (float)atof(tokens[5].c_str()) * TILE_SIZE);
+			obj = new ColorBlock(width, height);
 			break;
 		}
 		case BlockType::BRICK: {
 			obj = new CBrick();
 			break;
 		}
+		case BlockType::QUESTION_BLOCK: {
+			ItemType type = ItemType(atoi(tokens[7].c_str()));
+			obj = new QuestionBlock(type, width, height);
+			break;
+		}
 		}
 		break;
 	}
-	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(); break;
-	case OBJECT_TYPE_KOOPAS: obj = new CKoopas(); break;
-	case OBJECT_TYPE_PORTAL:
-	{
-		float r = atof(tokens[4].c_str());
-		float b = atof(tokens[5].c_str());
-		int scene_id = atoi(tokens[6].c_str());
-		obj = new CPortal(x, y, r, b, scene_id);
+
+	case ObjectType::ITEM: {
+		ItemType itemType = ItemType(atoi(tokens[6].c_str()));
+		switch (itemType) {
+		case ItemType::COIN: {
+			obj = new Coin(itemType, objectWidth, objectHeight);
+			break;
+		}
+		}
+		break;
 	}
-	break;
+						 //case OBJECT_TYPE_GOOMBA: obj = new CGoomba(); break;
+						 //case OBJECT_TYPE_KOOPAS: obj = new CKoopas(); break;
+						 //case OBJECT_TYPE_PORTAL:
+						 //{
+						 //	float r = atof(tokens[4].c_str());
+						 //	float b = atof(tokens[5].c_str());
+						 //	int scene_id = atoi(tokens[6].c_str());
+						 //	obj = new CPortal(x, y, r, b, scene_id);
+						 //}
+						 //break;
 	default:
 		DebugOut(L"[ERR] Invalid object type: %d\n", object_type);
 		return;
@@ -303,13 +327,29 @@ void CPlayScene::Update(DWORD dt)
 	if (player->y >= 240)
 		cy = 240;
 
+
 	CGame::GetInstance()->SetCamPos(cx, cy);
+
+	//for (size_t i = 1; i < objects.size(); i++) {
+	//	if (objects[i]->getType() == ObjectType::BLOCK) {
+	//		if (dynamic_cast<Block*>(objects[i])) {
+	//			if (dynamic_cast<Block*>(objects[i])->getBlockType() == BlockType::QUESTION_BLOCK) {
+	//				float x = objects[i]->x;
+	//				float y = objects[i]->y;
+	//				Coin* c = new Coin(ItemType::COIN, x, y);
+	//				c->setAnimation(CAnimationSets::GetInstance()->Get(4)->at(0));
+	//				objects.push_back(c);
+	//			}
+	//		}
+	//	}
+	//}
 
 }
 
 void CPlayScene::Render()
 {
-	map->Render();
+	Map::GetInstance()->Render();
+
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
 }

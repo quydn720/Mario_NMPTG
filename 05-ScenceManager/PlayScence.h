@@ -18,6 +18,8 @@ class CPlayScene: public CScene
 protected: 
 	Mario* player;					// A play scene has to have player, right? 
 	//Map* map;
+	// Object width, height calculated when we parse SPRITES part
+	float objectWidth, objectHeight;
 
 	vector<LPGAMEOBJECT> objects;
 

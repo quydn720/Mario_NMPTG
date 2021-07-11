@@ -4,7 +4,7 @@ Block::Block() {
 
 }
 Block::Block(float width, float height) {
-	blockType = UNDEFINED;
+	setType(ObjectType::BLOCK);
 	SetBoundingBox(width, height);
 }
 Block::~Block()
@@ -12,7 +12,7 @@ Block::~Block()
 }
 void Block::Render()
 {
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void Block::GetBoundingBox(float& l, float& t, float& r, float& b)

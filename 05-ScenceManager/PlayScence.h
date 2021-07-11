@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Game.h"
 #include "Textures.h"
 #include "Scence.h"
@@ -19,6 +19,9 @@ protected:
 	Mario* player;					// A play scene has to have player, right? 
 	//Map* map;
 	// Object width, height calculated when we parse SPRITES part
+	// Áp dụng với những vật thể 1 sprite. 
+	// Mario, coin, nấm, v.v
+	// TODO: nên stick với một state cụ thể ?
 	float objectWidth, objectHeight;
 
 	vector<LPGAMEOBJECT> objects;

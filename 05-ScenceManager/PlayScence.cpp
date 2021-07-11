@@ -192,7 +192,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			break;
 		}
 		case BlockType::BRICK: {
-			obj = new CBrick();
+			obj = new CBrick(width, height);
 			break;
 		}
 		case BlockType::QUESTION_BLOCK: {

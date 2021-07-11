@@ -85,11 +85,11 @@ CAnimationSets *CAnimationSets::GetInstance()
 	return __instance;
 }
 
-LPANIMATION_SET CAnimationSets::Get(unsigned int id)
+LPANIMATION_SET CAnimationSets::Get(unsigned int ani_set_id)
 {
-	LPANIMATION_SET ani_set = animation_sets[id];
+	LPANIMATION_SET ani_set = animation_sets[ani_set_id];
 	if (ani_set == NULL)
-		DebugOut(L"[ERROR] Failed to find animation set id: %d\n",id);
+		DebugOut(L"[ERROR] Failed to find animation set id: %d\n",ani_set_id);
 	 
 	return ani_set;
 }
@@ -97,4 +97,11 @@ LPANIMATION_SET CAnimationSets::Get(unsigned int id)
 void CAnimationSets::Add(int id, LPANIMATION_SET ani_set)
 {
 	animation_sets[id] = ani_set;
+	DebugOut(L"[ANIMATION_SETS] Added: %d\n", ani_set);
 }
+
+//CAnimationSet* CAnimationSet::GetInstance()
+//{
+//	if (__instance == NULL) __instance = new CAnimationSet();
+//	return __instance;
+//}

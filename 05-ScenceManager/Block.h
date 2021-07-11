@@ -1,17 +1,18 @@
 #pragma once
 #include "GameObject.h"
 
-enum BlockType {
+enum class BlockType {
 	UNDEFINED = -1,
 	COLOR_BLOCK,
 	GROUND,
-	BRICK
+	BRICK,
+	QUESTION_BLOCK
 };
 
 class Block : public CGameObject
 {
 protected:
-	BlockType blockType = UNDEFINED;
+	BlockType blockType = BlockType::UNDEFINED;
 public:
 	Block(float width, float height);
 	Block();

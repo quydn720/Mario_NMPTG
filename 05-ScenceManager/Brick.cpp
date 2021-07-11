@@ -1,10 +1,15 @@
 ﻿#include "Brick.h"
 
+CBrick::CBrick(float width, float height):Block(width, height)
+{
+	blockType = BlockType::BRICK;
+	// Fix this to the format
+	currentAnimation = animation_set->at(0);
+}
+
 void CBrick::Render()
 {
-	blockType = BRICK;
 	// only 1 animation/frame
-	animation_set->at(0)->Render(x, y);
 	RenderBoundingBox();
 }
 

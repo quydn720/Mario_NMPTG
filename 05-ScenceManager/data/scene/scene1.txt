@@ -1,14 +1,11 @@
 #	id	file_path	transparent_color_r	g	b
 [TEXTURES]
 0	textures\mario.png	255	255	255
-20	textures\misc.png	176	224	248
 10	textures\enemies.png	3	26	110
+20	textures\misc.png	176	224	248
 
 [MAPS]
-#30	textures\NES_SuperMarioBros3_Stage1_1_bank.png	255	255	255	data\NES_SuperMarioBros3_Stage1_1_bank.txt
 30	textures\SMB3_1-1_map_bank.png	255	255	255	data\map1.1.txt
-#30	textures\map1.1.png	255	255	255	data\map1.1.txt
-
 
 #	id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -25,7 +22,6 @@
 #	Walk
 10012	155	154	170	181	0
 10013	125	154	140	181	0
-
 #	Die
 10099	215	120	231	135	0
 
@@ -78,6 +74,12 @@
 40002	318	117	334	133	20
 40003	336	117	352	133	20
 40004	355	117	370	133	20
+
+#coin
+200	303	99	313	115	20
+201	341	99	347	115	20
+202	322	99	330	115	20
+	
 		
 #	ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
@@ -123,7 +125,7 @@
 601	20001	100
 
 #	====	QUESTION	MARK	BRICK	=========
-602	40001	1000	40001	100	40002	100	40003	100	40004	100
+602	40001	100	40001	100	40002	100	40003	100	40004	100
 
 
 #	====	GOOMBA	=========
@@ -132,7 +134,8 @@
 #	die
 702	30003	100
 
-# 
+# === COIN ==
+300	200	50	201	50	202	50
 
 
 #
@@ -140,37 +143,39 @@
 #
 [ANIMATION_SETS]
 #	MARIO
-1	400	401	402	403	500	501	502	503	599	1	21	2	22	3	23	4	5
+0	400	401	402	403	500	501	502	503	599	1	21	2	22	3	23	4	5
 #	BRICK	
-2	601
+1	601
 #	QUESTION	MARK	BRICK	
-22	602
+2	602
 #	GOOMBA
 3	701	702
+# 	COIN
+4	300
 
 [OBJECTS]
 #	type	x	y	ani_set_id	extra_settings	per	object	type
 #	type:	0	=	Mario	,	1	=	Brick,	2	=	Goomba, 3 = Ground
 
 #	MARIO
-0	100.0	300	1
+0	100.0	300	0
 
 # GROUND - ani_set doesn't matter, so just take the brick. // change if have issues
 # type	x	y	ani_set_id	width	height	specificType	(unit = tile size)
-2	0	416	2	38	1	1
-2	608	400	2	29	2	1
-2	1136	416	2	22	1	1
-2	1520	416	2	5	1	1
-2	1648	416	2	36	1	1
-2	1648	416	2	36	1	1
-2	2240	416	2	35	1	1
+2	0	416	1	38	1	1
+2	608	400	1	29	2	1
+2	1136	416	1	22	1	1
+2	1520	416	1	5	1	1
+2	1648	416	1	36	1	1
+2	1648	416	1	36	1	1
+2	2240	416	1	35	1	1
 
 # ColorBlock
-2	224	368	2	3	3	0
-2	256	336	2	3	5	0
-#6	224	368	2	3	3	0
-#6	224	368	2	3	3	0
-#6	224	368	2	3	3	0
+2	224	368	1	3	3	0
+2	256	336	1	3	5	0
+#6	224	368	1	3	3	0
+#6	224	368	1	3	3	0
+#6	224	368	1	3	3	0
 
 #	GOOMBA
 #5	200	400	3
@@ -185,23 +190,27 @@
 #1	16	375	2
 #1	32	375	2
 
-# testing
-2	160	336	2	1	1	2
+# QUESTION BRICK			#item_id
+2	160	352	2	1	1	3	1
+2	176	352	2	1	1	3	0
+
+#	COIN
+3	160	352	4	1	1	0
 
 #	----	brick	group	1	----
-1	100	74	2
-1	100	90	22
-1	84	90	22
-
-#	----	brick	group	2	----
-1	160	74	2
-1	160	90	22
-1	144	90	22
-
-#	----	brick	group	3	----
-1	220	74	2
-1	220	90	22
-1	204	90	22
+#2	100	74	2	1	1	0			
+#2	100	90	2	1	1	0
+#2	84	90	2	1	1	0
+#
+##	----	brick	group	2	----
+#2	160	74	2	1	1	0
+#2	160	90	2	1	1	0
+#2	144	90	2	1	1	0
+#
+##	----	brick	group	3	----
+#2	220	74	2	1	1	0
+#2	220	90	2	1	1	0
+#2	204	90	2	1	1	0
 
 #	---	SCENE	PORTAL	----
 #	type	l	t	ani_set_id	r	b	scene_id

@@ -52,6 +52,16 @@ public:
 
 typedef vector<LPANIMATION> CAnimationSet;
 
+//class CAnimationSet {
+//private:
+//	unordered_map<int, LPANIMATION> animation_set;
+//	static CAnimationSet* __instance;
+//public:
+//	static CAnimationSet* GetInstance();
+//	void Add()
+//
+//};
+
 typedef CAnimationSet* LPANIMATION_SET;
 
 /*

@@ -121,10 +121,12 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					marioState["onGround"] = true;
 					QuestionBlock* questionBlock = dynamic_cast<QuestionBlock*>(e->obj);
 					if (e->ny > 0) {
-						if (questionBlock->getItemType() == ItemType::COIN) {
-							// Item khởi tạo khi xảy ra va chạm
-							/*Coin* c = new Coin(ItemType::COIN, questionBlock->x, questionBlock->y);
-							c->RenderBoundingBox();*/
+						if (questionBlock->getItemType() == ItemType::COIN && !questionBlock->isEmpty) {
+							questionBlock->setState(QUESTION_BLOCK_EMPTY);
+							Coin* c = dynamic_cast<Coin*>(questionBlock->getItem());
+							// and this
+							c->SetState(9999);
+							DebugOut(L"+1000\n");
 						}
 						else DebugOut(L"\nhit something");
 					}
@@ -134,13 +136,13 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			if (dynamic_cast<Item*>(e->obj)) {
 				switch (dynamic_cast<Item*>(e->obj)->getItemType()) {
-				case ItemType::COIN: {
-					Coin* coin = dynamic_cast<Coin*>(e->obj);
-					coin->y += dy;
-					//testing -> idea: khởi tạo coin nằm yên trong ?brick, khi mario cụng, thì câu lệnh này làm đồng tiền nảy lên, sau đó biến mất
-					DebugOut(L"\n[COIN]: %s", "+1000000000000");
-					break;
-				}
+				//case ItemType::COIN: {
+				//	Coin* coin = dynamic_cast<Coin*>(e->obj);
+				//	coin->y += dy;
+				//	//testing -> idea: khởi tạo coin nằm yên trong ?brick, khi mario cụng, thì câu lệnh này làm đồng tiền nảy lên, sau đó biến mất
+				//	DebugOut(L"\n[COIN]: %s", "+1000000000000");
+				//	break;
+				//}
 				}
 			}
 			if (dynamic_cast<CGoomba*>(e->obj)) {// if e->obj is Goomba 

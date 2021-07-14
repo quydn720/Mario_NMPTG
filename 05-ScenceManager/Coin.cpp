@@ -1,17 +1,46 @@
 #include "Coin.h"
 
-Coin::Coin(ItemType type, float x, float y) : Item(type, x, y) {
+Coin::Coin(ItemType type, float w, float h) : Item(type, w, h) {
 	itemType = ItemType::COIN;
-	setAnimation(CAnimationSets::GetInstance()->Get(4)->at(0));
+	SetState(9998);
+	// Fix this hard-code
 }
 
 void Coin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CGameObject::Update(dt);
-
-	vy += 0.000003f * dt;
+	
+	if (state == 9999) {
+		vy += COIN_GRAVITY * dt;
+	}
+	if (vy > 0 && y > destroy) {
+		isAlive = false;
+		this->~Coin();
+	}
 	y += dy;
+
+	DebugOut(L"[COIN]\nvy:	%f\ny:	%f\n", vy, y);
 }
 void Coin::Render() {
-	RenderBoundingBox();
-	currentAnimation->Render(x, y);
+	if (state == 9999) {
+		currentAnimation->Render(x, y);
+	}
+}
+
+void Coin::SetState(int s)
+{
+	CGameObject::SetState(s);
+	switch (s) {
+	case 9999: {
+		destroy = y - GAME_UNIT;
+		vy = -0.3f;
+		setAnimation(CAnimationSets::GetInstance()->Get(4)->at(0));
+		break;
+	}
+	case 9998: {
+		setAnimation(CAnimationSets::GetInstance()->Get(4)->at(0));
+		vy = 0;
+		break;
+	}
+	}
+
 }

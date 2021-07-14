@@ -3,17 +3,17 @@
 #include "Item.h"
 class QuestionBlock : public Block {
 private:
-	// 
-	bool isEmpty = false;
-	// Dont need a whole Item object
 	ItemType itemType;
+	Item* item;
 public:
-	QuestionBlock(ItemType itemType, float w, float h);
-	~QuestionBlock() {}
-	virtual void Render() {
-		//currentAnimation->Render(x, y);
-		//RenderBoundingBox();
-	}
+	bool isEmpty = false;
 
+	QuestionBlock(ItemType itemType, float w, float h);
 	ItemType getItemType();
+	Item* getItem();
+	void setItem(Item* it);
+	virtual void Render() {
+		currentAnimation->Render(x, y);
+	};
+	void setState(ObjectState s);
 };

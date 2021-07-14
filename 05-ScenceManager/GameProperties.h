@@ -1,6 +1,14 @@
 #pragma once
 
+#define COIN_GRAVITY 0.0007f
+#define GAME_UNIT 16.0f
+
 enum ObjectState {
 	MARIO_IDLE,
 
+	QUESTION_BLOCK_FILLED,
+	QUESTION_BLOCK_EMPTY,
+
+	COIN_VISIBLE,
+	COIN_INVISIBLE
 };

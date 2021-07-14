@@ -3,5 +3,4 @@
 class Ground : public Block {
 public:
 	Ground(float width, float height);
-	~Ground() {};
 };

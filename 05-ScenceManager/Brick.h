@@ -1,13 +1,8 @@
 #pragma once
 #include "Block.h"
 
-#define BRICK_BBOX_WIDTH  16
-#define BRICK_BBOX_HEIGHT 16
-
-class CBrick : public Block
-{
+class Brick : public Block {
 public:
-	CBrick(float width, float height);
+	Brick(float width, float height);
 	virtual void Render();
-	virtual void GetBoundingBox(float &l, float &t, float &r, float &b);
 };

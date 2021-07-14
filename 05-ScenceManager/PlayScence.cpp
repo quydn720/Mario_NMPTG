@@ -192,12 +192,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			break;
 		}
 		case BlockType::BRICK: {
-			obj = new CBrick(width, height);
+			obj = new Brick(width, height);
 			break;
 		}
 		case BlockType::QUESTION_BLOCK: {
 			ItemType type = ItemType(atoi(tokens[7].c_str()));
 			obj = new QuestionBlock(type, width, height);
+			questionBlocks.push_back(dynamic_cast<QuestionBlock*>(obj));
 			break;
 		}
 		}
@@ -208,7 +209,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		ItemType itemType = ItemType(atoi(tokens[6].c_str()));
 		switch (itemType) {
 		case ItemType::COIN: {
+			// The coins is in the middle of the bricks
+			x += 3.5;
 			obj = new Coin(itemType, objectWidth, objectHeight);
+			items.push_back(dynamic_cast<Item*>(obj));
 			break;
 		}
 		}
@@ -295,6 +299,13 @@ void CPlayScene::Load()
 	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
+
+	// Assign item to block, then release the vector objects.
+	for (size_t i = 0; i < items.size(); i++) {
+		questionBlocks[i]->setItem(items[i]);
+	}
+	questionBlocks = vector<QuestionBlock*>();
+	items = vector<Item*>();
 }
 
 void CPlayScene::Update(DWORD dt)
@@ -305,7 +316,9 @@ void CPlayScene::Update(DWORD dt)
 	vector<LPGAMEOBJECT> coObjects;
 	for (size_t i = 1; i < objects.size(); i++)
 	{
-		coObjects.push_back(objects[i]);
+		if (objects[i]->isAlive) {
+			coObjects.push_back(objects[i]);
+		}
 	}
 
 	for (size_t i = 0; i < objects.size(); i++)
@@ -329,29 +342,17 @@ void CPlayScene::Update(DWORD dt)
 
 
 	CGame::GetInstance()->SetCamPos(cx, cy);
-
-	//for (size_t i = 1; i < objects.size(); i++) {
-	//	if (objects[i]->getType() == ObjectType::BLOCK) {
-	//		if (dynamic_cast<Block*>(objects[i])) {
-	//			if (dynamic_cast<Block*>(objects[i])->getBlockType() == BlockType::QUESTION_BLOCK) {
-	//				float x = objects[i]->x;
-	//				float y = objects[i]->y;
-	//				Coin* c = new Coin(ItemType::COIN, x, y);
-	//				c->setAnimation(CAnimationSets::GetInstance()->Get(4)->at(0));
-	//				objects.push_back(c);
-	//			}
-	//		}
-	//	}
-	//}
-
 }
 
 void CPlayScene::Render()
 {
 	Map::GetInstance()->Render();
 
-	for (int i = 0; i < objects.size(); i++)
-		objects[i]->Render();
+	for (int i = 0; i < objects.size(); i++) {
+		if (objects[i]->isAlive) {
+			objects[i]->Render();
+		}
+	}
 }
 
 /*

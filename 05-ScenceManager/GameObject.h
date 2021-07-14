@@ -6,6 +6,8 @@
 
 #include "Sprites.h"
 #include "Animations.h"
+#include "GameProperties.h"
+#include "Utils.h"
 
 enum ObjectType {
 	PLAYER,
@@ -55,10 +57,13 @@ public:
 	float dx, dy;	// dx = vx * dt;	dy = vy * dt
 	float vx, vy;
 
+	bool isAlive = true;
+
 	int nx;
 	//
 	int state;
 	int getState() { return this->state; }
+	virtual void SetState(int state) { this->state = state; }
 
 	DWORD dt;
 
@@ -106,7 +111,6 @@ public:
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom) = 0;
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
 	virtual void Render() = 0;
-	virtual void SetState(int state) { this->state = state; }
 
 
 	~CGameObject();

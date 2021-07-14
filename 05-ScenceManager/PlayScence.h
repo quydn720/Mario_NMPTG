@@ -8,10 +8,9 @@
 #include "Goomba.h"
 #include "Koopas.h"
 #include "Map.h"
+#include "QuestionBlock.h"
 
 #define TILE_SIZE 16
-
-
 
 class CPlayScene: public CScene
 {
@@ -43,6 +42,10 @@ public:
 	virtual void Unload();
 
 	Mario * GetPlayer() { return player; } 
+
+	// Purpose: Assign item to block object; because we initialize item with the map
+	vector<QuestionBlock*> questionBlocks;
+	vector<Item*> items;
 
 	//friend class CPlayScenceKeyHandler;
 };

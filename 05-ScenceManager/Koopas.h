@@ -8,9 +8,6 @@
 #define KOOPAS_BBOX_HEIGHT 26
 #define KOOPAS_BBOX_HEIGHT_DIE 16
 
-#define KOOPAS_STATE_WALKING 100
-#define KOOPAS_STATE_DIE 200
-
 #define KOOPAS_ANI_WALKING_LEFT 0
 #define KOOPAS_ANI_WALKING_RIGHT 1
 #define KOOPAS_ANI_DIE 2
@@ -23,5 +20,5 @@ class CKoopas : public Enemy
 
 public:
 	CKoopas();
-	virtual void SetState(int state);
+	virtual void setObjectState(ObjectState state);
 };

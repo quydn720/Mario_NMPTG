@@ -62,10 +62,6 @@ public:
 
 	int nx;
 
-	int state;
-	int getState() { return this->state; }
-	virtual void SetState(int state) { this->state = state; }
-
 	DWORD dt;
 
 	LPANIMATION_SET animation_set;

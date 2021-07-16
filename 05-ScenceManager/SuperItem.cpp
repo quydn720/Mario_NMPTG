@@ -2,12 +2,12 @@
 
 SuperItem::SuperItem(ItemType type, float w, float h) : Item(type, w, h) {
 	itemType = ItemType::SUPER_ITEM;
-	setObjectState(ObjectState::SUPER_ITEM_INVISIBLE);
+	setObjectState(ObjectState::ITEM_INVISIBLE);
 }
 
 void SuperItem::Render() {
 	RenderBoundingBox();
-	if (_state == ObjectState::SUPER_ITEM_VISIBLE) {
+	if (_state == ObjectState::ITEM_VISIBLE) {
 		currentAnimation->Render(x, y);
 	}
 }
@@ -15,7 +15,7 @@ void SuperItem::Render() {
 void SuperItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CGameObject::Update(dt);
 
-	if (_state == ObjectState::SUPER_ITEM_VISIBLE) {
+	if (_state == ObjectState::ITEM_VISIBLE) {
 		vy += ITEM_GRAVITY * dt;
 
 		vector<LPCOLLISIONEVENT> coEvents;
@@ -50,12 +50,12 @@ void SuperItem::setObjectState(ObjectState s, int marioLevel, int mario_x)
 {
 	CGameObject::setObjectState(s);
 	switch (s) {
-	case ObjectState::SUPER_ITEM_INVISIBLE: {
+	case ObjectState::ITEM_INVISIBLE: {
 		setAnimation(CAnimationSets::GetInstance()->Get(5)->at(0));
 		vy = 0;
 		break;
 	}
-	case ObjectState::SUPER_ITEM_VISIBLE: {
+	case ObjectState::ITEM_VISIBLE: {
 		LPANIMATION ani = (marioLevel == 2) ?
 			CAnimationSets::GetInstance()->Get(5)->at(0) : // Super Mushroom
 			CAnimationSets::GetInstance()->Get(5)->at(1);  // Super Leaf

@@ -24,7 +24,7 @@ Mario::Mario(float x, float y) : CGameObject()
 {
 	level = MARIO_LEVEL_BIG;
 	untouchable = 0;
-	SetState(MARIO_STATE_IDLE);
+	setObjectState(ObjectState::MARIO_STATE_IDLE);
 
 	start_x = x;
 	start_y = y;
@@ -54,7 +54,7 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	coEvents.clear();
 
 	// turn off collision when die 
-	if (state != MARIO_STATE_DIE)
+	if (_state != ObjectState::MARIO_STATE_DIE)
 		CalcPotentialCollisions(coObjects, coEvents);
 
 	// reset untouchable timer if untouchable time has passed
@@ -134,7 +134,7 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						if (questionBlock->getItemType() == ItemType::SUPER_ITEM && !questionBlock->isEmpty) {
 							questionBlock->setObjectState(ObjectState::QUESTION_BLOCK_EMPTY);
 							SuperItem* s = dynamic_cast<SuperItem*>(questionBlock->getItem());
-							s->setObjectState(ObjectState::SUPER_ITEM_VISIBLE, this->level, this->x);
+							s->setObjectState(ObjectState::ITEM_VISIBLE, this->level, this->x);
 						}
 					}
 					break;
@@ -160,9 +160,9 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				// jump on top >> kill Goomba and deflect a bit 
 				if (e->ny < 0)
 				{
-					if (goomba->getState() != GOOMBA_STATE_DIE)
+					if (goomba->getObjectState() != ObjectState::GOOMBA_STATE_DIE)
 					{
-						goomba->SetState(GOOMBA_STATE_DIE);
+						goomba->setObjectState(ObjectState::GOOMBA_STATE_DIE);
 						vy = -MARIO_JUMP_DEFLECT_SPEED;
 					}
 				}
@@ -170,7 +170,7 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					if (untouchable == 0)
 					{
-						if (goomba->getState() != GOOMBA_STATE_DIE)
+						if (goomba->getObjectState() != ObjectState::GOOMBA_STATE_DIE)
 						{
 							if (level > MARIO_LEVEL_SMALL)
 							{
@@ -178,7 +178,7 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 								StartUntouchable();
 							}
 							else
-								SetState(MARIO_STATE_DIE);
+								setObjectState(ObjectState::MARIO_STATE_DIE);
 						}
 					}
 				}
@@ -198,9 +198,9 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void Mario::Render()
 {
 	int ani = -1;
-	if (state == MARIO_STATE_DIE)
+	if (_state == ObjectState::MARIO_STATE_DIE)
 		ani = MARIO_ANI_DIE;
-	else if (state == MARIO_TAIL_STATE_IDLE)
+	else if (_state == ObjectState::MARIO_TAIL_STATE_IDLE)
 		ani = MARIO_TAIL_ANI_IDLE_RIGHT;
 	else
 		if (level == MARIO_LEVEL_BIG)
@@ -235,30 +235,30 @@ void Mario::Render()
 	RenderBoundingBox();
 }
 
-void Mario::SetState(int state)
+void Mario::setObjectState(ObjectState state)
 {
-	CGameObject::SetState(state);
+	CGameObject::setObjectState(state);
 
 	switch (state)
 	{
-	case MARIO_STATE_WALKING_RIGHT:
+	case ObjectState::MARIO_STATE_WALKING_RIGHT:
 		vx = MARIO_WALKING_SPEED;
 		nx = 1;
 		break;
-	case MARIO_STATE_WALKING_LEFT:
+	case ObjectState::MARIO_STATE_WALKING_LEFT:
 		vx = -MARIO_WALKING_SPEED;
 		nx = -1;
 		break;
-	case MARIO_STATE_JUMP:
+	case ObjectState::MARIO_STATE_JUMP:
 		if (marioState["onGround"]) {
 			vy = -MARIO_JUMP_SPEED_Y;
 			marioState["onGround"] = false;
 		}
 		break;
-	case MARIO_STATE_IDLE:
+	case ObjectState::MARIO_STATE_IDLE:
 		vx = 0;
 		break;
-	case MARIO_STATE_DIE:
+	case ObjectState::MARIO_STATE_DIE:
 		vy = -MARIO_DIE_DEFLECT_SPEED;
 		break;
 	}
@@ -291,7 +291,7 @@ void Mario::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 */
 void Mario::Reset()
 {
-	SetState(MARIO_STATE_IDLE);
+	setObjectState(ObjectState::MARIO_STATE_IDLE);
 	SetLevel(MARIO_LEVEL_SMALL);
 	SetPosition(start_x, start_y);
 	SetSpeed(0, 0);

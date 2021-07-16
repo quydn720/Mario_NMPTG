@@ -1,10 +1,8 @@
 #include "SuperItem.h"
 
-SuperItem::SuperItem(ItemType type, float w, float h) : Item(type, w, h){
+SuperItem::SuperItem(ItemType type, float w, float h) : Item(type, w, h) {
 	itemType = ItemType::SUPER_ITEM;
 	setState(ObjectState::SUPER_ITEM_INVISIBLE);
-
-	vx = 0.013f;
 }
 
 void SuperItem::Render() {
@@ -14,7 +12,7 @@ void SuperItem::Render() {
 	}
 }
 
-void SuperItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects){
+void SuperItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CGameObject::Update(dt);
 
 	if (state == ObjectState::SUPER_ITEM_VISIBLE) {
@@ -49,7 +47,7 @@ void SuperItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects){
 }
 
 // should have argument: int level to figure what animation
-void SuperItem::setState(ObjectState s, int marioLevel, int mario_nx)
+void SuperItem::setState(ObjectState s, int marioLevel, int mario_x)
 {
 	state = s;
 	switch (s) {
@@ -59,9 +57,16 @@ void SuperItem::setState(ObjectState s, int marioLevel, int mario_nx)
 		break;
 	case ObjectState::SUPER_ITEM_VISIBLE:
 		setAnimation(CAnimationSets::GetInstance()->Get(5)->at(0));
-		nx = -mario_nx;
+		if (x <= mario_x) {
+			nx = -1;
+			vx = -0.1f;
+		}
+		else
+		{
+			nx = 1;
+			vx = 0.1f;
+		}
 		vy -= 0.2f;
 		break;
 	}
-
 }

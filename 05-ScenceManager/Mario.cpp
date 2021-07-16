@@ -39,6 +39,7 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
 
+
 	// Simple fall down
 	vy += MARIO_GRAVITY * dt;
 
@@ -112,7 +113,7 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 					break;
 				}
-									 // Mario can go through color block horizontally
+				// Mario can go through color block horizontally
 				case BlockType::COLOR_BLOCK: {
 					marioState["onGround"] = true;
 					ColorBlock* colorBlock = dynamic_cast<ColorBlock*>(e->obj);
@@ -130,12 +131,11 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							Coin* c = dynamic_cast<Coin*>(questionBlock->getItem());
 							// and this
 							c->SetState(9999);
-							DebugOut(L"+1000\n");
 						}
 						if (questionBlock->getItemType() == ItemType::SUPER_ITEM && !questionBlock->isEmpty) {
 							questionBlock->setState(QUESTION_BLOCK_EMPTY);
 							SuperItem* s = dynamic_cast<SuperItem*>(questionBlock->getItem());
-							s->setState(ObjectState::SUPER_ITEM_VISIBLE, level);
+							s->setState(ObjectState::SUPER_ITEM_VISIBLE, level, this->x);
 						}
 					}
 					break;
@@ -152,7 +152,9 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			//		//	break;
 			//		//}
 			//	}
-			//}
+			if (dynamic_cast<SuperItem*>(e->obj)) {
+				e->obj->isAlive = false;
+			}
 			if (dynamic_cast<CGoomba*>(e->obj)) {// if e->obj is Goomba 
 				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 

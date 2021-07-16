@@ -3,10 +3,9 @@
 0	textures\mario.png	255	255	255
 10	textures\enemies.png	3	26	110
 20	textures\misc.png	176	224	248
-
+21	textures\leaf1.png	176	224	248
 [MAPS]
-#30	textures\SMB3_1-1_map_bank.png	255	255	255	data\map1.1.txt
-30	textures\SMB3_1-1_map_map_bank.png	255	255	255	data\dtht.txt
+30	textures\SMB3_1-1_map_map_bank.png	255	255	255	data\map1.1.txt
 
 #	id	left	top	right	bottom	texture_id
 [SPRITES]
@@ -86,7 +85,8 @@
 
 # Super Mushroom / Leaf
 40040	300	189	316	205	20
-40041	300	208	316	222	20	
+40041	300	208	316	222	20
+40042	1	1	17	15	21
 		
 #	ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
@@ -145,7 +145,7 @@
 300	200	50	201	50	202	50
 # Super Mushroom / Leaf
 301	40040	100
-302	40041	100
+302	40041	200	40042	200
 
 #
 #	id	ani1	ani2	ani3
@@ -162,7 +162,7 @@
 # 	COIN
 4	300
 # 	Super Mushroom
-5	301
+5	301	302
 
 [OBJECTS]
 #	type	x	y	ani_set_id	extra_settings	per	object	type
@@ -177,7 +177,6 @@
 2	608	384	1	29	2	1
 2	1136	400	1	22	1	1
 2	1520	400	1	5	1	1
-2	1648	400	1	36	1	1
 2	1648	400	1	36	1	1
 2	2240	400	1	35	1	1
 
@@ -194,8 +193,6 @@
 2	208	288	2	1	1	3	1
 2	224	288	2	1	1	3	1
 
-
-
 #	COIN
 3	160	336	4	1	1	0
 3	176	336	4	1	1	0
@@ -204,33 +201,12 @@
 3	208	288	5	1	1	1
 3	224	288	5	1	1	1
 
-
 #	GOOMBA
 #5	200	400	3
 #5	260	400	3
 #5	320	400	3
 #5	480	400	3
 #5	500	400	3
-
-#	BRICK	
-#	---	platform	(hint:	I	created	the	list	using	Excel!)	----
-#1	0	375	2
-#1	16	375	2
-#1	32	375	2
-#	----	brick	group	1	----
-#2	100	74	2	1	1	0			
-#2	100	90	2	1	1	0
-#2	84	90	2	1	1	0
-#
-##	----	brick	group	2	----
-#2	160	74	2	1	1	0
-#2	160	90	2	1	1	0
-#2	144	90	2	1	1	0
-#
-##	----	brick	group	3	----
-#2	220	74	2	1	1	0
-#2	220	90	2	1	1	0
-#2	204	90	2	1	1	0
 
 #	---	SCENE	PORTAL	----
 #	type	l	t	ani_set_id	r	b	scene_id

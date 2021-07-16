@@ -137,3 +137,13 @@ CGameObject::~CGameObject()
 {
 
 }
+
+void CGameObject::setObjectState(ObjectState s)
+{
+	_state = s;
+}
+
+ObjectState CGameObject::getObjectState()
+{
+	return _state;
+}

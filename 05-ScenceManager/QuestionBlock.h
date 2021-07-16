@@ -15,5 +15,5 @@ public:
 	virtual void Render() {
 		currentAnimation->Render(x, y);
 	};
-	void setState(ObjectState s);
+	void setObjectState(ObjectState s);
 };

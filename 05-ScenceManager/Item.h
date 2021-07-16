@@ -13,6 +13,7 @@ protected:
 public: 
 	Item(ItemType type, float x, float y);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {}
+	virtual void Render() {};
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	ItemType getItemType() { return itemType; }
 };

@@ -3,7 +3,7 @@
 QuestionBlock::QuestionBlock(ItemType itemType, float width, float height) : Block(width, height) {
 	blockType = BlockType::QUESTION_BLOCK;
 	this->itemType = itemType;
-	setState(ObjectState::QUESTION_BLOCK_FILLED);
+	setObjectState(ObjectState::QUESTION_BLOCK_FILLED);
 	// TODO: nên viết các hàm với tham số thể hiện chi tiết mục đích hàm, lấy ani_set của một state
 	//animationSets::GetInstance()->Get(ani_set_id)->Get(state)
 }
@@ -21,11 +21,11 @@ void QuestionBlock::setItem(Item* it) {
 	item = it;
 }
 
-void QuestionBlock::setState(ObjectState s)
+void QuestionBlock::setObjectState(ObjectState s)
 {
-	state = s;
+	CGameObject::setObjectState(s);
 	switch (s) {
-	case QUESTION_BLOCK_FILLED:
+	case ObjectState::QUESTION_BLOCK_FILLED:
 		setAnimation(CAnimationSets::GetInstance()->Get(2)->at(0));
 		break;
 	case ObjectState::QUESTION_BLOCK_EMPTY:

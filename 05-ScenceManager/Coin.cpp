@@ -2,39 +2,38 @@
 
 Coin::Coin(ItemType type, float w, float h) : Item(type, w, h) {
 	itemType = ItemType::COIN;
-	SetState(9998);
-	// Fix this hard-code
+	setObjectState(ObjectState::ITEM_INVISIBLE);
 }
 
 void Coin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CGameObject::Update(dt);
 	
-	if (state == 9999) {
+	if (_state == ObjectState::ITEM_VISIBLE) {
 		vy += ITEM_GRAVITY * dt;
 	}
 	if (vy > 0 && y > destroy) {
 		isAlive = false;
-		//this->~Coin();
 	}
 	y += dy;
 }
+
 void Coin::Render() {
-	if (state == 9999) {
+	if (_state == ObjectState::ITEM_VISIBLE) {
 		currentAnimation->Render(x, y);
 	}
 }
 
-void Coin::SetState(int s)
+void Coin::setObjectState(ObjectState s)
 {
-	CGameObject::SetState(s);
+	CGameObject::setObjectState(s);
 	switch (s) {
-	case 9999: {
+	case ObjectState::ITEM_VISIBLE: {
 		destroy = y - GAME_UNIT;
 		vy = -0.3f;
 		setAnimation(CAnimationSets::GetInstance()->Get(4)->at(0));
 		break;
 	}
-	case 9998: {
+	case ObjectState::ITEM_INVISIBLE: {
 		setAnimation(CAnimationSets::GetInstance()->Get(4)->at(0));
 		vy = 0;
 		break;

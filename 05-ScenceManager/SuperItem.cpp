@@ -2,12 +2,12 @@
 
 SuperItem::SuperItem(ItemType type, float w, float h) : Item(type, w, h) {
 	itemType = ItemType::SUPER_ITEM;
-	setState(ObjectState::SUPER_ITEM_INVISIBLE);
+	setObjectState(ObjectState::SUPER_ITEM_INVISIBLE);
 }
 
 void SuperItem::Render() {
 	RenderBoundingBox();
-	if (state == ObjectState::SUPER_ITEM_VISIBLE) {
+	if (_state == ObjectState::SUPER_ITEM_VISIBLE) {
 		currentAnimation->Render(x, y);
 	}
 }
@@ -15,7 +15,7 @@ void SuperItem::Render() {
 void SuperItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CGameObject::Update(dt);
 
-	if (state == ObjectState::SUPER_ITEM_VISIBLE) {
+	if (_state == ObjectState::SUPER_ITEM_VISIBLE) {
 		vy += ITEM_GRAVITY * dt;
 
 		vector<LPCOLLISIONEVENT> coEvents;
@@ -46,10 +46,9 @@ void SuperItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	}
 }
 
-// should have argument: int level to figure what animation
-void SuperItem::setState(ObjectState s, int marioLevel, int mario_x)
+void SuperItem::setObjectState(ObjectState s, int marioLevel, int mario_x)
 {
-	state = s;
+	CGameObject::setObjectState(s);
 	switch (s) {
 	case ObjectState::SUPER_ITEM_INVISIBLE: {
 		setAnimation(CAnimationSets::GetInstance()->Get(5)->at(0));

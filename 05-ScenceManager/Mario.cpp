@@ -127,15 +127,14 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					QuestionBlock* questionBlock = dynamic_cast<QuestionBlock*>(e->obj);
 					if (e->ny > 0) {
 						if (questionBlock->getItemType() == ItemType::COIN && !questionBlock->isEmpty) {
-							questionBlock->setState(QUESTION_BLOCK_EMPTY);
+							questionBlock->setObjectState(ObjectState::QUESTION_BLOCK_EMPTY);
 							Coin* c = dynamic_cast<Coin*>(questionBlock->getItem());
-							// and this
-							c->SetState(9999);
+							c->setObjectState(ObjectState::ITEM_VISIBLE);
 						}
 						if (questionBlock->getItemType() == ItemType::SUPER_ITEM && !questionBlock->isEmpty) {
-							questionBlock->setState(QUESTION_BLOCK_EMPTY);
+							questionBlock->setObjectState(ObjectState::QUESTION_BLOCK_EMPTY);
 							SuperItem* s = dynamic_cast<SuperItem*>(questionBlock->getItem());
-							s->setState(ObjectState::SUPER_ITEM_VISIBLE, this->level, this->x);
+							s->setObjectState(ObjectState::SUPER_ITEM_VISIBLE, this->level, this->x);
 						}
 					}
 					break;

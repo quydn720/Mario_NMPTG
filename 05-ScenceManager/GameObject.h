@@ -9,7 +9,7 @@
 #include "GameProperties.h"
 #include "Utils.h"
 
-enum ObjectType {
+enum class ObjectType {
 	PLAYER,
 	ENEMY,
 	BLOCK,
@@ -50,8 +50,9 @@ struct CCollisionEvent
 
 class CGameObject
 {
-private:
+protected:
 	ObjectType type;
+	ObjectState _state;
 public:
 	float x, y;
 	float dx, dy;	// dx = vx * dt;	dy = vy * dt
@@ -60,7 +61,7 @@ public:
 	bool isAlive = true;
 
 	int nx;
-	//
+
 	int state;
 	int getState() { return this->state; }
 	virtual void SetState(int state) { this->state = state; }
@@ -69,27 +70,11 @@ public:
 
 	LPANIMATION_SET animation_set;
 
-	// setting the bounding box
-	float widthBoundingBox, heightBoundingBox;
-
-	ObjectType getType() { return this->type; }
-	void setType(ObjectType t) { type = t; }
-
-	////TODO: thêm thuộc tính ani để kế thừa, mỗi gameobject đều có ani
-	LPANIMATION currentAnimation;
-	void setAnimation(LPANIMATION ani) {
-		currentAnimation = ani;
-	}
-
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }
 	void SetSpeed(float vx, float vy) { this->vx = vx, this->vy = vy; }
 	void GetPosition(float& x, float& y) { x = this->x; y = this->y; }
 	void GetSpeed(float& vx, float& vy) { vx = this->vx; vy = this->vy; }
 
-	virtual void SetBoundingBox(float w, float h) {
-		widthBoundingBox = w;
-		heightBoundingBox = h;
-	}
 	void RenderBoundingBox();
 
 	void SetAnimationSet(LPANIMATION_SET ani_set) { animation_set = ani_set; }
@@ -112,7 +97,27 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
 	virtual void Render() = 0;
 
-
 	~CGameObject();
+
+
+	// =========================================================
+	// setting the bounding box
+	float widthBoundingBox, heightBoundingBox;
+
+	virtual void SetBoundingBox(float w, float h) {
+		widthBoundingBox = w;
+		heightBoundingBox = h;
+	}
+
+	ObjectType getType() { return this->type; }
+	void setType(ObjectType t) { type = t; }
+
+	LPANIMATION currentAnimation;
+	void setAnimation(LPANIMATION ani) {
+		currentAnimation = ani;
+	}
+
+	virtual void setObjectState(ObjectState s);
+	ObjectState getObjectState();
 };
 

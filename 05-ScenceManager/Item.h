@@ -1,10 +1,10 @@
 #pragma once
 #include "GameObject.h"
+#include "Block.h"
 
 enum class ItemType {
 	COIN,
-	SUPER_MUSHROOM,
-	SUPER_LEAF
+	SUPER_ITEM,
 };
 
 class Item : public CGameObject {

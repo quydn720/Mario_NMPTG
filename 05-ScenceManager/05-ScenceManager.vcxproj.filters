@@ -102,6 +102,9 @@
     <ClCompile Include="Ground.cpp">
       <Filter>Source Files\Block</Filter>
     </ClCompile>
+    <ClCompile Include="SuperItem.cpp">
+      <Filter>Source Files\Item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GameObject.h">
@@ -172,6 +175,9 @@
     </ClInclude>
     <ClInclude Include="Ground.h">
       <Filter>Header Files\Block</Filter>
+    </ClInclude>
+    <ClInclude Include="SuperItem.h">
+      <Filter>Header Files\Item</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

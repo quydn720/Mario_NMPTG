@@ -17,8 +17,6 @@ void Coin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		this->~Coin();
 	}
 	y += dy;
-
-	DebugOut(L"[COIN]\nvy:	%f\ny:	%f\n", vy, y);
 }
 void Coin::Render() {
 	if (state == 9999) {

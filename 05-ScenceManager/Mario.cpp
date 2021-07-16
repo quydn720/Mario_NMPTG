@@ -42,6 +42,11 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// Simple fall down
 	vy += MARIO_GRAVITY * dt;
 
+	// test - block mario from edge -
+	if (x < 1) {
+		x = 1;
+	}
+
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -83,7 +88,6 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 		if (nx != 0) vx = 0;
 		if (ny != 0) vy = 0;
-
 		//
 		// Collision logic with other objects
 		//
@@ -128,23 +132,27 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 							c->SetState(9999);
 							DebugOut(L"+1000\n");
 						}
-						else DebugOut(L"\nhit something");
+						if (questionBlock->getItemType() == ItemType::SUPER_ITEM && !questionBlock->isEmpty) {
+							questionBlock->setState(QUESTION_BLOCK_EMPTY);
+							SuperItem* s = dynamic_cast<SuperItem*>(questionBlock->getItem());
+							s->setState(ObjectState::SUPER_ITEM_VISIBLE, level);
+						}
 					}
 					break;
 				}
 				}
 			}
-			if (dynamic_cast<Item*>(e->obj)) {
-				switch (dynamic_cast<Item*>(e->obj)->getItemType()) {
-				//case ItemType::COIN: {
-				//	Coin* coin = dynamic_cast<Coin*>(e->obj);
-				//	coin->y += dy;
-				//	//testing -> idea: khởi tạo coin nằm yên trong ?brick, khi mario cụng, thì câu lệnh này làm đồng tiền nảy lên, sau đó biến mất
-				//	DebugOut(L"\n[COIN]: %s", "+1000000000000");
-				//	break;
-				//}
-				}
-			}
+			//if (dynamic_cast<Item*>(e->obj)) {
+			//	switch (dynamic_cast<Item*>(e->obj)->getItemType()) {
+			//		//case ItemType::COIN: {
+			//		//	Coin* coin = dynamic_cast<Coin*>(e->obj);
+			//		//	coin->y += dy;
+			//		//	//testing -> idea: khởi tạo coin nằm yên trong ?brick, khi mario cụng, thì câu lệnh này làm đồng tiền nảy lên, sau đó biến mất
+			//		//	DebugOut(L"\n[COIN]: %s", "+1000000000000");
+			//		//	break;
+			//		//}
+			//	}
+			//}
 			if (dynamic_cast<CGoomba*>(e->obj)) {// if e->obj is Goomba 
 				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 

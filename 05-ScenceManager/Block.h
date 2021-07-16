@@ -16,7 +16,9 @@ protected:
 public:
 	Block(float width, float height);
 	~Block();
-	virtual void Render() {};
+	virtual void Render() {
+		RenderBoundingBox();
+	}
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	BlockType getBlockType() { return blockType; }
 };

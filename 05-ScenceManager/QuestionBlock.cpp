@@ -23,6 +23,7 @@ void QuestionBlock::setItem(Item* it) {
 
 void QuestionBlock::setState(ObjectState s)
 {
+	state = s;
 	switch (s) {
 	case QUESTION_BLOCK_FILLED:
 		setAnimation(CAnimationSets::GetInstance()->Get(2)->at(0));

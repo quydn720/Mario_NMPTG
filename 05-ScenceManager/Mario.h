@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "SuperItem.h"
 
 #define MARIO_WALKING_SPEED		0.15f 
 #define MARIO_JUMP_SPEED_Y		0.5f

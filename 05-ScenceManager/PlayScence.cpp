@@ -215,6 +215,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			items.push_back(dynamic_cast<Item*>(obj));
 			break;
 		}
+		case ItemType::SUPER_ITEM: {
+			obj = new SuperItem(itemType, objectWidth, objectHeight);
+			items.push_back(dynamic_cast<SuperItem*>(obj));
+			break;
+		}
 		}
 		break;
 	}
@@ -337,6 +342,7 @@ void CPlayScene::Update(DWORD dt)
 	cx -= game->GetScreenWidth() / 2;
 	cy -= game->GetScreenHeight() / 2;
 
+	float mapWidth = Map::GetInstance()->GetWidth();
 	if (player->y >= 240)
 		cy = 240;
 

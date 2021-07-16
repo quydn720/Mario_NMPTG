@@ -92,6 +92,9 @@ void Map::_ParseSection_INFO(string line)
 	tileRow = atoi(tokens[2].c_str());
 	tileColumn = atoi(tokens[3].c_str());
 	tileSize = atoi(tokens[4].c_str());
+
+	Width = row * tileSize;
+	Height = column * tileSize;
 }
 
 Map::~Map()

@@ -1,6 +1,6 @@
 #include "Item.h"
 
-Item::Item(ItemType type, float x, float y) {
+Item::Item(ItemType type, float x, float y) : CGameObject() {
 	SetBoundingBox(x, y);
 	setType(ObjectType::ITEM);
 	itemType = type;

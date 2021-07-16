@@ -9,10 +9,8 @@ Coin::Coin(ItemType type, float w, float h) : Item(type, w, h) {
 void Coin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CGameObject::Update(dt);
 	
-	DebugOut(L"COIN y: %f\n", y);
-
 	if (state == 9999) {
-		vy += COIN_GRAVITY * dt;
+		vy += ITEM_GRAVITY * dt;
 	}
 	if (vy > 0 && y > destroy) {
 		isAlive = false;

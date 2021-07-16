@@ -1,6 +1,6 @@
 #pragma once
 
-#define COIN_GRAVITY 0.0007f
+#define ITEM_GRAVITY 0.0007f
 #define GAME_UNIT 16.0f
 
 enum ObjectState {

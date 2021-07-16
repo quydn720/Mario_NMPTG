@@ -135,7 +135,7 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						if (questionBlock->getItemType() == ItemType::SUPER_ITEM && !questionBlock->isEmpty) {
 							questionBlock->setState(QUESTION_BLOCK_EMPTY);
 							SuperItem* s = dynamic_cast<SuperItem*>(questionBlock->getItem());
-							s->setState(ObjectState::SUPER_ITEM_VISIBLE, level, this->x);
+							s->setState(ObjectState::SUPER_ITEM_VISIBLE, this->level, this->x);
 						}
 					}
 					break;
@@ -293,7 +293,7 @@ void Mario::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 void Mario::Reset()
 {
 	SetState(MARIO_STATE_IDLE);
-	SetLevel(MARIO_LEVEL_BIG);
+	SetLevel(MARIO_LEVEL_SMALL);
 	SetPosition(start_x, start_y);
 	SetSpeed(0, 0);
 }

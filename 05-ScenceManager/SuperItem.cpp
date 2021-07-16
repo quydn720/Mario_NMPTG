@@ -16,7 +16,7 @@ void SuperItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	CGameObject::Update(dt);
 
 	if (state == ObjectState::SUPER_ITEM_VISIBLE) {
-		vy += COIN_GRAVITY * dt;
+		vy += ITEM_GRAVITY * dt;
 
 		vector<LPCOLLISIONEVENT> coEvents;
 		vector<LPCOLLISIONEVENT> coEventsResult;
@@ -38,7 +38,7 @@ void SuperItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 				if (dynamic_cast<Block*>(e->obj)) {
 					if (e->ny != 0) {
 						vy = 0;
-						x += dx;
+						x += min_tx * dx + nx * 0.4f;
 					}
 				}
 			}
@@ -51,22 +51,26 @@ void SuperItem::setState(ObjectState s, int marioLevel, int mario_x)
 {
 	state = s;
 	switch (s) {
-	case ObjectState::SUPER_ITEM_INVISIBLE:
+	case ObjectState::SUPER_ITEM_INVISIBLE: {
 		setAnimation(CAnimationSets::GetInstance()->Get(5)->at(0));
 		vy = 0;
 		break;
-	case ObjectState::SUPER_ITEM_VISIBLE:
-		setAnimation(CAnimationSets::GetInstance()->Get(5)->at(0));
+	}
+	case ObjectState::SUPER_ITEM_VISIBLE: {
+		LPANIMATION ani = (marioLevel == 2) ?
+			CAnimationSets::GetInstance()->Get(5)->at(0) : // Super Mushroom
+			CAnimationSets::GetInstance()->Get(5)->at(1);  // Super Leaf
+		setAnimation(ani);
 		if (x <= mario_x) {
 			nx = -1;
-			vx = -0.1f;
+			vx = -SUPER_MUSHROOM_VX;
 		}
-		else
-		{
+		else {
 			nx = 1;
-			vx = 0.1f;
+			vx = SUPER_MUSHROOM_VX;
 		}
-		vy -= 0.2f;
+		vy -= SUPER_MUSHROOM_INIT_VY;
 		break;
+	}
 	}
 }

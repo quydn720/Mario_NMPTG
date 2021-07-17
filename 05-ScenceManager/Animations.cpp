@@ -1,8 +1,9 @@
 #include "Animations.h"
 #include "Utils.h"
 
-CAnimationSets * CAnimationSets::__instance = NULL;
-
+CAnimationSets* CAnimationSets::__instance = NULL;
+CAnimationSet* CAnimationSet::__instance = NULL;
+//============== ANIMATION ============== 
 void Animation::Add(int spriteId, DWORD time)
 {
 	int t = time;
@@ -18,7 +19,6 @@ void Animation::Add(int spriteId, DWORD time)
 	LPANIMATION_FRAME frame = new AnimationFrame(sprite, t);
 	frames.push_back(frame);
 }
-
 // NOTE: sometimes Animation object is NULL ??? HOW ??? 
 void Animation::Render(float x, float y, int alpha)
 {
@@ -41,20 +41,17 @@ void Animation::Render(float x, float y, int alpha)
 
 	frames[currentFrame]->GetSprite()->Draw(x, y, alpha);
 }
-
-CAnimations * CAnimations::__instance = NULL;
-
-CAnimations * CAnimations::GetInstance()
+//============== ANIMATIONS ============== 
+CAnimations* CAnimations::__instance = NULL;
+CAnimations* CAnimations::GetInstance()
 {
 	if (__instance == NULL) __instance = new CAnimations();
 	return __instance;
 }
-
 void CAnimations::Add(int id, LPANIMATION ani)
 {
 	animations[id] = ani;
 }
-
 LPANIMATION CAnimations::Get(int id)
 {
 	LPANIMATION ani = animations[id];
@@ -62,7 +59,6 @@ LPANIMATION CAnimations::Get(int id)
 		DebugOut(L"[ERROR] Failed to find animation id: %d\n", id);
 	return ani;
 }
-
 void CAnimations::Clear()
 {
 	for (auto x : animations)
@@ -73,35 +69,38 @@ void CAnimations::Clear()
 
 	animations.clear();
 }
-
+//============== ANIMATION_SETS ============== 
 CAnimationSets::CAnimationSets()
 {
 
 }
-
-CAnimationSets *CAnimationSets::GetInstance()
+CAnimationSets* CAnimationSets::GetInstance()
 {
 	if (__instance == NULL) __instance = new CAnimationSets();
 	return __instance;
 }
-
 LPANIMATION_SET CAnimationSets::Get(unsigned int ani_set_id)
 {
 	LPANIMATION_SET ani_set = animation_sets[ani_set_id];
 	if (ani_set == NULL)
-		DebugOut(L"[ERROR] Failed to find animation set id: %d\n",ani_set_id);
-	 
+		DebugOut(L"[ERROR] Failed to find animation set id: %d\n", ani_set_id);
+
 	return ani_set;
 }
-
 void CAnimationSets::Add(int id, LPANIMATION_SET ani_set)
 {
 	animation_sets[id] = ani_set;
 	DebugOut(L"[ANIMATION_SETS] Added: %d\n", ani_set);
 }
-
-//CAnimationSet* CAnimationSet::GetInstance()
-//{
-//	if (__instance == NULL) __instance = new CAnimationSet();
-//	return __instance;
-//}
+//============== ANIMATION_SET ============== 
+CAnimationSet* CAnimationSet::GetInstance()
+{
+	if (__instance == NULL) __instance = new CAnimationSet();
+	return __instance;
+}
+void CAnimationSet::push_back(int objectId, LPANIMATION ani) {
+	animation_set[objectId] = ani;
+}
+LPANIMATION CAnimationSet::at(int stateId) {
+	return animation_set[stateId];
+}

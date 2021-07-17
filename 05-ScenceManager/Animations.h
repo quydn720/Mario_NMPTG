@@ -18,9 +18,7 @@ public:
 	DWORD GetTime() { return time; }
 	LPSPRITE GetSprite() { return sprite; }
 };
-
 typedef AnimationFrame *LPANIMATION_FRAME;
-
 class Animation
 {
 	DWORD lastFrameTime;
@@ -33,9 +31,7 @@ public:
 
 	void Render(float x, float y, int alpha = 255);
 };
-
 typedef Animation *LPANIMATION;
-
 class CAnimations
 {
 	static CAnimations * __instance;
@@ -49,21 +45,16 @@ public:
 
 	static CAnimations * GetInstance();
 };
-
-typedef vector<LPANIMATION> CAnimationSet;
-
-//class CAnimationSet {
-//private:
-//	unordered_map<int, LPANIMATION> animation_set;
-//	static CAnimationSet* __instance;
-//public:
-//	static CAnimationSet* GetInstance();
-//	void Add()
-//
-//};
-
+class CAnimationSet {
+private:
+	unordered_map<int, LPANIMATION> animation_set;
+	static CAnimationSet* __instance;
+public:
+	static CAnimationSet* GetInstance();
+	void push_back(int objectId, LPANIMATION ani);
+	LPANIMATION at(int stateId);
+};
 typedef CAnimationSet* LPANIMATION_SET;
-
 /*
 	Manage animation set database
 */
@@ -71,7 +62,7 @@ class CAnimationSets
 {
 	static CAnimationSets * __instance;
 
-	unordered_map<int, LPANIMATION_SET> animation_sets;
+	unordered_map<int, CAnimationSet*> animation_sets;
 
 public:
 	CAnimationSets();

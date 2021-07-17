@@ -26,11 +26,11 @@ void QuestionBlock::setObjectState(ObjectState s)
 	CGameObject::setObjectState(s);
 	switch (s) {
 	case ObjectState::QUESTION_BLOCK_FILLED:
-		setAnimation(CAnimationSets::GetInstance()->Get(2)->at(0));
+		setAnimation(CAnimationSets::GetInstance()->Get(2)->at(602));
 		break;
 	case ObjectState::QUESTION_BLOCK_EMPTY:
 		isEmpty = true;
-		setAnimation(CAnimationSets::GetInstance()->Get(2)->at(1));
+		setAnimation(CAnimationSets::GetInstance()->Get(2)->at(603));
 		break;
 	}
 

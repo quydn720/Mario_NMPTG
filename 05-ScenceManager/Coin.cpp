@@ -30,11 +30,11 @@ void Coin::setObjectState(ObjectState s)
 	case ObjectState::ITEM_VISIBLE: {
 		destroy = y - GAME_UNIT;
 		vy = -0.3f;
-		setAnimation(CAnimationSets::GetInstance()->Get(4)->at(0));
+		setAnimation(CAnimationSets::GetInstance()->Get(4)->at(300));
 		break;
 	}
 	case ObjectState::ITEM_INVISIBLE: {
-		setAnimation(CAnimationSets::GetInstance()->Get(4)->at(0));
+		setAnimation(CAnimationSets::GetInstance()->Get(4)->at(300));
 		vy = 0;
 		break;
 	}

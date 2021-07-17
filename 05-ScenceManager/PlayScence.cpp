@@ -138,7 +138,7 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 		int ani_id = atoi(tokens[i].c_str());
 
 		LPANIMATION ani = animations->Get(ani_id);
-		s->push_back(ani);
+		s->push_back(ani_id, ani);
 	}
 
 	CAnimationSets::GetInstance()->Add(ani_set_id, s);

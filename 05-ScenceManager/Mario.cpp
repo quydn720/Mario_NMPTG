@@ -230,22 +230,25 @@ void Mario::Render()
 	int alpha = 255;
 	if (untouchable) alpha = 128;
 
-	animation_set->at(ani)->Render(x, y, alpha);
+	animation_set->Get(ani)->Render(x, y, alpha);
 
+	//currentAnimation->Render(x, y);
 	RenderBoundingBox();
 }
 
 void Mario::setObjectState(ObjectState state)
 {
 	CGameObject::setObjectState(state);
-
+	LPANIMATION ani = NULL;
 	switch (state)
 	{
 	case ObjectState::MARIO_STATE_WALKING_RIGHT:
+		ani = CAnimationSets::GetInstance()->Get(0)->Get(500);
 		vx = MARIO_WALKING_SPEED;
 		nx = 1;
 		break;
 	case ObjectState::MARIO_STATE_WALKING_LEFT:
+		ani = CAnimationSets::GetInstance()->Get(0)->Get(501);
 		vx = -MARIO_WALKING_SPEED;
 		nx = -1;
 		break;
@@ -256,19 +259,21 @@ void Mario::setObjectState(ObjectState state)
 		}
 		break;
 	case ObjectState::MARIO_STATE_IDLE:
+		ani = CAnimationSets::GetInstance()->Get(0)->Get(1);
 		vx = 0;
 		break;
 	case ObjectState::MARIO_STATE_DIE:
+		ani = CAnimationSets::GetInstance()->Get(0)->Get(599);
 		vy = -MARIO_DIE_DEFLECT_SPEED;
 		break;
 	}
+	setAnimation(ani);
 }
 
 void Mario::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = x;
 	top = y;
-
 
 	if (level == MARIO_LEVEL_BIG)
 	{
@@ -284,6 +289,8 @@ void Mario::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 		right = x + MARIO_SMALL_BBOX_WIDTH;
 		bottom = y + MARIO_SMALL_BBOX_HEIGHT;
 	}
+	//right += currentAnimation->getBBWidth();
+	//bottom += currentAnimation->getBBHeight();
 }
 
 /*

@@ -98,9 +98,9 @@ CAnimationSet* CAnimationSet::GetInstance()
 	if (__instance == NULL) __instance = new CAnimationSet();
 	return __instance;
 }
-void CAnimationSet::push_back(int objectId, LPANIMATION ani) {
+void CAnimationSet::Add(int objectId, LPANIMATION ani) {
 	animation_set[objectId] = ani;
 }
-LPANIMATION CAnimationSet::at(int stateId) {
+LPANIMATION CAnimationSet::Get(int stateId) {
 	return animation_set[stateId];
 }

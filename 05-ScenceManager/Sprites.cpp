@@ -10,6 +10,9 @@ CSprite::CSprite(int id, int left, int top, int right, int bottom, LPDIRECT3DTEX
 	this->right = right;
 	this->bottom = bottom;
 	this->texture = tex;
+
+	width = abs(left - right);
+	height = abs(top - bottom);
 }
 
 CSprites * CSprites::__instance = NULL;

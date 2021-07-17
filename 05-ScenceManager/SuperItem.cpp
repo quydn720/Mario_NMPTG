@@ -1,4 +1,6 @@
 #include "SuperItem.h"
+#define ANI_SUPER_MUSHROOM		301
+#define ANI_SUPER_LEAF			302
 
 SuperItem::SuperItem(ItemType type, float w, float h) : Item(type, w, h) {
 	itemType = ItemType::SUPER_ITEM;
@@ -38,7 +40,7 @@ void SuperItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 				if (dynamic_cast<Block*>(e->obj)) {
 					if (e->ny != 0) {
 						vy = 0;
-						x += min_tx * dx + nx * 0.4f;
+						x += dx;
 					}
 				}
 			}
@@ -51,14 +53,13 @@ void SuperItem::setObjectState(ObjectState s, int marioLevel, int mario_x)
 	CGameObject::setObjectState(s);
 	switch (s) {
 	case ObjectState::ITEM_INVISIBLE: {
-		setAnimation(CAnimationSets::GetInstance()->Get(5)->at(0));
 		vy = 0;
 		break;
 	}
 	case ObjectState::ITEM_VISIBLE: {
 		LPANIMATION ani = (marioLevel == 2) ?
-			CAnimationSets::GetInstance()->Get(5)->at(0) : // Super Mushroom
-			CAnimationSets::GetInstance()->Get(5)->at(1);  // Super Leaf
+			CAnimationSets::GetInstance()->Get(5)->Get(ANI_SUPER_MUSHROOM) :
+			CAnimationSets::GetInstance()->Get(5)->Get(ANI_SUPER_LEAF);
 		setAnimation(ani);
 		if (x <= mario_x) {
 			nx = -1;

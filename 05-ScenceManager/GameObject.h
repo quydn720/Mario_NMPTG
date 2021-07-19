@@ -97,7 +97,7 @@ public:
 
 
 	// =========================================================
-	// setting the bounding box
+	// Static object
 	float widthBoundingBox, heightBoundingBox;
 
 	virtual void SetBoundingBox(float w, float h) {

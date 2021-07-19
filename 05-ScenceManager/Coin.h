@@ -10,6 +10,4 @@ public:
 	void Render();
 	ItemType getItemType() { return itemType; }
 	void setObjectState(ObjectState s);
-	
-	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 };

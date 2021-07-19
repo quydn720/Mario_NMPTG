@@ -12,8 +12,6 @@ public:
 	ItemType getItemType();
 	Item* getItem();
 	void setItem(Item* it);
-	virtual void Render() {
-		currentAnimation->Render(x, y);
-	};
+	void Render();
 	void setObjectState(ObjectState s);
 };

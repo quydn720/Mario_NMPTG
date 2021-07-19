@@ -11,6 +11,8 @@
 #include "Item.h"
 #include "Coin.h"
 
+#define  MarioAni CAnimationSets::GetInstance()->Get(0)
+
 Mario* Mario::_instance = NULL;
 Mario* Mario::GetInstance()
 {
@@ -22,7 +24,7 @@ Mario* Mario::GetInstance()
 
 Mario::Mario(float x, float y) : CGameObject()
 {
-	level = MARIO_LEVEL_BIG;
+	form = FORM_SMALL_MARIO;
 	untouchable = 0;
 	setObjectState(ObjectState::MARIO_STATE_IDLE);
 
@@ -38,7 +40,6 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	// Calculate dx, dy 
 	CGameObject::Update(dt);
-
 
 	// Simple fall down
 	vy += MARIO_GRAVITY * dt;
@@ -84,11 +85,13 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		//	x += nx*abs(rdx); 
 
 		// block every object first!
+		/*
 		x += min_tx * dx + nx * 0.4f;
 		y += min_ty * dy + ny * 0.4f;
 
 		if (nx != 0) vx = 0;
 		if (ny != 0) vy = 0;
+		*/
 		//
 		// Collision logic with other objects
 		//
@@ -96,10 +99,15 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 
 			LPCOLLISIONEVENT e = coEventsResult[i];
-			//DebugOut(L"\n[ON_GROUND]: %d", marioState["onGround"]);
-			//DebugOut(L"\n[OBJ]: %d", dynamic_cast<Block*>(e->obj)->getBlockType());
 
 			if (dynamic_cast<Block*>(e->obj)) {
+
+				x += min_tx * dx + nx * 0.4f;
+				y += min_ty * dy + ny * 0.4f;
+
+				if (nx != 0) vx = 0;
+				if (ny != 0) vy = 0;
+				
 				switch (dynamic_cast<Block*>(e->obj)->getBlockType()) {
 				case BlockType::GROUND:
 				case BlockType::BRICK: {
@@ -108,12 +116,8 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					if (e->ny > 0) {
 						vy = 0;
 					}
-					if (e->nx != 0) {
-						vx = 0;
-					}
 					break;
 				}
-				// Mario can go through color block horizontally
 				case BlockType::COLOR_BLOCK: {
 					marioState["onGround"] = true;
 					ColorBlock* colorBlock = dynamic_cast<ColorBlock*>(e->obj);
@@ -134,7 +138,7 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 						if (questionBlock->getItemType() == ItemType::SUPER_ITEM && !questionBlock->isEmpty) {
 							questionBlock->setObjectState(ObjectState::QUESTION_BLOCK_EMPTY);
 							SuperItem* s = dynamic_cast<SuperItem*>(questionBlock->getItem());
-							s->setObjectState(ObjectState::ITEM_VISIBLE, this->level, this->x);
+							s->setObjectState(ObjectState::ITEM_VISIBLE, this->form, this->x);
 						}
 					}
 					break;
@@ -153,6 +157,13 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			//	}
 			if (dynamic_cast<SuperItem*>(e->obj)) {
 				e->obj->isAlive = false;
+
+				if (nx != 0) vx = 0;
+				if (ny != 0) vy = 0;
+				if (form == FORM_SMALL_MARIO) {
+					y -= BBH_SUPER_MARIO;
+					SetLevel(FORM_SUPER_MARIO);
+				}
 			}
 			if (dynamic_cast<CGoomba*>(e->obj)) {// if e->obj is Goomba 
 				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
@@ -172,9 +183,9 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					{
 						if (goomba->getObjectState() != ObjectState::GOOMBA_STATE_DIE)
 						{
-							if (level > MARIO_LEVEL_SMALL)
+							if (form > FORM_SMALL_MARIO)
 							{
-								level = MARIO_LEVEL_SMALL;
+								form = FORM_SMALL_MARIO;
 								StartUntouchable();
 							}
 							else
@@ -190,82 +201,116 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 		}
 	}
-
-	// clean up collision events
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
 
 void Mario::Render()
 {
-	int ani = -1;
-	if (_state == ObjectState::MARIO_STATE_DIE)
-		ani = MARIO_ANI_DIE;
-	else if (_state == ObjectState::MARIO_TAIL_STATE_IDLE)
-		ani = MARIO_TAIL_ANI_IDLE_RIGHT;
-	else
-		if (level == MARIO_LEVEL_BIG)
-		{
-			if (vx == 0)
-			{
-				if (nx > 0) ani = MARIO_TAIL_ANI_IDLE_RIGHT;
-				else ani = MARIO_ANI_BIG_IDLE_LEFT;
-			}
-			else if (vx > 0)
-				ani = MARIO_ANI_BIG_WALKING_RIGHT;
-			else ani = MARIO_ANI_BIG_WALKING_LEFT;
-		}
-		else if (level == MARIO_LEVEL_SMALL)
-		{
-			if (vx == 0)
-			{
-				if (nx > 0) ani = MARIO_ANI_SMALL_IDLE_RIGHT;
-				else ani = MARIO_ANI_SMALL_IDLE_LEFT;
-			}
-			else if (vx > 0)
-				ani = MARIO_ANI_SMALL_WALKING_RIGHT;
-			else ani = MARIO_ANI_SMALL_WALKING_LEFT;
-		}
-
-
-	int alpha = 255;
-	if (untouchable) alpha = 128;
-
-	animation_set->Get(ani)->Render(x, y, alpha);
-
-	//currentAnimation->Render(x, y);
-	RenderBoundingBox();
+	currentAnimation->Render(x, y);
 }
 
 void Mario::setObjectState(ObjectState state)
 {
 	CGameObject::setObjectState(state);
 	LPANIMATION ani = NULL;
-	switch (state)
-	{
-	case ObjectState::MARIO_STATE_WALKING_RIGHT:
-		ani = CAnimationSets::GetInstance()->Get(0)->Get(500);
-		vx = MARIO_WALKING_SPEED;
-		nx = 1;
+	switch (state) {
+	case ObjectState::MARIO_STATE_DIE: {
+		ani = MarioAni->Get(ANI_MARIO_DIE);
+		vy = -MARIO_DIE_DEFLECT_SPEED;
 		break;
-	case ObjectState::MARIO_STATE_WALKING_LEFT:
-		ani = CAnimationSets::GetInstance()->Get(0)->Get(501);
-		vx = -MARIO_WALKING_SPEED;
-		nx = -1;
-		break;
-	case ObjectState::MARIO_STATE_JUMP:
+	}
+	case ObjectState::MARIO_STATE_JUMP: {
 		if (marioState["onGround"]) {
 			vy = -MARIO_JUMP_SPEED_Y;
 			marioState["onGround"] = false;
 		}
+		switch (form) {
+		case FORM_SMALL_MARIO: {
+			ani = (nx > 0) ?
+				MarioAni->Get(ANI_SMALL_MARIO_JUMPING_RIGHT) :
+				MarioAni->Get(ANI_SMALL_MARIO_JUMPING_LEFT);
+			break;
+		}
+		case FORM_SUPER_MARIO: {
+			ani = (nx > 0) ?
+				MarioAni->Get(ANI_SUPER_MARIO_JUMPING_RIGHT) :
+				MarioAni->Get(ANI_SUPER_MARIO_JUMPING_LEFT);
+			break;
+		}
+		case FORM_RACOON_MARIO: {
+			ani = (nx > 0) ?
+				MarioAni->Get(ANI_RACOON_MARIO_JUMPING_RIGHT) :
+				MarioAni->Get(ANI_RACOON_MARIO_JUMPING_LEFT);
+			break;
+		}
+		}
 		break;
-	case ObjectState::MARIO_STATE_IDLE:
-		ani = CAnimationSets::GetInstance()->Get(0)->Get(1);
+	}
+	case ObjectState::MARIO_STATE_WALKING_RIGHT: {
+		switch (form) {
+		case FORM_SMALL_MARIO: {
+			ani = MarioAni->Get(ANI_SMALL_MARIO_WALKING_RIGHT);
+			break;
+		}
+		case FORM_SUPER_MARIO: {
+			ani = MarioAni->Get(ANI_SUPER_MARIO_WALKING_RIGHT);
+			break;
+		}
+		case FORM_RACOON_MARIO: {
+			ani = MarioAni->Get(ANI_RACOON_MARIO_WALKING_RIGHT);
+			break;
+		}
+		}
+		vx = MARIO_WALKING_SPEED;
+		nx = 1;
+		break;
+	}
+	case ObjectState::MARIO_STATE_WALKING_LEFT: {
+		switch (form) {
+		case FORM_SMALL_MARIO: {
+			ani = MarioAni->Get(ANI_SMALL_MARIO_WALKING_LEFT);
+			break;
+		}
+		case FORM_SUPER_MARIO: {
+			ani = MarioAni->Get(ANI_SUPER_MARIO_WALKING_LEFT);
+			break;
+		}
+		case FORM_RACOON_MARIO: {
+			ani = MarioAni->Get(ANI_RACOON_MARIO_WALKING_LEFT);
+			break;
+		}
+		}
+		vx = -MARIO_WALKING_SPEED;
+		nx = -1;
+		break;
+	}
+	case ObjectState::MARIO_STATE_IDLE: {
+		/*if (vy != 0) {
+			setObjectState(State::MARIO_STATE_JUMP);
+		}*/
 		vx = 0;
+		switch (form) {
+		case FORM_SMALL_MARIO: {
+			ani = (nx > 0) ?
+				MarioAni->Get(ANI_SMALL_MARIO_IDLE_RIGHT) :
+				MarioAni->Get(ANI_SMALL_MARIO_IDLE_LEFT);
+			break;
+		}
+		case FORM_SUPER_MARIO: {
+			ani = (nx > 0) ?
+				MarioAni->Get(ANI_SUPER_MARIO_IDLE_RIGHT) :
+				MarioAni->Get(ANI_SUPER_MARIO_IDLE_LEFT);
+			break;
+		}
+		case FORM_RACOON_MARIO: {
+			ani = (nx > 0) ?
+				MarioAni->Get(ANI_RACOON_MARIO_IDLE_RIGHT) :
+				MarioAni->Get(ANI_RACOON_MARIO_IDLE_LEFT);
+			break;
+		}
+		}
 		break;
-	case ObjectState::MARIO_STATE_DIE:
-		ani = CAnimationSets::GetInstance()->Get(0)->Get(599);
-		vy = -MARIO_DIE_DEFLECT_SPEED;
-		break;
+	}
 	}
 	setAnimation(ani);
 }
@@ -274,23 +319,20 @@ void Mario::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 	left = x;
 	top = y;
-
-	if (level == MARIO_LEVEL_BIG)
-	{
-		right = x + MARIO_BIG_BBOX_WIDTH;
-		bottom = y + MARIO_BIG_BBOX_HEIGHT;
+	switch (form) {
+	case FORM_SUPER_MARIO:
+		right = x + BBW_SUPER_MARIO;
+		bottom = y + BBH_SUPER_MARIO;
+		break;
+	case FORM_SMALL_MARIO:
+		right = x + BBW_SMALL_MARIO;
+		bottom = y + BBH_SMALL_MARIO;
+		break;
+	case FORM_RACOON_MARIO:
+		right = x + BBW_RACOON_MARIO;
+		bottom = y + BBH_RACOON_MARIO;
+		break;
 	}
-	else if (level == MARIO_LEVEL_TAIL) {
-		right = x + 20;
-		bottom = y + MARIO_BIG_BBOX_HEIGHT;
-	}
-	else
-	{
-		right = x + MARIO_SMALL_BBOX_WIDTH;
-		bottom = y + MARIO_SMALL_BBOX_HEIGHT;
-	}
-	//right += currentAnimation->getBBWidth();
-	//bottom += currentAnimation->getBBHeight();
 }
 
 /*
@@ -299,7 +341,7 @@ void Mario::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 void Mario::Reset()
 {
 	setObjectState(ObjectState::MARIO_STATE_IDLE);
-	SetLevel(MARIO_LEVEL_SMALL);
+	SetLevel(FORM_RACOON_MARIO);
 	SetPosition(start_x, start_y);
 	SetSpeed(0, 0);
 }

@@ -32,7 +32,6 @@ void Coin::setObjectState(ObjectState s)
 	case ObjectState::ITEM_VISIBLE: {
 		destroy = y - GAME_UNIT;
 		vy = -0.3f;
-		setAnimation(CAnimationSets::GetInstance()->Get(4)->Get(ANI_SPINNING_COIN));
 		break;
 	}
 	case ObjectState::ITEM_INVISIBLE: {
@@ -42,18 +41,4 @@ void Coin::setObjectState(ObjectState s)
 	}
 	}
 
-}
-
-void Coin::GetBoundingBox(float& left, float& top, float& right, float& bottom)
-{
-	left = x;
-	top = y;
-	if (_state == ObjectState::ITEM_VISIBLE) {
-		right = left + currentAnimation->getBBWidth();
-		bottom = top + currentAnimation->getBBHeight();
-	}
-	else {
-		right = left + widthBoundingBox;
-		bottom = top + heightBoundingBox;
-	}
 }

@@ -1,6 +1,7 @@
 #include "SuperItem.h"
 #define ANI_SUPER_MUSHROOM		301
 #define ANI_SUPER_LEAF			302
+#define FORM_SMALL_MARIO		0
 
 SuperItem::SuperItem(ItemType type, float w, float h) : Item(type, w, h) {
 	itemType = ItemType::SUPER_ITEM;
@@ -8,9 +9,9 @@ SuperItem::SuperItem(ItemType type, float w, float h) : Item(type, w, h) {
 }
 
 void SuperItem::Render() {
-	RenderBoundingBox();
 	if (_state == ObjectState::ITEM_VISIBLE) {
 		currentAnimation->Render(x, y);
+		RenderBoundingBox();
 	}
 }
 
@@ -48,7 +49,7 @@ void SuperItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	}
 }
 
-void SuperItem::setObjectState(ObjectState s, int marioLevel, int mario_x)
+void SuperItem::setObjectState(ObjectState s, int marioForm, int mario_x)
 {
 	CGameObject::setObjectState(s);
 	switch (s) {
@@ -57,7 +58,7 @@ void SuperItem::setObjectState(ObjectState s, int marioLevel, int mario_x)
 		break;
 	}
 	case ObjectState::ITEM_VISIBLE: {
-		LPANIMATION ani = (marioLevel == 2) ?
+		LPANIMATION ani = (marioForm == FORM_SMALL_MARIO) ?
 			CAnimationSets::GetInstance()->Get(5)->Get(ANI_SUPER_MUSHROOM) :
 			CAnimationSets::GetInstance()->Get(5)->Get(ANI_SUPER_LEAF);
 		setAnimation(ani);

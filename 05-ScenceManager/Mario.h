@@ -8,48 +8,58 @@
 #define MARIO_GRAVITY			0.002f
 #define MARIO_DIE_DEFLECT_SPEED	 0.5f
 
-#define MARIO_ANI_BIG_IDLE_RIGHT		400
-#define MARIO_ANI_BIG_IDLE_LEFT			401
-#define MARIO_ANI_SMALL_IDLE_RIGHT		402
-#define MARIO_ANI_SMALL_IDLE_LEFT		403
+#define ANI_SMALL_MARIO_IDLE_RIGHT		410
+#define ANI_SMALL_MARIO_IDLE_LEFT		411
+#define ANI_SMALL_MARIO_WALKING_RIGHT	412
+#define ANI_SMALL_MARIO_WALKING_LEFT	413
+#define ANI_SMALL_MARIO_JUMPING_RIGHT	414
+#define ANI_SMALL_MARIO_JUMPING_LEFT	415
 
-#define MARIO_ANI_BIG_WALKING_RIGHT			500
-#define MARIO_ANI_BIG_WALKING_LEFT			501
-#define MARIO_ANI_SMALL_WALKING_RIGHT		502
-#define MARIO_ANI_SMALL_WALKING_LEFT		503
+#define ANI_SUPER_MARIO_IDLE_RIGHT		400
+#define ANI_SUPER_MARIO_IDLE_LEFT		401
+#define ANI_SUPER_MARIO_WALKING_RIGHT	402
+#define ANI_SUPER_MARIO_WALKING_LEFT	403
+#define ANI_SUPER_MARIO_JUMPING_RIGHT	404
+#define ANI_SUPER_MARIO_JUMPING_LEFT	405
 
-#define MARIO_ANI_DIE				599
+
+#define ANI_RACOON_MARIO_IDLE_RIGHT		420
+#define ANI_RACOON_MARIO_IDLE_LEFT		421
+#define ANI_RACOON_MARIO_WALKING_RIGHT	422
+#define ANI_RACOON_MARIO_WALKING_LEFT	423
+#define ANI_RACOON_MARIO_JUMPING_RIGHT	426
+#define ANI_RACOON_MARIO_JUMPING_LEFT	427
+
+#define ANI_MARIO_DIE				599
 
 #define MARIO_TAIL_ANI_IDLE_RIGHT	1
 
-#define	MARIO_LEVEL_SMALL	1
-#define	MARIO_LEVEL_BIG		2
-#define MARIO_LEVEL_TAIL	3
+#define	FORM_SMALL_MARIO	0
+#define	FORM_SUPER_MARIO	1
+#define	FORM_RACOON_MARIO	2
 
-#define MARIO_BIG_BBOX_WIDTH  15
-#define MARIO_BIG_BBOX_HEIGHT 27
-
-#define MARIO_SMALL_BBOX_WIDTH  13
-#define MARIO_SMALL_BBOX_HEIGHT 15
+#define BBW_RACOON_MARIO				22
+#define BBH_RACOON_MARIO				28
+#define BBW_SUPER_MARIO					15
+#define BBH_SUPER_MARIO					27
+#define BBW_SMALL_MARIO					13
+#define BBH_SMALL_MARIO					15
 
 #define MARIO_UNTOUCHABLE_TIME 5000
 
 
 class Mario : public CGameObject
 {
-	// we can't have two Mario at a time
 	static Mario* _instance;
 
-	int level;
+	int form;
+
 	int untouchable;
 	DWORD untouchable_start;
-
 	
 	float start_x;			// initial position of Mario at scene
 	float start_y; 
-	unordered_map<string, bool> marioState;
-
-	Animation* animation;
+	unordered_map<string, bool> marioState; // change proper name
 public: 
 	static Mario* GetInstance();
 
@@ -58,9 +68,8 @@ public:
 	virtual void Render();
 
 	void setObjectState(ObjectState state);
-	void SetLevel(int l) { level = l; }
+	void SetLevel(int l) { form = l; }
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
-	
 
 	void Reset();
 

@@ -1,16 +1,21 @@
 #include "Item.h"
-
+#define BB_W_SUPER_ITEM 16
+#define BB_H_SUPER_ITEM 16
 Item::Item(ItemType type, float width, float height) : CGameObject() {
 	setType(ObjectType::ITEM);
 	itemType = type;
-	this->x = width;
-	this->y = height;
 }
 
-void Item::GetBoundingBox(float& l, float& t, float& r, float& b)
+void Item::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	l = x;
-	t = y;
-	r = x + widthBoundingBox;
-	b = y + heightBoundingBox;
+	left = x;
+	top = y;
+	if (_state == ObjectState::ITEM_VISIBLE) {
+		right = left + currentAnimation->getBBWidth();
+		bottom = top + currentAnimation->getBBHeight();
+	}
+	else {
+		right = left + widthBoundingBox;
+		bottom = top + heightBoundingBox;
+	}
 }

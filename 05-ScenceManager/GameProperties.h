@@ -4,6 +4,8 @@
 #define GAME_UNIT 16.0f
 
 enum class ObjectState {
+	UNDEFINED = -1,
+
 	MARIO_STATE_IDLE,
 	MARIO_STATE_WALKING_RIGHT,
 	MARIO_STATE_WALKING_LEFT,
@@ -26,3 +28,5 @@ enum class ObjectState {
 	KOOPAS_STATE_WALKING,
 
 };
+
+typedef ObjectState State;

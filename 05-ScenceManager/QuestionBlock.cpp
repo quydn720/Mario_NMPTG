@@ -2,6 +2,7 @@
 #include "QuestionBlock.h"
 #define ANI_QUESTION_BLOCK_FILLED 602
 #define ANI_QUESTION_BLOCK_EMPTY 603
+
 QuestionBlock::QuestionBlock(ItemType itemType, float width, float height) : Block(width, height) {
 	blockType = BlockType::QUESTION_BLOCK;
 	this->itemType = itemType;
@@ -21,6 +22,12 @@ Item* QuestionBlock::getItem() {
 
 void QuestionBlock::setItem(Item* it) {
 	item = it;
+}
+
+void QuestionBlock::Render()
+{
+	RenderBoundingBox();
+	currentAnimation->Render(x, y);
 }
 
 void QuestionBlock::setObjectState(ObjectState s)

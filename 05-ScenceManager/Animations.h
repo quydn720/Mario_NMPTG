@@ -28,14 +28,6 @@ public:
 	Animation(int defaultTime = 100) { this->defaultTime = defaultTime; lastFrameTime = -1; currentFrame = -1; }
 	void Add(int spriteId, DWORD time = 0);
 	void Render(float x, float y, int alpha = 255);
-	int getBBWidth() {
-		if (currentFrame != -1)
-			return frames[currentFrame]->GetSprite()->getWidth();
-	}
-	int getBBHeight() {
-		if (currentFrame != -1)
-			return frames[currentFrame]->GetSprite()->getHeight();
-	}
 };
 typedef Animation* LPANIMATION;
 class CAnimations

@@ -1,6 +1,8 @@
 #pragma once
 #include "Block.h"
 #include "Item.h"
+#include "GameObject.h"
+
 class QuestionBlock : public Block {
 private:
 	ItemType itemType;

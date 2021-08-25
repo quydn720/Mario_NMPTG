@@ -7,12 +7,9 @@ QuestionBlock::QuestionBlock(ItemType itemType, float width, float height) : Blo
 	blockType = BlockType::QUESTION_BLOCK;
 	this->itemType = itemType;
 	setObjectState(ObjectState::QUESTION_BLOCK_FILLED);
-	// TODO: nên viết các hàm với tham số thể hiện chi tiết mục đích hàm, lấy ani_set của một state
-	//animationSets::GetInstance()->Get(ani_set_id)->Get(state)
 }
 
-ItemType QuestionBlock::getItemType()
-{
+ItemType QuestionBlock::getItemType() {
 	return itemType;
 }
 
@@ -26,8 +23,8 @@ void QuestionBlock::setItem(Item* it) {
 
 void QuestionBlock::Render()
 {
-	RenderBoundingBox();
 	currentAnimation->Render(x, y);
+	RenderBoundingBox();
 }
 
 void QuestionBlock::setObjectState(ObjectState s)

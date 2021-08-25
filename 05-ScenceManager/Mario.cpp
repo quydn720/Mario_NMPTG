@@ -102,12 +102,13 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 			if (dynamic_cast<Block*>(e->obj)) {
 
-				x += min_tx * dx + nx * 0.4f;
-				y += min_ty * dy + ny * 0.4f;
+				
 
 				if (nx != 0) vx = 0;
 				if (ny != 0) vy = 0;
-				
+				x += min_tx * dx + nx * 0.4f;
+				y += min_ty * dy + ny * 0.4f;
+
 				switch (dynamic_cast<Block*>(e->obj)->getBlockType()) {
 				case BlockType::GROUND:
 				case BlockType::BRICK: {
@@ -158,6 +159,7 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			if (dynamic_cast<SuperItem*>(e->obj)) {
 				e->obj->isAlive = false;
 
+				x += min_tx * dx + nx * 0.4f;
 				if (nx != 0) vx = 0;
 				if (ny != 0) vy = 0;
 				if (form == FORM_SMALL_MARIO) {
@@ -207,6 +209,7 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 void Mario::Render()
 {
 	currentAnimation->Render(x, y);
+	RenderBoundingBox();
 }
 
 void Mario::setObjectState(ObjectState state)

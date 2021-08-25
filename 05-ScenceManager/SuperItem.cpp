@@ -9,9 +9,10 @@ SuperItem::SuperItem(ItemType type, float w, float h) : Item(type, w, h) {
 }
 
 void SuperItem::Render() {
+	RenderBoundingBox();
+
 	if (_state == ObjectState::ITEM_VISIBLE) {
 		currentAnimation->Render(x, y);
-		RenderBoundingBox();
 	}
 }
 

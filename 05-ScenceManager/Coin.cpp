@@ -1,7 +1,7 @@
 #include "Coin.h"
 #define ANI_SPINNING_COIN 300
 
-Coin::Coin(ItemType type, float w, float h) : Item(type, w, h) {
+Coin::Coin(ItemType type, int w, int h) : Item(type, w, h) {
 	itemType = ItemType::COIN;
 	setObjectState(ObjectState::ITEM_INVISIBLE);
 }

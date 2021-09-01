@@ -1,7 +1,7 @@
 #include "Item.h"
 #define BB_W_SUPER_ITEM 16.0f;
 #define BB_H_SUPER_ITEM 16.0f;
-Item::Item(ItemType type, float width, float height) : CGameObject() {
+Item::Item(ItemType type, int width, int height) : CGameObject() {
 	setType(ObjectType::ITEM);
 	itemType = type;
 }

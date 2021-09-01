@@ -21,7 +21,8 @@ protected:
 	// Áp dụng với những vật thể 1 sprite. 
 	// Mario, coin, nấm, v.v
 	// TODO: nên stick với một state cụ thể ?
-	float objectWidth, objectHeight;
+	int objectWidth = 0; 
+	int objectHeight = 0;
 
 	vector<LPGAMEOBJECT> objects;
 

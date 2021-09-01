@@ -42,7 +42,7 @@ class CGame
 	int screen_height; 
 
 	unordered_map<int, LPSCENE> scenes;
-	int current_scene; 
+	int current_scene = -1;
 
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_SCENES(string line);
@@ -64,7 +64,7 @@ public:
 	int GetScreenWidth() { return screen_width; }
 	int GetScreenHeight() { return screen_height; }
 
-	static void SweptAABB(
+	static float SweptAABB(
 		float ml,			// move left 
 		float mt,			// move top
 		float mr,			// move right 
@@ -75,7 +75,6 @@ public:
 		float st, 
 		float sr, 
 		float sb,
-		float &t, 
 		float &nx, 
 		float &ny);
 

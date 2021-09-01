@@ -22,7 +22,7 @@ void Animation::Add(int spriteId, DWORD time)
 // NOTE: sometimes Animation object is NULL ??? HOW ??? 
 void Animation::Render(float x, float y, int alpha)
 {
-	DWORD now = GetTickCount();
+	DWORD now = (long) GetTickCount64();
 	if (currentFrame == -1)
 	{
 		currentFrame = 0;
@@ -90,7 +90,6 @@ LPANIMATION_SET CAnimationSets::Get(unsigned int ani_set_id)
 void CAnimationSets::Add(int id, LPANIMATION_SET ani_set)
 {
 	animation_sets[id] = ani_set;
-	DebugOut(L"[ANIMATION_SETS] Added: %d\n", ani_set);
 }
 //============== ANIMATION_SET ============== 
 CAnimationSet* CAnimationSet::GetInstance()

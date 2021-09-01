@@ -6,9 +6,9 @@
 
 class SuperItem : public Item {
 public:
-	SuperItem(ItemType type, float w, float h);
+	SuperItem(ItemType type, int w, int h);
 	~SuperItem() {}
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
 	virtual void Render();
-	void setObjectState(ObjectState s, int marioLevel = 0, int mario_nx = 0);
+	void setObjectState(ObjectState s, int marioLevel = 0, float mario_nx = 0);
 };

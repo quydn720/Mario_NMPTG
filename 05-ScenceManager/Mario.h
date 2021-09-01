@@ -67,9 +67,10 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);
 	virtual void Render();
 
+	void LevelUp();
 	void setObjectState(ObjectState state);
 	void SetLevel(int l) { form = l; }
-	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
+	void StartUntouchable() { untouchable = 1; untouchable_start =(long) GetTickCount64(); }
 
 	void Reset();
 

@@ -11,7 +11,7 @@
 #include "Item.h"
 #include "Coin.h"
 
-#define  MarioAni CAnimationSets::GetInstance()->Get(0)
+#define  MarioAni CAnimationSets::GetInstance()->Get(MARIO_ANI)
 
 Mario* Mario::_instance = NULL;
 Mario* Mario::GetInstance()
@@ -59,7 +59,7 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		CalcPotentialCollisions(coObjects, coEvents);
 
 	// reset untouchable timer if untouchable time has passed
-	if (GetTickCount() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
+	if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
 	{
 		untouchable_start = 0;
 		untouchable = 0;
@@ -85,51 +85,40 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		//	x += nx*abs(rdx); 
 
 		// block every object first!
-		/*
+
 		x += min_tx * dx + nx * 0.4f;
 		y += min_ty * dy + ny * 0.4f;
 
 		if (nx != 0) vx = 0;
 		if (ny != 0) vy = 0;
-		*/
+
 		//
 		// Collision logic with other objects
 		//
-		for (UINT i = 0; i < coEventsResult.size(); i++)
-		{
-
+		for (UINT i = 0; i < coEventsResult.size(); i++) {
 			LPCOLLISIONEVENT e = coEventsResult[i];
 
-			if (dynamic_cast<Block*>(e->obj)) {
+			switch (e->obj->getType()) {
+			case ObjectType::BLOCK: {
+				auto block = dynamic_cast<Block*>(e->obj);
+				if (e->ny < 0)
+					marioState["onGround"] = true;
 
-				
-
-				if (nx != 0) vx = 0;
-				if (ny != 0) vy = 0;
-				x += min_tx * dx + nx * 0.4f;
-				y += min_ty * dy + ny * 0.4f;
-
-				switch (dynamic_cast<Block*>(e->obj)->getBlockType()) {
+				switch (block->getBlockType()) {
 				case BlockType::GROUND:
 				case BlockType::BRICK: {
-					marioState["onGround"] = true;
-					Ground* ground = dynamic_cast<Ground*>(e->obj);
-					if (e->ny > 0) {
-						vy = 0;
-					}
+					Ground* ground = dynamic_cast<Ground*>(block);
 					break;
 				}
 				case BlockType::COLOR_BLOCK: {
-					marioState["onGround"] = true;
-					ColorBlock* colorBlock = dynamic_cast<ColorBlock*>(e->obj);
+					ColorBlock* colorBlock = dynamic_cast<ColorBlock*>(block);
 					if (e->nx != 0) {
 						x += dx;
 					}
 					break;
 				}
 				case BlockType::QUESTION_BLOCK: {
-					marioState["onGround"] = true;
-					QuestionBlock* questionBlock = dynamic_cast<QuestionBlock*>(e->obj);
+					QuestionBlock* questionBlock = dynamic_cast<QuestionBlock*>(block);
 					if (e->ny > 0) {
 						if (questionBlock->getItemType() == ItemType::COIN && !questionBlock->isEmpty) {
 							questionBlock->setObjectState(ObjectState::QUESTION_BLOCK_EMPTY);
@@ -145,65 +134,63 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					break;
 				}
 				}
+				break;
 			}
-			//if (dynamic_cast<Item*>(e->obj)) {
-			//	switch (dynamic_cast<Item*>(e->obj)->getItemType()) {
-			//		//case ItemType::COIN: {
-			//		//	Coin* coin = dynamic_cast<Coin*>(e->obj);
-			//		//	coin->y += dy;
-			//		//	//testing -> idea: khởi tạo coin nằm yên trong ?brick, khi mario cụng, thì câu lệnh này làm đồng tiền nảy lên, sau đó biến mất
-			//		//	DebugOut(L"\n[COIN]: %s", "+1000000000000");
-			//		//	break;
-			//		//}
-			//	}
-			if (dynamic_cast<SuperItem*>(e->obj)) {
-				e->obj->isAlive = false;
+			case ObjectType::ITEM: {
+				ItemType itemType = dynamic_cast<Item*>(e->obj)->getItemType();
 
-				x += min_tx * dx + nx * 0.4f;
-				if (nx != 0) vx = 0;
-				if (ny != 0) vy = 0;
-				if (form == FORM_SMALL_MARIO) {
-					y -= BBH_SUPER_MARIO;
-					SetLevel(FORM_SUPER_MARIO);
+				switch (itemType)
+				{	
+				case ItemType::SUPER_ITEM: {
+					e->obj->isAlive = false;
+					LevelUp();
+					break;
+				}
+				default:
+					break;
 				}
 			}
-			if (dynamic_cast<CGoomba*>(e->obj)) {// if e->obj is Goomba 
-				CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+			case ObjectType::ENEMY: {
+				if (dynamic_cast<CGoomba*>(e->obj)) {// if e->obj is Goomba 
+					CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
 
-				// jump on top >> kill Goomba and deflect a bit 
-				if (e->ny < 0)
-				{
-					if (goomba->getObjectState() != ObjectState::GOOMBA_STATE_DIE)
-					{
-						goomba->setObjectState(ObjectState::GOOMBA_STATE_DIE);
-						vy = -MARIO_JUMP_DEFLECT_SPEED;
-					}
-				}
-				else if (e->nx != 0)
-				{
-					if (untouchable == 0)
+					// jump on top >> kill Goomba and deflect a bit 
+					if (e->ny < 0)
 					{
 						if (goomba->getObjectState() != ObjectState::GOOMBA_STATE_DIE)
 						{
-							if (form > FORM_SMALL_MARIO)
-							{
-								form = FORM_SMALL_MARIO;
-								StartUntouchable();
-							}
-							else
-								setObjectState(ObjectState::MARIO_STATE_DIE);
+							goomba->setObjectState(ObjectState::GOOMBA_STATE_DIE);
+							vy = -MARIO_JUMP_DEFLECT_SPEED;
 						}
 					}
+					else if (e->nx != 0)
+					{
+						if (untouchable == 0)
+						{
+							if (goomba->getObjectState() != ObjectState::GOOMBA_STATE_DIE)
+							{
+								if (form > FORM_SMALL_MARIO)
+								{
+									form = FORM_SMALL_MARIO;
+									StartUntouchable();
+								}
+								else
+									setObjectState(ObjectState::MARIO_STATE_DIE);
+							}
+						}
+					}
+				} // if Goomba
+				else if (dynamic_cast<CPortal*>(e->obj))
+				{
+					CPortal* p = dynamic_cast<CPortal*>(e->obj);
+					CGame::GetInstance()->SwitchScene(p->GetSceneId());
 				}
-			} // if Goomba
-			else if (dynamic_cast<CPortal*>(e->obj))
-			{
-				CPortal* p = dynamic_cast<CPortal*>(e->obj);
-				CGame::GetInstance()->SwitchScene(p->GetSceneId());
+				break;
+			}
 			}
 		}
+		for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 	}
-	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
 
 void Mario::Render()
@@ -288,9 +275,6 @@ void Mario::setObjectState(ObjectState state)
 		break;
 	}
 	case ObjectState::MARIO_STATE_IDLE: {
-		/*if (vy != 0) {
-			setObjectState(State::MARIO_STATE_JUMP);
-		}*/
 		vx = 0;
 		switch (form) {
 		case FORM_SMALL_MARIO: {
@@ -316,6 +300,14 @@ void Mario::setObjectState(ObjectState state)
 	}
 	}
 	setAnimation(ani);
+}
+
+void Mario::LevelUp()
+{
+	if (form == FORM_SMALL_MARIO) {
+		y -= BBH_SUPER_MARIO;
+		SetLevel(FORM_SUPER_MARIO);
+	}
 }
 
 void Mario::GetBoundingBox(float& left, float& top, float& right, float& bottom)

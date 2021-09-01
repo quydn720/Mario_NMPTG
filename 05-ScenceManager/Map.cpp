@@ -48,7 +48,7 @@ void Map::Load(wstring path)
 		}
 	}
 	f.close();
-	DebugOut(L"Map loaded successfully");
+	DebugOut(L"[MAP] loaded successfully\n");
 }
 
 void Map::Render()
@@ -57,12 +57,10 @@ void Map::Render()
 		for (int j = 0; j < column; j++) {
 			int id = tileId[i][j];
 			RECT r;
-
 			r.left = id % tileColumn * tileSize;
 			r.top = (id / tileColumn) * tileSize;
 			r.right = r.left + tileSize;
 			r.bottom = r.top + tileSize;
-
 			CGame::GetInstance()->Draw((float)(j * tileSize), (float)(i * tileSize), CTextures::GetInstance()->Get(30), r.left, r.top, r.right, r.bottom);
 		}
 	}

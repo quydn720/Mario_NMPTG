@@ -12,7 +12,7 @@
 class Map {
 	static Map* __instance;
 
-	float Width, Height;
+	int Width, Height;
 	int column, row;
 	int tileSize;
 	int tileColumn, tileRow;
@@ -23,10 +23,10 @@ public:
 	~Map();
 
 	static Map* GetInstance();
-	float GetWidth() {
+	int GetWidth() {
 		return Width;
 	}
-	float GetHeight() {
+	int GetHeight() {
 		return Height;
 	}
 

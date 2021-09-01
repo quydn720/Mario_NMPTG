@@ -18,6 +18,7 @@
 using namespace std;
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath) : CScene(id, filePath) {
+	player = NULL;
 	key_handler = new CPlayScenceKeyHandler(this);
 }
 
@@ -111,7 +112,7 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 	LPANIMATION ani = new Animation();
 
 	int ani_id = atoi(tokens[0].c_str());
-	for (int i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
+	for (size_t i = 1; i < tokens.size(); i += 2)
 	{
 		int sprite_id = atoi(tokens[i].c_str());
 		int frame_time = atoi(tokens[i + 1].c_str());
@@ -133,7 +134,7 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 
 	CAnimations* animations = CAnimations::GetInstance();
 
-	for (int i = 1; i < tokens.size(); i++)
+	for (size_t i = 1; i < tokens.size(); i++)
 	{
 		int ani_id = atoi(tokens[i].c_str());
 
@@ -156,8 +157,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	if (tokens.size() < 3) return; // skip invalid lines - an object set must have at least id, x, y
 
 	ObjectType object_type = (ObjectType)atoi(tokens[0].c_str());
-	float x = atof(tokens[1].c_str());
-	float y = atof(tokens[2].c_str());
+	float x = (float)atof(tokens[1].c_str());
+	float y = (float)atof(tokens[2].c_str());
 
 	int ani_set_id = atoi(tokens[3].c_str());
 
@@ -301,7 +302,7 @@ void CPlayScene::Load()
 
 	f.close();
 
-	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
+	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox_red.png", D3DCOLOR_XRGB(255, 255, 255));
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 
@@ -344,19 +345,19 @@ void CPlayScene::Update(DWORD dt)
 	cx -= game->GetScreenWidth() / 2;
 	cy -= game->GetScreenHeight() / 2;
 
-	float mapWidth = Map::GetInstance()->GetWidth();
+	int mapWidth = Map::GetInstance()->GetWidth();
 	if (player->y >= 240)
 		cy = 240;
-
 
 	CGame::GetInstance()->SetCamPos(cx, cy);
 }
 
 void CPlayScene::Render()
 {
+	// Map ve 1 lan thoi
 	Map::GetInstance()->Render();
 
-	for (int i = 0; i < objects.size(); i++) {
+	for (size_t i = 0; i < objects.size(); i++) {
 		if (objects[i]->isAlive) {
 			objects[i]->Render();
 		}
@@ -368,7 +369,7 @@ void CPlayScene::Render()
 */
 void CPlayScene::Unload()
 {
-	for (int i = 0; i < objects.size(); i++)
+	for (size_t i = 0; i < objects.size(); i++)
 		delete objects[i];
 
 	objects.clear();
@@ -382,13 +383,15 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	DebugOut(L"[INFO] Keydown: %d\n", KeyCode);
 
 	Mario* mario = ((CPlayScene*)scence)->GetPlayer();
+	CPlayScene* s = ((CPlayScene*)scence);
 	switch (KeyCode)
 	{
 	case DIK_SPACE:
 		mario->setObjectState(ObjectState::MARIO_STATE_JUMP);
 		break;
 	case DIK_A:
-		mario->Reset();
+		s->Unload();
+		s->Load();
 		break;
 	case DIK_I:
 		mario->setObjectState(ObjectState::MARIO_TAIL_STATE_IDLE);

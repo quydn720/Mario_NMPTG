@@ -48,7 +48,10 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (x < 1) {
 		x = 1;
 	}
-
+	if (x > 2784 - 16) {
+		x = 2784 - 16;
+	}
+	// TODO: Hard-code
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -78,14 +81,13 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		float rdy = 0;
 
 		// TODO: This is a very ugly designed function!!!!
-		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 
 		// how to push back Mario if collides with a moving objects, what if Mario is pushed this way into another object?
 		//if (rdx != 0 && rdx!=dx)
 		//	x += nx*abs(rdx); 
 
 		// block every object first!
-
+		FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
 		x += min_tx * dx + nx * 0.4f;
 		y += min_ty * dy + ny * 0.4f;
 
@@ -140,7 +142,7 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				ItemType itemType = dynamic_cast<Item*>(e->obj)->getItemType();
 
 				switch (itemType)
-				{	
+				{
 				case ItemType::SUPER_ITEM: {
 					e->obj->isAlive = false;
 					LevelUp();

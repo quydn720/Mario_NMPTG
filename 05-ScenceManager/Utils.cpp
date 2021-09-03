@@ -12,6 +12,13 @@ void DebugOut(wchar_t *fmt, ...)
 	OutputDebugString(dbg_out);
 }
 
+D3DCOLOR GetRGB(string r, string g, string b) {
+	int R = atoi(r.c_str());
+	int G = atoi(g.c_str());
+	int B = atoi(b.c_str());
+	return D3DCOLOR_XRGB(R, G, B);
+}
+
 vector<string> split(string line, string delimeter)
 {
 	vector<string> tokens;

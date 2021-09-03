@@ -11,7 +11,7 @@ class Item : public CGameObject {
 protected:
 	ItemType itemType;
 public: 
-	Item(ItemType type, int  x, int y);
+	Item(ItemType type);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL) {}
 	virtual void Render() {};
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);

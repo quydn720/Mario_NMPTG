@@ -6,7 +6,7 @@
 
 class SuperItem : public Item {
 public:
-	SuperItem(ItemType type, int w, int h);
+	SuperItem(ItemType type);
 	~SuperItem() {}
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
 	virtual void Render();

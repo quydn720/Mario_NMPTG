@@ -6,7 +6,7 @@
 #define ANI_SUPER_LEAF			302
 #define FORM_SMALL_MARIO		0
 
-SuperItem::SuperItem(ItemType type, int w, int h) : Item(type, w, h) {
+SuperItem::SuperItem(ItemType type) : Item(type) {
 	itemType = ItemType::SUPER_ITEM;
 	setObjectState(ObjectState::ITEM_INVISIBLE);
 }

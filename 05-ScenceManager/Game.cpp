@@ -6,7 +6,7 @@
 
 #include "PlayScence.h"
 
-CGame* CGame::__instance = NULL;
+CGame* CGame::_instance = NULL;
 
 /*
 	Initialize DirectX, create a Direct3D device for rendering within the window, initial Sprite library for
@@ -78,7 +78,7 @@ void CGame::Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, int left, int top
 */
 void CGame::Draw(float x, float y, LPDIRECT3DTEXTURE9 texture, RECT r, int alpha)
 {
-	D3DXVECTOR3 p(x - cam_x, y - cam_y, 0);
+	D3DXVECTOR3 p(floor(x - cam_x), floor(y - cam_y), 0);
 	spriteHandler->Draw(texture, &r, NULL, &p, D3DCOLOR_ARGB(alpha, 255, 255, 255));
 }
 
@@ -299,8 +299,8 @@ float CGame::SweptAABB(
 
 CGame* CGame::GetInstance()
 {
-	if (__instance == NULL) __instance = new CGame();
-	return __instance;
+	if (_instance == NULL) _instance = new CGame();
+	return _instance;
 }
 
 #define MAX_GAME_LINE 1024
@@ -387,3 +387,4 @@ void CGame::SwitchScene(int scene_id)
 	CGame::GetInstance()->SetKeyHandler(s->GetKeyEventHandler());
 	s->Load();
 }
+

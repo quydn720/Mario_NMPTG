@@ -197,8 +197,8 @@
 
 #	MARIO
 #0	100.0	300	0
-0	240.0	300	0
-#0	1400.0	300.0	0
+#0	240.0	300	0
+0	2500.0	300.0	0
 
 #	GROUND	-	ani_set	doesn't	matter,	so	just	take	the	brick.	//	change	if	have	issues
 #	type	x	y	ani_set_id	height	width	specificType	(unit	=	tile	size)

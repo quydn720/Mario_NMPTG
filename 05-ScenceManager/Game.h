@@ -1,36 +1,32 @@
 #pragma once
 
 #include <unordered_map>
-
 #include <Windows.h>
 #include <d3d9.h>
 #include <d3dx9.h>
-
-
-#define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
 
 #include "Scence.h"
-
 using namespace std;
 
+#define DIRECTINPUT_VERSION 0x0800
 #define KEYBOARD_BUFFER_SIZE 1024
 
 class CGame
 {
-	static CGame * __instance;
+	static CGame* _instance;
 	HWND hWnd;									// Window handle
 
-	LPDIRECT3D9 d3d = NULL;						// Direct3D handle
-	LPDIRECT3DDEVICE9 d3ddv = NULL;				// Direct3D device object
+	LPDIRECT3D9 d3d;						// Direct3D handle
+	LPDIRECT3DDEVICE9 d3ddv;				// Direct3D device object
 
-	LPDIRECT3DSURFACE9 backBuffer = NULL;		
-	LPD3DXSPRITE spriteHandler = NULL;			// Sprite helper library to help us draw 2D image on the screen 
+	LPDIRECT3DSURFACE9 backBuffer;
+	LPD3DXSPRITE spriteHandler;			// Sprite helper library to help us draw 2D image on the screen 
 
-	LPDIRECTINPUT8       di;		// The DirectInput object         
+	LPDIRECTINPUT8 di;		// The DirectInput object         
 	LPDIRECTINPUTDEVICE8 didv;		// The keyboard device 
 
-	BYTE  keyStates[256];			// DirectInput keyboard state buffer 
+	BYTE keyStates[256];			// DirectInput keyboard state buffer 
 	DIDEVICEOBJECTDATA keyEvents[KEYBOARD_BUFFER_SIZE];		// Buffered keyboard data
 
 	LPKEYEVENTHANDLER keyHandler;
@@ -39,7 +35,7 @@ class CGame
 	float cam_y = 0.0f;
 
 	int screen_width;
-	int screen_height; 
+	int screen_height;
 
 	unordered_map<int, LPSCENE> scenes;
 	int current_scene = -1;
@@ -72,11 +68,11 @@ public:
 		float dx,			// 
 		float dy,			// 
 		float sl,			// static left
-		float st, 
-		float sr, 
+		float st,
+		float sr,
 		float sb,
-		float &nx, 
-		float &ny);
+		float& nx,
+		float& ny);
 
 	LPDIRECT3DDEVICE9 GetDirect3DDevice() { return this->d3ddv; }
 	LPDIRECT3DSURFACE9 GetBackBuffer() { return backBuffer; }
@@ -84,7 +80,7 @@ public:
 
 	void SetCamPos(float x, float y) { cam_x = x; cam_y = y; }
 
-	static CGame * GetInstance();
+	static CGame* GetInstance();
 
 	~CGame();
 };

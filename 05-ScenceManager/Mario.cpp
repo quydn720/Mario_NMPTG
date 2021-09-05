@@ -51,6 +51,9 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (x > 2784 - 16) {
 		x = 2784 - 16;
 	}
+	if (y < 0) {
+		y = 0;
+	}
 	// TODO: Hard-code
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;

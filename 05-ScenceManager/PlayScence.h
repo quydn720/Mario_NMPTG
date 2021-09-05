@@ -10,6 +10,7 @@
 #include "Map.h"
 #include "QuestionBlock.h"
 #include "Camera.h"
+#include "Hud.h"
 
 #define TILE_SIZE 16
 

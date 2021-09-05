@@ -11,8 +11,6 @@
 #define MAP_SECTION_UNKNOWN		-1
 
 class CMap {
-	static CMap* __instance;
-
 	int column, row = 0;
 	int tileSize = 0;
 	int tileColumn, tileRow = 0;

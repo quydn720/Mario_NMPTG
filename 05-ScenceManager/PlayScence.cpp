@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <fstream>
 
 #include "PlayScence.h"
@@ -17,6 +17,7 @@
 
 using namespace std;
 
+#define HUD_SIZE 40
 float camx = 2000.0f;
 float camy = 0.0f;
 
@@ -336,38 +337,55 @@ void CPlayScene::Update(DWORD dt)
 	mPlayer->GetPosition(cx, cy);
 
 	CGame* game = CGame::GetInstance();
-	cx -= game->GetScreenWidth() / 2;
-	cy -= game->GetScreenHeight() / 2;
-
-	// TODO: now - fixed at the bottom of the screem
-	/*if (mPlayer->y >= 200)
-		cy = 214;
-	if (cx < 0)
-	{
-		cx = 0;
-	}
-	if (cx + game->GetScreenWidth() > mMap->getMapWidth()) {
-		cx = mMap->getMapWidth() - game->GetScreenWidth() - 2;
-	}
-	*/
 	camera = new CCamera(cx, cy);
-	if (camx > mMap->getMapWidth() - game->GetScreenWidth()) camx = mMap->getMapWidth() - game->GetScreenWidth();
-	if (camy > mMap->getMapHeight() - game->GetScreenHeight()) camy = mMap->getMapHeight() - game->GetScreenHeight();
+
+	float playerY = mPlayer->y;
+	//if (playerY > 255) {
+	//	camy = mPlayer->y;
+	//}
+	if (playerY < 300) {
+		camy = cy - 40;
+	}
+	else {
+		//  TODO: FLICK 
+		//camy = mPlayer->y - game->GetScreenHeight() / 4;
+		camy = mPlayer->y; 
+		//DebugOut(L"%0.1f\n", mPlayer->vy);
+	}
+	camx = mPlayer->x - game->GetScreenWidth() / 2;
+
+	/*else {
+		game->SetCamPos(mPlayer->x, mPlayer->y);
+	}*/
+	// Bound of the map
 	if (camx < 0) camx = 0;
 	if (camy < 0) camy = 0;
+	if (camx > mMap->getMapWidth() - game->GetScreenWidth() ) camx = mMap->getMapWidth() - game->GetScreenWidth();
+	float cameraHeight = mMap->getMapHeight() - game->GetScreenHeight(); // + 40 = Screen size
+	if (camy > cameraHeight + 40) {
+		camy = mMap->getMapHeight() - game->GetScreenHeight() + 40;
+	}
+	else {
+		//camy -= game->GetScreenHeight() / 3;
+	}
 	CPlayScene* s = ((CPlayScene*)game->GetCurrentScene());
 	//s->SetCamPos(camx, camy);
+	// nếu vị trí của player nằm trong khoảng [y1, y2] ---> lock camera position cameraHeight + HUD (bound)
+	// nếu không, di chuyển cam theo vị trí player 
+	//game->SetCamPos(camx, cameraHeight + HUD_SIZE);
+	
 	game->SetCamPos(camx, camy);
-	DebugOut(L"%0.1f, %0.1f\n", camx, camy);
-	/*camy += (game->GetScreenHeight() * 3 / 4);
-	auto red = CTextures::GetInstance()->Get(ID_TEX_BBOX);
-	game->Draw(camx, camy, red, 0, 0, 200, 200, 255);*/
+	//game->SetCamPos((mMap->getMapWidth() - game->GetScreenWidth()) / 2, (mMap->getMapHeight() - game->GetScreenHeight()) / 4);
+	// TODO: playscene: hud, map, camera, player, other objects/
+	//DebugOut(L"[CAM]\t%0.1f, %0.1f\n", camx, camy);
+	DebugOut(L"[MARIO]\t%0.1f, %0.1f\n", mPlayer->x, mPlayer->y);
 }
 
 void CPlayScene::Render()
 {
 	mMap->Render(camera);
-
+	Hud::GetInstance()->Render(); 
+	mPlayer->Render();
 	/*for (size_t i = 0; i < objects.size(); i++) {
 		if (objects[i]->isAlive) {
 			objects[i]->Render();
@@ -427,15 +445,27 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	else if (game->IsKeyDown(DIK_LEFT))
 		mario->setObjectState(ObjectState::MARIO_STATE_WALKING_LEFT);*/
 	else if (game->IsKeyDown(DIK_DOWN)) {
-		camy += 3;
+		mario->y += 3;
 	}
 	else if (game->IsKeyDown(DIK_UP)) {
-		camy -= 3;
+		mario->y -= 3;
 	}
 	else if (game->IsKeyDown(DIK_RIGHT)) {
-		camx += 3;
+		mario->x += 3;
 	}
 	else if (game->IsKeyDown(DIK_LEFT)) {
+		mario->x -= 3;
+	}
+	else if (game->IsKeyDown(DIK_NUMPAD2)) {
+		camy += 3;
+	}
+	else if (game->IsKeyDown(DIK_NUMPAD8)) {
+		camy -= 3;
+	}
+	else if (game->IsKeyDown(DIK_NUMPAD6)) {
+		camx += 3;
+	}
+	else if (game->IsKeyDown(DIK_NUMPAD4)) {
 		camx -= 3;
 	}
 	else

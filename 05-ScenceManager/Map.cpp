@@ -55,10 +55,10 @@ void CMap::Render(CCamera* c)
 				r.right = r.left + tileSize;
 				r.bottom = r.top + tileSize;
 
-				float c_left, c_top;
+				/*float c_left, c_top;
 				c->GetPostion(c_left, c_top);
 				float c_width = c->GetWidth();
-				float c_height = c->GetHeight();
+				float c_height = c->GetHeight();*/
 				/*if (r.left > c_left + c_width || r.right < c_left || r.top > c_top + c_height || r.bottom < c_top) {
 					continue;
 				}*/

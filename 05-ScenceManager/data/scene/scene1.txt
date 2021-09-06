@@ -13,7 +13,7 @@
 #	Die
 10099	215	120	231	135	0
 
-#	==========================================	Small_Mario
+#	======	Small_Mario
 #	IdleRight
 10021	247	0	259	15	0
 #	IdleLeft
@@ -29,7 +29,7 @@
 #	JumpingLeft
 10035	35	80	51	96	0
 
-#	==========================================	Super_Mario
+#	======	Super_Mario
 #	IdleRight
 10001	246	154	260	181	0
 #	IdleLeft
@@ -45,7 +45,7 @@
 #	JumpingLeft
 10015	35	275	51	301	0
 
-#	==========================================	Racoon_Mario
+#	======	Racoon_Mario
 #	IdleRight
 10051	243	634	264	661	0
 #	IdleLeft
@@ -106,7 +106,7 @@
 #	DIE
 599	10099	100
 
-#	==========================================	Super_Mario
+#	======	Super_Mario
 #	IdleRight
 400	10001	100
 #	IdleLeft
@@ -120,7 +120,7 @@
 #	JumpingLeft
 405	10015	100
 
-#	==========================================	Small_Mario
+#	======	Small_Mario
 #	IdleRight
 410	10021	100
 #	IdleLeft
@@ -134,7 +134,7 @@
 #	JumpingLeft
 415	10035	100
 
-#	==========================================	Racoon_Mario
+#	======	Racoon_Mario
 #	IdleRight
 420	10051	100
 #	IdleLeft
@@ -196,16 +196,18 @@
 #	type:	0	=	Mario	,	1	=	Brick,	2	=	Goomba,	3	=	Ground
 
 #	MARIO
-0	100.0	300	0
+#0	100.0	300	0
+#0	240.0	300	0
+0	2500.0	100.0	0
 
 #	GROUND	-	ani_set	doesn't	matter,	so	just	take	the	brick.	//	change	if	have	issues
-#	type	x	y	ani_set_id	width	height	specificType	(unit	=	tile	size)
+#	type	x	y	ani_set_id	height	width	specificType	(unit	=	tile	size)
 2	0	400	1	38	1	1
 2	608	384	1	29	2	1
 2	1136	400	1	22	1	1
 2	1520	400	1	5	1	1
 2	1648	400	1	36	1	1
-2	2240	400	1	35	1	1
+2	2240	400	1	34	1	1
 
 #	Brick
 2	1488	320	1	2	1	1
@@ -238,6 +240,7 @@
 2	208	288	2	1	1	3	0
 2	400	304	2	1	1	3	0
 2	688	336	2	1	1	3	0
+
 2	224	288	2	1	1	3	1
 2	640	368	2	1	1	3	1
 2	1456	352	2	1	1	3	1

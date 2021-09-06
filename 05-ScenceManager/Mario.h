@@ -5,7 +5,7 @@
 #define MARIO_WALKING_SPEED		0.15f 
 #define MARIO_JUMP_SPEED_Y		0.5f
 #define MARIO_JUMP_DEFLECT_SPEED 0.2f
-#define MARIO_GRAVITY			0.002f
+#define MARIO_GRAVITY			0.00f//	0.002f
 #define MARIO_DIE_DEFLECT_SPEED	 0.5f
 
 #define ANI_SMALL_MARIO_IDLE_RIGHT		410
@@ -67,9 +67,10 @@ public:
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);
 	virtual void Render();
 
+	void LevelUp();
 	void setObjectState(ObjectState state);
 	void SetLevel(int l) { form = l; }
-	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount(); }
+	void StartUntouchable() { untouchable = 1; untouchable_start =(long) GetTickCount64(); }
 
 	void Reset();
 

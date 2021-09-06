@@ -30,7 +30,7 @@ LPCOLLISIONEVENT CGameObject::SweptAABBEx(LPGAMEOBJECT coO)
 {
 	float sl, st, sr, sb;		// static object bbox
 	float ml, mt, mr, mb;		// moving object bbox
-	float t, nx, ny;
+	float nx, ny;
 
 	coO->GetBoundingBox(sl, st, sr, sb);
 
@@ -47,11 +47,11 @@ LPCOLLISIONEVENT CGameObject::SweptAABBEx(LPGAMEOBJECT coO)
 
 	GetBoundingBox(ml, mt, mr, mb);
 
-	CGame::SweptAABB(
+	float t = CGame::SweptAABB(
 		ml, mt, mr, mb,
 		rdx, rdy,
 		sl, st, sr, sb,
-		t, nx, ny
+		nx, ny
 	);
 
 	CCollisionEvent* e = new CCollisionEvent(t, nx, ny, rdx, rdy, coO);
@@ -130,7 +130,7 @@ void CGameObject::RenderBoundingBox()
 	rect.right = (int)r - (int)l;
 	rect.bottom = (int)b - (int)t;
 
-	CGame::GetInstance()->Draw(x, y, bbox, rect.left, rect.top, rect.right, rect.bottom, 100);
+	CGame::GetInstance()->Draw(x, y, bbox, rect, 100);
 }
 
 

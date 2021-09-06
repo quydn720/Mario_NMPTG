@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <fstream>
 
 #include "PlayScence.h"
@@ -17,7 +17,11 @@
 
 using namespace std;
 
+#define game CGame::GetInstance() 
+
+
 CPlayScene::CPlayScene(int id, LPCWSTR filePath) : CScene(id, filePath) {
+	mPlayer = NULL;
 	key_handler = new CPlayScenceKeyHandler(this);
 }
 
@@ -42,43 +46,37 @@ CPlayScene::CPlayScene(int id, LPCWSTR filePath) : CScene(id, filePath) {
 
 #define MAX_SCENE_LINE 1024
 
+#define textureDb CTextures::GetInstance()
 
 void CPlayScene::_ParseSection_TEXTURES(string line)
 {
 	vector<string> tokens = split(line);
-
-	if (tokens.size() < 5) return; // skip invalid lines
+	if (tokens.size() < 5) return;
 
 	int texID = atoi(tokens[0].c_str());
 	wstring path = ToWSTR(tokens[1]);
-	int R = atoi(tokens[2].c_str());
-	int G = atoi(tokens[3].c_str());
-	int B = atoi(tokens[4].c_str());
 
-	CTextures::GetInstance()->Add(texID, path.c_str(), D3DCOLOR_XRGB(R, G, B));
+	textureDb->Add(texID, path.c_str(), GetRGB(tokens[2], tokens[3], tokens[4]));
 }
 
 void CPlayScene::_ParseSection_MAP(string line) {
 	vector<string> tokens = split(line);
 
-	if (tokens.size() < 6) return; // skip invalid lines
+	if (tokens.size() < 6) return;
 
 	int texID = atoi(tokens[0].c_str());
-	wstring path = ToWSTR(tokens[1]);
-	int R = atoi(tokens[2].c_str());
-	int G = atoi(tokens[3].c_str());
-	int B = atoi(tokens[4].c_str());
-	wstring map_path = ToWSTR(tokens[5]);
+	wstring mTexPath = ToWSTR(tokens[1]);
+	wstring mTileSheetPath = ToWSTR(tokens[5]);
+	textureDb->Add(texID, mTexPath.c_str(), GetRGB(tokens[2], tokens[3], tokens[4]));
 
-	CTextures::GetInstance()->Add(texID, path.c_str(), D3DCOLOR_XRGB(R, G, B));
-	Map::GetInstance()->Load(map_path);
+	mMap = new CMap(mTileSheetPath);
 }
 
 void CPlayScene::_ParseSection_SPRITES(string line)
 {
 	vector<string> tokens = split(line);
 
-	if (tokens.size() < 6) return; // skip invalid lines
+	if (tokens.size() < 6) return;
 
 	int ID = atoi(tokens[0].c_str());
 	int l = atoi(tokens[1].c_str());
@@ -87,10 +85,7 @@ void CPlayScene::_ParseSection_SPRITES(string line)
 	int b = atoi(tokens[4].c_str());
 	int texID = atoi(tokens[5].c_str());
 
-	objectWidth = abs(r - l);
-	objectHeight = abs(t - b);
-
-	LPDIRECT3DTEXTURE9 tex = CTextures::GetInstance()->Get(texID);
+	LPDIRECT3DTEXTURE9 tex = textureDb->Get(texID);
 	if (tex == NULL)
 	{
 		DebugOut(L"[ERROR] Texture ID %d not found!\n", texID);
@@ -111,7 +106,7 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 	LPANIMATION ani = new Animation();
 
 	int ani_id = atoi(tokens[0].c_str());
-	for (int i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
+	for (size_t i = 1; i < tokens.size(); i += 2)
 	{
 		int sprite_id = atoi(tokens[i].c_str());
 		int frame_time = atoi(tokens[i + 1].c_str());
@@ -133,7 +128,7 @@ void CPlayScene::_ParseSection_ANIMATION_SETS(string line)
 
 	CAnimations* animations = CAnimations::GetInstance();
 
-	for (int i = 1; i < tokens.size(); i++)
+	for (size_t i = 1; i < tokens.size(); i++)
 	{
 		int ani_id = atoi(tokens[i].c_str());
 
@@ -156,8 +151,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	if (tokens.size() < 3) return; // skip invalid lines - an object set must have at least id, x, y
 
 	ObjectType object_type = (ObjectType)atoi(tokens[0].c_str());
-	float x = atof(tokens[1].c_str());
-	float y = atof(tokens[2].c_str());
+	float x = (float)atof(tokens[1].c_str());
+	float y = (float)atof(tokens[2].c_str());
 
 	int ani_set_id = atoi(tokens[3].c_str());
 
@@ -167,12 +162,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	switch (object_type) {
 	case ObjectType::PLAYER: {
-		if (player != NULL) {
+		if (mPlayer != NULL) {
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
 			return;
 		}
 		obj = new Mario(x, y);
-		player = (Mario*)obj;
+		mPlayer = (Mario*)obj;
 
 		DebugOut(L"[INFO] Player object created!\n");
 		break;
@@ -211,12 +206,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		case ItemType::COIN: {
 			// The coins is in the middle of the bricks
 			x += 3.5;
-			obj = new Coin(itemType, objectWidth, objectHeight);
+			obj = new Coin(itemType);
 			items.push_back(dynamic_cast<Item*>(obj));
 			break;
 		}
 		case ItemType::SUPER_ITEM: {
-			obj = new SuperItem(itemType, objectWidth, objectHeight);
+			obj = new SuperItem(itemType);
 			items.push_back(dynamic_cast<SuperItem*>(obj));
 			break;
 		}
@@ -301,7 +296,7 @@ void CPlayScene::Load()
 
 	f.close();
 
-	CTextures::GetInstance()->Add(ID_TEX_BBOX, L"textures\\bbox.png", D3DCOLOR_XRGB(255, 255, 255));
+	textureDb->Add(ID_TEX_BBOX, L"textures\\bbox_red.png", D3DCOLOR_XRGB(255, 255, 255));
 
 	DebugOut(L"[INFO] Done loading scene resources %s\n", sceneFilePath);
 
@@ -311,6 +306,8 @@ void CPlayScene::Load()
 	}
 	questionBlocks = vector<QuestionBlock*>();
 	items = vector<Item*>();
+
+	camera = new CCamera(mMap->getMapWidth(), mMap->getMapHeight(), game->GetScreenWidth(), game->GetScreenHeight());
 }
 
 void CPlayScene::Update(DWORD dt)
@@ -334,33 +331,26 @@ void CPlayScene::Update(DWORD dt)
 	}
 
 	// skip the rest if scene was already unloaded (Mario::Update might trigger PlayScene::Unload)
-	if (player == NULL) return;
+	if (mPlayer == NULL) return;
 
 	// Update camera to follow mario
-	float cx, cy;
-	player->GetPosition(cx, cy);
-
-	CGame* game = CGame::GetInstance();
-	cx -= game->GetScreenWidth() / 2;
-	cy -= game->GetScreenHeight() / 2;
-
-	float mapWidth = Map::GetInstance()->GetWidth();
-	if (player->y >= 240)
-		cy = 240;
-
-
-	CGame::GetInstance()->SetCamPos(cx, cy);
+	float camX, camY;
+	mPlayer->GetPosition(camX, camY);
+	camera->SetPosition(camX, camY);
+	game->SetCamPos(camX, camY);
+	// TODO: playscene: hud, map, camera, player, other objects/
 }
 
 void CPlayScene::Render()
 {
-	Map::GetInstance()->Render();
-
-	for (int i = 0; i < objects.size(); i++) {
+	mMap->Render(camera);
+	Hud::GetInstance()->Render();
+	mPlayer->Render();
+	/*for (size_t i = 0; i < objects.size(); i++) {
 		if (objects[i]->isAlive) {
 			objects[i]->Render();
 		}
-	}
+	}*/
 }
 
 /*
@@ -368,11 +358,11 @@ void CPlayScene::Render()
 */
 void CPlayScene::Unload()
 {
-	for (int i = 0; i < objects.size(); i++)
+	for (size_t i = 0; i < objects.size(); i++)
 		delete objects[i];
 
 	objects.clear();
-	player = NULL;
+	mPlayer = NULL;
 
 	DebugOut(L"[INFO] Scene %s unloaded! \n", sceneFilePath);
 }
@@ -381,14 +371,17 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 {
 	DebugOut(L"[INFO] Keydown: %d\n", KeyCode);
 
-	Mario* mario = ((CPlayScene*)scence)->GetPlayer();
+	Mario* mario = ((CPlayScene*)scene)->GetPlayer();
+	CPlayScene* s = ((CPlayScene*)scene);
+
 	switch (KeyCode)
 	{
 	case DIK_SPACE:
 		mario->setObjectState(ObjectState::MARIO_STATE_JUMP);
 		break;
 	case DIK_A:
-		mario->Reset();
+		s->Unload();
+		s->Load();
 		break;
 	case DIK_I:
 		mario->setObjectState(ObjectState::MARIO_TAIL_STATE_IDLE);
@@ -399,15 +392,25 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 
 void CPlayScenceKeyHandler::KeyState(BYTE* states)
 {
-	CGame* game = CGame::GetInstance();
-	Mario* mario = ((CPlayScene*)scence)->GetPlayer();
-
+	Mario* mario = ((CPlayScene*)scene)->GetPlayer();
 	// disable control key when Mario die 
 	if (mario->getObjectState() == ObjectState::MARIO_STATE_DIE) return;
-	if (game->IsKeyDown(DIK_RIGHT))
+	/*if (game->IsKeyDown(DIK_RIGHT))
 		mario->setObjectState(ObjectState::MARIO_STATE_WALKING_RIGHT);
 	else if (game->IsKeyDown(DIK_LEFT))
-		mario->setObjectState(ObjectState::MARIO_STATE_WALKING_LEFT);
+		mario->setObjectState(ObjectState::MARIO_STATE_WALKING_LEFT);*/
+	else if (game->IsKeyDown(DIK_DOWN)) {
+		mario->y += 3;
+	}
+	else if (game->IsKeyDown(DIK_UP)) {
+		mario->y -= 3;
+	}
+	else if (game->IsKeyDown(DIK_RIGHT)) {
+		mario->x += 3;
+	}
+	else if (game->IsKeyDown(DIK_LEFT)) {
+		mario->x -= 3;
+	}
 	else
 		mario->setObjectState(ObjectState::MARIO_STATE_IDLE);
 }

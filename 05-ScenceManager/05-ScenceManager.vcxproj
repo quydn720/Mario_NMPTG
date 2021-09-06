@@ -127,10 +127,12 @@
     <ClCompile Include="Animations.cpp" />
     <ClCompile Include="Block.cpp" />
     <ClCompile Include="Brick.cpp" />
+    <ClCompile Include="Camera.cpp" />
     <ClCompile Include="Coin.cpp" />
     <ClCompile Include="ColorBlock.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Ground.cpp" />
+    <ClCompile Include="Hud.cpp" />
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Koopas.cpp" />
     <ClCompile Include="Map.cpp" />
@@ -152,11 +154,13 @@
     <ClInclude Include="Animations.h" />
     <ClInclude Include="Block.h" />
     <ClInclude Include="Brick.h" />
+    <ClInclude Include="Camera.h" />
     <ClInclude Include="Coin.h" />
     <ClInclude Include="ColorBlock.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="GameProperties.h" />
     <ClInclude Include="Ground.h" />
+    <ClInclude Include="Hud.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="Koopas.h" />
     <ClInclude Include="Map.h" />

@@ -5,6 +5,10 @@
 
 #include "Sprites.h"
 
+#define MARIO_ANI 0
+#define BRICK_ANI 1
+#define QUESTION_BRICK_ANI	2
+
 /// <summary>
 /// Frame is a sprite + a time period that sprite is displayed (frame time)
 /// </summary>
@@ -43,6 +47,7 @@ public:
 
 	static CAnimations* GetInstance();
 };
+
 class CAnimationSet {
 private:
 	unordered_map<int, LPANIMATION> animation_set;

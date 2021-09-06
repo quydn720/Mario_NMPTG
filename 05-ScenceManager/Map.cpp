@@ -1,19 +1,11 @@
 #include "Map.h"
 
-Map* Map::__instance = NULL;
-Map* Map::GetInstance()
+CMap::CMap(wstring path)
 {
-	if (__instance == NULL)
-		__instance = new Map();
-	return __instance;
+	Load(path);
 }
 
-Map::Map()
-{
-	currentRow = column = row = tileSize = tileColumn = tileRow = 0;
-}
-
-void Map::Load(wstring path)
+void CMap::Load(wstring path)
 {
 	ifstream f;
 	f.open(path);
@@ -48,27 +40,36 @@ void Map::Load(wstring path)
 		}
 	}
 	f.close();
-	DebugOut(L"Map loaded successfully");
+	DebugOut(L"[MAP] loaded successfully\n");
 }
 
-void Map::Render()
+void CMap::Render(CCamera* c)
 {
 	for (int i = 0; i < row; i++) {
 		for (int j = 0; j < column; j++) {
-			int id = tileId[i][j];
-			RECT r;
+			int id = tiles[i][j];
+			if (id != -1) {
+				RECT r;
+				r.left = id % tileColumn * tileSize;
+				r.top = (id / tileColumn) * tileSize;
+				r.right = r.left + tileSize;
+				r.bottom = r.top + tileSize;
 
-			r.left = id % tileColumn * tileSize;
-			r.top = (id / tileColumn) * tileSize;
-			r.right = r.left + tileSize;
-			r.bottom = r.top + tileSize;
+				/*float c_left, c_top;
+				c->GetPostion(c_left, c_top);
+				float c_width = c->GetWidth();
+				float c_height = c->GetHeight();*/
+				/*if (r.left > c_left + c_width || r.right < c_left || r.top > c_top + c_height || r.bottom < c_top) {
+					continue;
+				}*/
+				CGame::GetInstance()->Draw((float)(j * tileSize), (float)(i * tileSize), CTextures::GetInstance()->Get(TEX_MAP_ID), r.left, r.top, r.right, r.bottom);
 
-			CGame::GetInstance()->Draw((float)(j * tileSize), (float)(i * tileSize), CTextures::GetInstance()->Get(30), r.left, r.top, r.right, r.bottom);
+			}
 		}
 	}
 }
 
-void Map::_ParseSection_ROWS(string line)
+void CMap::_ParseSection_ROWS(string line)
 {
 	vector<string> tokens = split(line);
 
@@ -76,12 +77,12 @@ void Map::_ParseSection_ROWS(string line)
 	if (size < column) return;
 	for (int i = 0; i < column; i++) {
 		int id = atoi(tokens[i].c_str()) - 1;	// because when using Tiled to export to json file, the id auto increase 1 unit
-		tileId[currentRow][i] = id;
+		tiles[currentRow][i] = id;
 	}
 	currentRow++;
 }
 
-void Map::_ParseSection_INFO(string line)
+void CMap::_ParseSection_INFO(string line)
 {
 	vector<string> tokens = split(line);
 	int size = tokens.size();
@@ -92,11 +93,8 @@ void Map::_ParseSection_INFO(string line)
 	tileRow = atoi(tokens[2].c_str());
 	tileColumn = atoi(tokens[3].c_str());
 	tileSize = atoi(tokens[4].c_str());
-
-	Width = row * tileSize;
-	Height = column * tileSize;
 }
 
-Map::~Map()
+CMap::~CMap()
 {
 }

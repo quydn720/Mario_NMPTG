@@ -1,9 +1,12 @@
 #include "SuperItem.h"
+#include "ColorBlock.h"
+#include "Coin.h"
+#include "Mario.h"
 #define ANI_SUPER_MUSHROOM		301
 #define ANI_SUPER_LEAF			302
 #define FORM_SMALL_MARIO		0
 
-SuperItem::SuperItem(ItemType type, float w, float h) : Item(type, w, h) {
+SuperItem::SuperItem(ItemType type) : Item(type) {
 	itemType = ItemType::SUPER_ITEM;
 	setObjectState(ObjectState::ITEM_INVISIBLE);
 }
@@ -25,24 +28,27 @@ void SuperItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		vector<LPCOLLISIONEVENT> coEvents;
 		vector<LPCOLLISIONEVENT> coEventsResult;
 
+		// Collision problems with other than mario obj
+		coEvents.clear();
 		CalcPotentialCollisions(coObjects, coEvents);
+		//DebugOut(L"[coEvents: %d obj\n", coEvents.size());
 
 		if (coEvents.size() == 0) {
+			//x += dx;
 			y += dy;
 		}
 		else {
 			float min_tx, min_ty, nx = 0, ny;
 			float rdx = 0;
 			float rdy = 0;
-
 			FilterCollision(coEvents, coEventsResult, min_tx, min_ty, nx, ny, rdx, rdy);
+			
 			for (UINT i = 0; i < coEventsResult.size(); i++) {
 				LPCOLLISIONEVENT e = coEventsResult[i];
-
 				if (dynamic_cast<Block*>(e->obj)) {
+					x += dx;
 					if (e->ny != 0) {
 						vy = 0;
-						x += dx;
 					}
 				}
 			}
@@ -50,7 +56,7 @@ void SuperItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	}
 }
 
-void SuperItem::setObjectState(ObjectState s, int marioForm, int mario_x)
+void SuperItem::setObjectState(ObjectState s, int marioForm, float mario_x)
 {
 	CGameObject::setObjectState(s);
 	switch (s) {

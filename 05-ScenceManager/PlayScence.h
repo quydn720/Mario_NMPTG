@@ -9,22 +9,34 @@
 #include "Koopas.h"
 #include "Map.h"
 #include "QuestionBlock.h"
+#include "Camera.h"
+#include "Hud.h"
 
 #define TILE_SIZE 16
 
-class CPlayScene: public CScene
+class CPlayScene : public CScene
 {
-protected: 
-	Mario* player;					// A play scene has to have player, right? 
-	//Map* map;
-	// Object width, height calculated when we parse SPRITES part
-	// Áp dụng với những vật thể 1 sprite. 
-	// Mario, coin, nấm, v.v
-	// TODO: nên stick với một state cụ thể ?
-	float objectWidth, objectHeight;
+protected:
+
+	Mario* mPlayer;					// A play scene has to have player, right? 
+	CMap* mMap;
 
 	vector<LPGAMEOBJECT> objects;
+public:
+	CPlayScene(int id, LPCWSTR filePath);
+	float cam_x = 0.0f, cam_y = 0.0f;
 
+	virtual void Load();
+	virtual void Update(DWORD dt);
+	virtual void Render();
+	virtual void Unload();
+
+	Mario* GetPlayer() { return mPlayer; }
+	//CCamera* GetCamera() { return camera; }
+	CCamera* camera;
+
+	vector<QuestionBlock*> questionBlocks;
+	vector<Item*> items;
 	void _ParseSection_TEXTURES(string line);
 	void _ParseSection_MAP(string line);
 	void _ParseSection_SPRITES(string line);
@@ -32,30 +44,15 @@ protected:
 	void _ParseSection_ANIMATION_SETS(string line);
 	void _ParseSection_OBJECTS(string line);
 
-	
-public: 
-	CPlayScene(int id, LPCWSTR filePath);
-
-	virtual void Load();
-	virtual void Update(DWORD dt);
-	virtual void Render();
-	virtual void Unload();
-
-	Mario * GetPlayer() { return player; } 
-
-	// Purpose: Assign item to block object; because we initialize item with the map
-	vector<QuestionBlock*> questionBlocks;
-	vector<Item*> items;
-
-	//friend class CPlayScenceKeyHandler;
+	void SetCamPos(float x, float y) { cam_x = x; cam_y = y; }
 };
 
-class CPlayScenceKeyHandler : public CScenceKeyHandler
+class CPlayScenceKeyHandler : public CSceneKeyHandler
 {
-public: 
-	virtual void KeyState(BYTE *states);
+public:
+	virtual void KeyState(BYTE* states);
 	virtual void OnKeyDown(int KeyCode);
 	virtual void OnKeyUp(int KeyCode) {};
-	CPlayScenceKeyHandler(CScene *s) :CScenceKeyHandler(s) {};
+	CPlayScenceKeyHandler(CScene* s) : CSceneKeyHandler(s) {};
 };
 

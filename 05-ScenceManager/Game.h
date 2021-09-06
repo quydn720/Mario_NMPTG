@@ -8,6 +8,8 @@
 
 #include "Scence.h"
 using namespace std;
+#define HUD_SIZE 40
+
 
 #define DIRECTINPUT_VERSION 0x0800
 #define KEYBOARD_BUFFER_SIZE 1024
@@ -15,6 +17,7 @@ using namespace std;
 class CGame
 {
 	static CGame* _instance;
+
 	HWND hWnd;									// Window handle
 
 	LPDIRECT3D9 d3d;						// Direct3D handle

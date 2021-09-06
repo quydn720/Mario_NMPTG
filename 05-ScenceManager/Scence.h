@@ -22,13 +22,13 @@ public:
 typedef CScene* LPSCENE;
 
 
-class CScenceKeyHandler : public CKeyEventHandler
+class CSceneKeyHandler : public CKeyEventHandler
 {
 protected:
-	CScene* scence;
+	CScene* scene;
 
 public:
-	CScenceKeyHandler(CScene* s) :CKeyEventHandler() { scence = s; }
+	CSceneKeyHandler(CScene* s) :CKeyEventHandler() { scene = s; }
 
 	virtual void KeyState(BYTE* states) = 0;
 	virtual void OnKeyDown(int KeyCode) = 0;

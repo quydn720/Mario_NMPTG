@@ -24,7 +24,6 @@ protected:
 	vector<LPGAMEOBJECT> objects;
 public:
 	CPlayScene(int id, LPCWSTR filePath);
-	CCamera* camera;
 	float cam_x = 0.0f, cam_y = 0.0f;
 
 	virtual void Load();
@@ -33,6 +32,8 @@ public:
 	virtual void Unload();
 
 	Mario* GetPlayer() { return mPlayer; }
+	//CCamera* GetCamera() { return camera; }
+	CCamera* camera;
 
 	vector<QuestionBlock*> questionBlocks;
 	vector<Item*> items;
@@ -46,12 +47,12 @@ public:
 	void SetCamPos(float x, float y) { cam_x = x; cam_y = y; }
 };
 
-class CPlayScenceKeyHandler : public CScenceKeyHandler
+class CPlayScenceKeyHandler : public CSceneKeyHandler
 {
 public:
 	virtual void KeyState(BYTE* states);
 	virtual void OnKeyDown(int KeyCode);
 	virtual void OnKeyUp(int KeyCode) {};
-	CPlayScenceKeyHandler(CScene* s) : CScenceKeyHandler(s) {};
+	CPlayScenceKeyHandler(CScene* s) : CSceneKeyHandler(s) {};
 };
 

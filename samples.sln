@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.31321.278
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "05-ScenceManager", "05-ScenceManager\05-ScenceManager.vcxproj", "{C83A385D-5992-4E1B-B783-AB1D446414D5}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "01-Skeleton", "..\gamedev-intro-tutorials\01-Skeleton\01-Skeleton.vcxproj", "{959C78E1-3BC0-4E30-BB42-048A1F251A85}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "01-Skeleton", "01-Skeleton\01-Skeleton.vcxproj", "{959C78E1-3BC0-4E30-BB42-048A1F251A85}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -70,6 +70,11 @@ void CPlayScene::_ParseSection_MAP(string line) {
 	textureDb->Add(texID, mTexPath.c_str(), GetRGB(tokens[2], tokens[3], tokens[4]));
 
 	mMap = new CMap(mTileSheetPath);
+
+	float w, h;
+	h = mMap->getMapHeight();
+	w = mMap->getMapWidth();
+	game->setMapSize(w, h);
 }
 
 void CPlayScene::_ParseSection_SPRITES(string line)
@@ -344,13 +349,13 @@ void CPlayScene::Update(DWORD dt)
 void CPlayScene::Render()
 {
 	mMap->Render(camera);
-	Hud::GetInstance()->Render();
-	mPlayer->Render();
-	/*for (size_t i = 0; i < objects.size(); i++) {
+	//mPlayer->Render();
+	for (size_t i = 0; i < objects.size(); i++) {
 		if (objects[i]->isAlive) {
 			objects[i]->Render();
 		}
-	}*/
+	}
+	Hud::GetInstance()->Render();
 }
 
 /*
@@ -377,6 +382,7 @@ void CPlayScenceKeyHandler::OnKeyDown(int KeyCode)
 	switch (KeyCode)
 	{
 	case DIK_SPACE:
+		if (mario->marioState["onGround"] && !mario->marioState["isFalling"])
 		mario->setObjectState(ObjectState::MARIO_STATE_JUMP);
 		break;
 	case DIK_A:
@@ -395,22 +401,10 @@ void CPlayScenceKeyHandler::KeyState(BYTE* states)
 	Mario* mario = ((CPlayScene*)scene)->GetPlayer();
 	// disable control key when Mario die 
 	if (mario->getObjectState() == ObjectState::MARIO_STATE_DIE) return;
-	/*if (game->IsKeyDown(DIK_RIGHT))
+	if (game->IsKeyDown(DIK_RIGHT))
 		mario->setObjectState(ObjectState::MARIO_STATE_WALKING_RIGHT);
 	else if (game->IsKeyDown(DIK_LEFT))
-		mario->setObjectState(ObjectState::MARIO_STATE_WALKING_LEFT);*/
-	else if (game->IsKeyDown(DIK_DOWN)) {
-		mario->y += 3;
-	}
-	else if (game->IsKeyDown(DIK_UP)) {
-		mario->y -= 3;
-	}
-	else if (game->IsKeyDown(DIK_RIGHT)) {
-		mario->x += 3;
-	}
-	else if (game->IsKeyDown(DIK_LEFT)) {
-		mario->x -= 3;
-	}
+		mario->setObjectState(ObjectState::MARIO_STATE_WALKING_LEFT);
 	else
 		mario->setObjectState(ObjectState::MARIO_STATE_IDLE);
 }

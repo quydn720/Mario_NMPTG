@@ -17,7 +17,7 @@ public:
 	Block(float width, float height);
 	~Block();
 	virtual void Render() {
-		RenderBoundingBox();
+		//RenderBoundingBox();
 	}
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);
 	BlockType getBlockType() { return blockType; }

@@ -20,3 +20,5 @@ public:
 	void addy(int y) { top += y; }
 };
 
+// Co the truyen vao vy cua Mario vi trong game goc, Mario bay [UP] qua khoi khu 1 [] thi cam moi theo,
+// Mario bay [DOWN] thi khong set cung' (mat' hang` gach. trong game)

@@ -12,8 +12,6 @@
 #include "Camera.h"
 #include "Hud.h"
 
-#define TILE_SIZE 16
-
 class CPlayScene : public CScene
 {
 protected:

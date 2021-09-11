@@ -5,7 +5,7 @@
 #define MARIO_WALKING_SPEED		0.15f 
 #define MARIO_JUMP_SPEED_Y		0.5f
 #define MARIO_JUMP_DEFLECT_SPEED 0.2f
-#define MARIO_GRAVITY			0.00f//	0.002f
+#define MARIO_GRAVITY			0.002f
 #define MARIO_DIE_DEFLECT_SPEED	 0.5f
 
 #define ANI_SMALL_MARIO_IDLE_RIGHT		410
@@ -59,9 +59,9 @@ class Mario : public CGameObject
 	
 	float start_x;			// initial position of Mario at scene
 	float start_y; 
-	unordered_map<string, bool> marioState; // change proper name
 public: 
 	static Mario* GetInstance();
+	unordered_map<string, bool> marioState;
 
 	Mario(float x = 0.0f, float y = 0.0f);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT> *colliable_objects = NULL);

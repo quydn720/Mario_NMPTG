@@ -13,10 +13,6 @@ void CCamera::SetPosition(float &playerX, float &playerY) {
 	left = playerX;
 	top = playerY;
 
-	// Khi mario o vung 1: [255 -> 255++], camY khong di chuyen theo playerY,
-	// Scene size = width * 201
-	// 300 = 255 + 45 -> 45 la [height / 4 ] khoang cach giua Y va canh tren camera, dua mario o vi tri gan giua camera
-	// 215 actual screen height ?
 	float floatedY = height + HUD_SIZE + height / 4;
 	if (playerY > floatedY) {
 		top = playerY;

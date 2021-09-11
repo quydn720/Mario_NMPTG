@@ -9,7 +9,7 @@
 #include "Scence.h"
 using namespace std;
 #define HUD_SIZE 40
-
+#define TILE_SIZE 16
 
 #define DIRECTINPUT_VERSION 0x0800
 #define KEYBOARD_BUFFER_SIZE 1024
@@ -37,8 +37,11 @@ class CGame
 	float cam_x = 0.0f;
 	float cam_y = 0.0f;
 
+	// Info of the game
 	int screen_width;
 	int screen_height;
+	// Current scene info
+	int mapHeight, mapWidth;
 
 	unordered_map<int, LPSCENE> scenes;
 	int current_scene = -1;
@@ -61,8 +64,12 @@ public:
 	LPSCENE GetCurrentScene() { return scenes[current_scene]; }
 	void SwitchScene(int scene_id);
 
-	int GetScreenWidth() { return screen_width; }
-	int GetScreenHeight() { return screen_height; }
+	int GetScreenWidth() const { return screen_width; } 
+	int GetScreenHeight() const { return screen_height; }
+	// Call multiple time in run-time, const
+	void setMapSize(int w, int h) { mapWidth = w; mapHeight = h; }
+	int getMapWidth() const { return mapWidth; }
+	int getMapHeight() const { return mapHeight; }
 
 	static float SweptAABB(
 		float ml,			// move left 

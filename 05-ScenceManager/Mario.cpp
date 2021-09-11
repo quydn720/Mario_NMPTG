@@ -34,6 +34,7 @@ Mario::Mario(float x, float y) : CGameObject()
 	this->y = y;
 
 	marioState["onGround"] = false;
+	marioState["isFalling"] = true;
 }
 
 void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
@@ -44,17 +45,24 @@ void Mario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// Simple fall down
 	vy += MARIO_GRAVITY * dt;
 
-	// test - block mario from edge -
+	// Bounding of map
+	int mw = 0, mh = 0;
+	mw = CGame::GetInstance()->getMapWidth();
+	mh = CGame::GetInstance()->getMapHeight();
+
 	if (x < 1) {
 		x = 1;
 	}
-	if (x > 2784 - 16) {
-		x = 2784 - 16;
+	if (x > mw - TILE_SIZE) {
+		x = mw - TILE_SIZE;
 	}
 	if (y < 0) {
 		y = 0;
 	}
-	// TODO: Hard-code
+	if (y > mh) {
+		isAlive = false;
+	}
+
 	vector<LPCOLLISIONEVENT> coEvents;
 	vector<LPCOLLISIONEVENT> coEventsResult;
 
@@ -304,6 +312,7 @@ void Mario::setObjectState(ObjectState state)
 		break;
 	}
 	}
+	DebugOut(L"%d\n", state);
 	setAnimation(ani);
 }
 

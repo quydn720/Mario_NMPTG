@@ -12,8 +12,7 @@ SuperItem::SuperItem(ItemType type) : Item(type) {
 }
 
 void SuperItem::Render() {
-	RenderBoundingBox();
-
+	//RenderBoundingBox();
 	if (_state == ObjectState::ITEM_VISIBLE) {
 		currentAnimation->Render(x, y);
 	}

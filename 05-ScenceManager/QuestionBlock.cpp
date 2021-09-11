@@ -24,7 +24,7 @@ void QuestionBlock::setItem(Item* it) {
 void QuestionBlock::Render()
 {
 	currentAnimation->Render(x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void QuestionBlock::setObjectState(ObjectState s)

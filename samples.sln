@@ -7,6 +7,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "05-ScenceManager", "05-Scen
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "01-Skeleton", "01-Skeleton\01-Skeleton.vcxproj", "{959C78E1-3BC0-4E30-BB42-048A1F251A85}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "05-SceneManager", "demo-05\05-SceneManager.vcxproj", "{30B52332-21EE-43B1-91BF-B2494C04C34F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,20 @@ Global
 		{959C78E1-3BC0-4E30-BB42-048A1F251A85}.Release|Win32.Build.0 = Release|Win32
 		{959C78E1-3BC0-4E30-BB42-048A1F251A85}.Release|x64.ActiveCfg = Release|x64
 		{959C78E1-3BC0-4E30-BB42-048A1F251A85}.Release|x64.Build.0 = Release|x64
+		{30B52332-21EE-43B1-91BF-B2494C04C34F}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{30B52332-21EE-43B1-91BF-B2494C04C34F}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{30B52332-21EE-43B1-91BF-B2494C04C34F}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{30B52332-21EE-43B1-91BF-B2494C04C34F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{30B52332-21EE-43B1-91BF-B2494C04C34F}.Debug|Win32.Build.0 = Debug|Win32
+		{30B52332-21EE-43B1-91BF-B2494C04C34F}.Debug|x64.ActiveCfg = Debug|x64
+		{30B52332-21EE-43B1-91BF-B2494C04C34F}.Debug|x64.Build.0 = Debug|x64
+		{30B52332-21EE-43B1-91BF-B2494C04C34F}.Release|Any CPU.ActiveCfg = Release|Win32
+		{30B52332-21EE-43B1-91BF-B2494C04C34F}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{30B52332-21EE-43B1-91BF-B2494C04C34F}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{30B52332-21EE-43B1-91BF-B2494C04C34F}.Release|Win32.ActiveCfg = Release|Win32
+		{30B52332-21EE-43B1-91BF-B2494C04C34F}.Release|Win32.Build.0 = Release|Win32
+		{30B52332-21EE-43B1-91BF-B2494C04C34F}.Release|x64.ActiveCfg = Release|x64
+		{30B52332-21EE-43B1-91BF-B2494C04C34F}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

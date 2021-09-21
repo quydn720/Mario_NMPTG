@@ -85,17 +85,20 @@ void LoadAssetsMario()
 
 	LPTEXTURE texMario = textures->Get(ID_TEX_MARIO);
 
+	// TODO: Should call this function to load all Mario's textures.
+	// Had destroyed the animation in the text file
+	sprites->AddFromFile(L"test.txt");
 	// IDLE
-	sprites->Add(ID_SPRITE_MARIO_BIG_IDLE_RIGHT + 1, 246, 154, 246 + 13, 154 + 26, texMario);
-	sprites->Add(ID_SPRITE_MARIO_BIG_IDLE_LEFT + 1, 186, 154, 186 + 13, 154 + 26, texMario);
+	//sprites->Add(ID_SPRITE_MARIO_BIG_IDLE_RIGHT + 1, 246, 154, 246 + 13, 154 + 26, texMario);
+	//sprites->Add(ID_SPRITE_MARIO_BIG_IDLE_LEFT + 1, 186, 154, 186 + 13, 154 + 26, texMario);
 
-	// WALKING LEFT
-	sprites->Add(ID_SPRITE_MARIO_BIG_WALKING_RIGHT + 2, 275, 154, 290, 181, texMario);
-	sprites->Add(ID_SPRITE_MARIO_BIG_WALKING_RIGHT + 3, 304, 154, 321, 181, texMario);
+	//// WALKING LEFT
+	//sprites->Add(ID_SPRITE_MARIO_BIG_WALKING_RIGHT + 2, 275, 154, 290, 181, texMario);
+	//sprites->Add(ID_SPRITE_MARIO_BIG_WALKING_RIGHT + 3, 304, 154, 321, 181, texMario);
 
-	// WALKING RIGHT
-	sprites->Add(ID_SPRITE_MARIO_BIG_WALKING_LEFT + 2, 155, 154, 170, 181, texMario);
-	sprites->Add(ID_SPRITE_MARIO_BIG_WALKING_LEFT + 3, 125, 154, 140, 181, texMario);
+	//// WALKING RIGHT
+	//sprites->Add(ID_SPRITE_MARIO_BIG_WALKING_LEFT + 2, 155, 154, 170, 181, texMario);
+	//sprites->Add(ID_SPRITE_MARIO_BIG_WALKING_LEFT + 3, 125, 154, 140, 181, texMario);
 
 	// RUNNING RIGHT 
 	sprites->Add(ID_SPRITE_MARIO_BIG_RUNNING_RIGHT + 1, 335, 154, 335 + 18, 154 + 26, texMario);
@@ -652,7 +655,7 @@ int WINAPI WinMain(
 	LoadResources();
 	Reload();
 
-	SetWindowPos(hWnd, 0, 0, 0, SCREEN_WIDTH*2, SCREEN_HEIGHT*2, SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
+	SetWindowPos(hWnd, 0, 50, 150, SCREEN_WIDTH*2, SCREEN_HEIGHT*2, SWP_NOZORDER | SWP_SHOWWINDOW);
 
 	Run();
 

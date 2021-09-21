@@ -34,7 +34,9 @@ void CSprites::AddFromFile(std::wstring path)
 			}
 			token = strtok_s(NULL, " ", &next_token);
 		}
-		CSprites::GetInstance()->Add(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4], texMario);
+		if (tokens.size() == 5) {
+			CSprites::GetInstance()->Add(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4], texMario);
+		}
 	}
 }
 

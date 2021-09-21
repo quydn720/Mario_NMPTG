@@ -57,6 +57,8 @@
 #define TEXTURE_PATH_ENEMY TEXTURES_DIR "\\enemies.png"
 #define TEXTURE_PATH_BBOX TEXTURES_DIR "\\bbox.png"
 
+#define SPRITE_FILE_PATH L"sprites.txt"
+
 CGame *game;
 CMario *mario;
 
@@ -77,85 +79,15 @@ LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
+void LoadSprites() {
+	CSprites* spriteDb = CSprites::GetInstance();
+	spriteDb->LoadFromFile(SPRITE_FILE_PATH);
+}
+
 void LoadAssetsMario()
 {
-	CTextures* textures = CTextures::GetInstance();
-	CSprites* sprites = CSprites::GetInstance();
 	CAnimations* animations = CAnimations::GetInstance();
-
-	LPTEXTURE texMario = textures->Get(ID_TEX_MARIO);
-
-	// TODO: Should call this function to load all Mario's textures.
-	// Had destroyed the animation in the text file
-	sprites->AddFromFile(L"test.txt");
-	// IDLE
-	//sprites->Add(ID_SPRITE_MARIO_BIG_IDLE_RIGHT + 1, 246, 154, 246 + 13, 154 + 26, texMario);
-	//sprites->Add(ID_SPRITE_MARIO_BIG_IDLE_LEFT + 1, 186, 154, 186 + 13, 154 + 26, texMario);
-
-	//// WALKING LEFT
-	//sprites->Add(ID_SPRITE_MARIO_BIG_WALKING_RIGHT + 2, 275, 154, 290, 181, texMario);
-	//sprites->Add(ID_SPRITE_MARIO_BIG_WALKING_RIGHT + 3, 304, 154, 321, 181, texMario);
-
-	//// WALKING RIGHT
-	//sprites->Add(ID_SPRITE_MARIO_BIG_WALKING_LEFT + 2, 155, 154, 170, 181, texMario);
-	//sprites->Add(ID_SPRITE_MARIO_BIG_WALKING_LEFT + 3, 125, 154, 140, 181, texMario);
-
-	// RUNNING RIGHT 
-	sprites->Add(ID_SPRITE_MARIO_BIG_RUNNING_RIGHT + 1, 335, 154, 335 + 18, 154 + 26, texMario);
-	sprites->Add(ID_SPRITE_MARIO_BIG_RUNNING_RIGHT + 2, 363, 154, 363 + 18, 154 + 26, texMario);
-	sprites->Add(ID_SPRITE_MARIO_BIG_RUNNING_RIGHT + 3, 393, 154, 393 + 18, 154 + 26, texMario);
-
-	// RUNNING LEFT
-	sprites->Add(ID_SPRITE_MARIO_BIG_RUNNING_LEFT + 1, 92, 154, 92 + 18, 154 + 26, texMario);
-	sprites->Add(ID_SPRITE_MARIO_BIG_RUNNING_LEFT + 2, 66, 154, 66 + 18, 154 + 26, texMario);
-	sprites->Add(ID_SPRITE_MARIO_BIG_RUNNING_LEFT + 3, 35, 154, 35 + 18, 154 + 26, texMario);
-
-	// JUMP WALK RIGHT & LEFT 
-	sprites->Add(ID_SPRITE_MARIO_BIG_JUMP_WALK_RIGHT + 1, 395, 275, 395 + 16, 275 + 25, texMario);
-	sprites->Add(ID_SPRITE_MARIO_BIG_JUMP_WALK_LEFT + 1, 35, 275, 35 + 16, 275 + 25, texMario);
-
-	// JUMP RUN RIGHT & LEFT 
-	sprites->Add(ID_SPRITE_MARIO_BIG_JUMP_RUN_RIGHT + 1, 395, 195, 395 + 18, 195 + 25, texMario);
-	sprites->Add(ID_SPRITE_MARIO_BIG_JUMP_RUN_LEFT + 1, 33, 195, 33 + 18, 195 + 25, texMario);
-
-	// SIT RIGHT/LEFT
-	sprites->Add(ID_SPRITE_MARIO_BIG_SIT_RIGHT + 1, 426, 239, 426 + 14, 239 + 17, texMario);
-	sprites->Add(ID_SPRITE_MARIO_BIG_SIT_LEFT + 1, 5, 239, 5 + 14, 239 + 17, texMario);
-
-	// BRACING RIGHT/LEFT
-	sprites->Add(ID_SPRITE_MARIO_BIG_BRACE_RIGHT + 1, 425, 154, 425 + 15, 154 + 27, texMario);
-	sprites->Add(ID_SPRITE_MARIO_BIG_BRACE_LEFT + 1, 5, 154, 5 + 15, 154 + 27, texMario);
-
-	// MARIO DIE
-	sprites->Add(ID_SPRITE_MARIO_DIE + 1, 215, 120, 231, 135, texMario);
-
-	// SMALL MARIO 
-	sprites->Add(ID_SPRITE_MARIO_SMALL_IDLE_RIGHT + 1, 247, 0, 259, 15, texMario);			
-	sprites->Add(ID_SPRITE_MARIO_SMALL_IDLE_LEFT + 1, 187, 0, 198, 15, texMario);			
-
-	sprites->Add(ID_SPRITE_MARIO_SMALL_WALKING_RIGHT + 2, 275, 0, 291, 15, texMario);			
-	sprites->Add(ID_SPRITE_MARIO_SMALL_WALKING_RIGHT + 3, 306, 0, 320, 15, texMario); 
-
-	sprites->Add(ID_SPRITE_MARIO_SMALL_WALKING_LEFT + 2, 155, 0, 170, 15, texMario);
-	sprites->Add(ID_SPRITE_MARIO_SMALL_WALKING_LEFT + 3, 125, 0, 139, 15, texMario);
-
-	sprites->Add(ID_SPRITE_MARIO_SMALL_RUNNING_RIGHT + 1, 275, 0, 275 + 15, 15, texMario);
-	sprites->Add(ID_SPRITE_MARIO_SMALL_RUNNING_RIGHT + 2, 306, 0, 306 + 15, 15, texMario); 
-	sprites->Add(ID_SPRITE_MARIO_SMALL_RUNNING_RIGHT + 3, 335, 0, 335 + 15, 15, texMario);
-
-	sprites->Add(ID_SPRITE_MARIO_SMALL_RUNNING_LEFT + 1, 155, 0, 155 + 15, 15, texMario);
-	sprites->Add(ID_SPRITE_MARIO_SMALL_RUNNING_LEFT + 2, 125, 0, 125 + 15, 15, texMario);
-	sprites->Add(ID_SPRITE_MARIO_SMALL_RUNNING_LEFT + 3, 95, 0, 95 + 15, 15, texMario);
-
-	sprites->Add(ID_SPRITE_MARIO_SMALL_BRACE_LEFT + 1, 6, 0, 6 + 13, 15, texMario);
-	sprites->Add(ID_SPRITE_MARIO_SMALL_BRACE_RIGHT + 1, 426, 0, 426 + 13, 15, texMario);
-
-	sprites->Add(ID_SPRITE_MARIO_SMALL_JUMP_WALK_LEFT + 1, 35, 80, 35 + 15, 80 + 15, texMario);		
-	sprites->Add(ID_SPRITE_MARIO_SMALL_JUMP_WALK_RIGHT + 1, 395, 80, 395 + 15, 80 + 15, texMario);
-
-	sprites->Add(ID_SPRITE_MARIO_SMALL_JUMP_RUN_LEFT + 1, 65, 40, 65 + 15, 40 + 15, texMario);
-	sprites->Add(ID_SPRITE_MARIO_SMALL_JUMP_RUN_RIGHT + 1, 365, 40, 365 + 15, 40 + 15, texMario);
-
+	
 	LPANIMATION ani;
 
 	ani = new CAnimation(100);
@@ -290,15 +222,7 @@ void LoadAssetsMario()
 void LoadAssetsGoomba()
 {
 	CTextures* textures = CTextures::GetInstance();
-	CSprites* sprites = CSprites::GetInstance();
 	CAnimations* animations = CAnimations::GetInstance();
-
-	LPTEXTURE texEnemy = textures->Get(ID_TEX_ENEMY);
-
-	sprites->Add(ID_SPRITE_GOOMBA_WALK + 1, 5, 14, 21, 29, texEnemy);  
-	sprites->Add(ID_SPRITE_GOOMBA_WALK + 2, 25, 14, 41, 29, texEnemy); 
-
-	sprites->Add(ID_SPRITE_GOOMBA_DIE + 1, 45, 21, 61, 29, texEnemy);
 
 	LPANIMATION ani = new CAnimation(100);
 	ani->Add(ID_SPRITE_GOOMBA_WALK + 1);
@@ -312,12 +236,7 @@ void LoadAssetsGoomba()
 }
 void LoadAssetsBrick()
 {
-	CTextures* textures = CTextures::GetInstance();
-	CSprites* sprites = CSprites::GetInstance();
 	CAnimations* animations = CAnimations::GetInstance();
-
-	LPTEXTURE texMisc = textures->Get(ID_TEX_MISC);
-	sprites->Add(ID_SPRITE_BRICK + 1, 372, 153, 372 + 15, 153 + 15, texMisc);
 
 	LPANIMATION ani = new CAnimation(100);
 	ani->Add(ID_SPRITE_BRICK + 1);
@@ -326,14 +245,7 @@ void LoadAssetsBrick()
 void LoadAssetsCoin()
 {
 	CTextures* textures = CTextures::GetInstance();
-	CSprites* sprites = CSprites::GetInstance();
 	CAnimations* animations = CAnimations::GetInstance();
-
-	LPTEXTURE texMisc = textures->Get(ID_TEX_MISC);
-
-	sprites->Add(ID_SPRITE_COIN + 1, 303, 99, 303 + 9, 99 + 15, texMisc);
-	sprites->Add(ID_SPRITE_COIN + 2, 321, 99, 321 + 9, 99 + 15, texMisc);
-	sprites->Add(ID_SPRITE_COIN + 3, 338, 99, 338 + 9, 99 + 15, texMisc);
 
 	LPANIMATION ani = new CAnimation(300);
 	ani->Add(ID_SPRITE_COIN + 1);
@@ -344,13 +256,13 @@ void LoadAssetsCoin()
 
 void LoadAssetsOther()
 {
-	CTextures* textures = CTextures::GetInstance();
+	/*CTextures* textures = CTextures::GetInstance();
 	CSprites* sprites = CSprites::GetInstance();
 
 	LPTEXTURE texMisc = textures->Get(ID_TEX_MISC);
 	sprites->Add(ID_SPRITE_CLOUD_BEGIN, 390, 117, 390 + 15, 117 + 14, texMisc);
 	sprites->Add(ID_SPRITE_CLOUD_MIDDLE, 408, 117, 408 + 15, 117 + 14, texMisc);
-	sprites->Add(ID_SPRITE_CLOUD_END, 426, 117, 426 + 15, 117 + 14, texMisc);
+	sprites->Add(ID_SPRITE_CLOUD_END, 426, 117, 426 + 15, 117 + 14, texMisc);*/
 
 }
 
@@ -369,6 +281,7 @@ void LoadResources()
 	textures->Add(ID_TEX_MISC, TEXTURE_PATH_MISC);
 	textures->Add(ID_TEX_BBOX, TEXTURE_PATH_BBOX);
 
+	LoadSprites();
 	LoadAssetsMario();
 	LoadAssetsGoomba();
 	LoadAssetsBrick();

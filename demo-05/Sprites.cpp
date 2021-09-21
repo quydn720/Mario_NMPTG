@@ -13,29 +13,37 @@ CSprites* CSprites::GetInstance()
 	return __instance;
 }
 
-void CSprites::AddFromFile(std::wstring path)
+void CSprites::LoadFromFile(std::wstring path)
 {
 	DebugOut(L"[INFO] Start loading scene resources from : %s \n", path);
-	
-	LPTEXTURE texMario = CTextures::GetInstance()->Get(0);
-	
+	LPTEXTURE tex = NULL;
+	int numTokens = 0;
+
 	std::ifstream f;
 	f.open(path);
 	char str[MAX_CHAR_LINE];
 	char* next_token = NULL;
 	while (f.getline(str, MAX_CHAR_LINE)) {
 		char* token = strtok_s(str, " ", &next_token);
-		std::vector<int> tokens;
 
+		// Can add some settings, like tokens size at here, 
+		// TODO: may be won't need the tokens size, cuz sprite has 5 tokens
+		if (token == NULL) continue; // blank space
+		if (token[0] == '/') continue; // comments
+		if (token[0] == '#') {
+			int texId = atoi(strtok_s(NULL, " ", &next_token));
+			tex = CTextures::GetInstance()->Get(texId);
+			numTokens = atoi(strtok_s(NULL, " ", &next_token));
+			continue;
+		}
+		// Add the sprite to database
+		std::vector<int> tokens;
 		while (token != NULL) {
-			DebugOut(L"%d\n", atoi(token));
-			if (token != NULL) {
-				tokens.push_back(atoi(token));
-			}
+			tokens.push_back(atoi(token));
 			token = strtok_s(NULL, " ", &next_token);
 		}
-		if (tokens.size() == 5) {
-			CSprites::GetInstance()->Add(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4], texMario);
+		if (tokens.size() == numTokens) {
+			CSprites::GetInstance()->Add(tokens[0], tokens[1], tokens[2], tokens[3], tokens[4], tex);
 		}
 	}
 }

@@ -19,7 +19,10 @@ class CSprites
 	std::unordered_map<int, LPSPRITE> sprites;
 
 public:
-	void AddFromFile(std::wstring path);
+	/*
+	* Load all sprites from a file (formatted for this function)
+	*/
+	void LoadFromFile(std::wstring path);
 	void Add(int id, int left, int top, int right, int bottom, LPTEXTURE tex);
 	LPSPRITE Get(int id);
 

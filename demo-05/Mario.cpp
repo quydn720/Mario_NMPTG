@@ -9,15 +9,17 @@
 
 #include "Collision.h"
 
-void CMario::Update(DWORD dt, vector<LPGAMEOBJECT> *coObjects)
+void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vy += ay * dt;
 	vx += ax * dt;
 
-	if (abs(vx) > abs(maxVx)) vx = maxVx;
-
+	if (abs(vx) > abs(maxVx)) {
+		vx = maxVx;
+		DebugOut(L"zo\n");
+	}
 	// reset untouchable timer if untouchable time has passed
-	if ( GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME) 
+	if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
 	{
 		untouchable_start = 0;
 		untouchable = 0;
@@ -41,11 +43,11 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		vy = 0;
 		if (e->ny < 0) isOnPlatform = true;
 	}
-	else 
-	if (e->nx != 0 && e->obj->IsBlocking())
-	{
-		vx = 0;
-	}
+	else
+		if (e->nx != 0 && e->obj->IsBlocking())
+		{
+			vx = 0;
+		}
 
 	if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomba(e);
@@ -194,7 +196,14 @@ int CMario::GetAniIdBig()
 			}
 			else if (vx > 0)
 			{
-				if (ax < 0)
+				if (ax == -nx * MARIO_ACCEL_SLOWING_DOWN_X)
+				{
+					if (ax * vx < 0)
+						aniId = ID_ANI_MARIO_WALKING_RIGHT;
+					else
+						aniId = ID_ANI_MARIO_WALKING_LEFT;
+				}
+				else if (ax < 0)
 					aniId = ID_ANI_MARIO_BRACE_RIGHT;
 				else if (ax == MARIO_ACCEL_RUN_X)
 					aniId = ID_ANI_MARIO_RUNNING_RIGHT;
@@ -203,7 +212,16 @@ int CMario::GetAniIdBig()
 			}
 			else // vx < 0
 			{
-				if (ax > 0)
+				// Because of line [16] vx += ax * dt, it's also depend on dt,
+				// so need to check if vx go oposite with ax
+				// [FIX the bug - ani change to left before go to idle]
+				if (ax == -nx * MARIO_ACCEL_SLOWING_DOWN_X) {
+					if (ax * vx < 0)
+						aniId = ID_ANI_MARIO_WALKING_LEFT;
+					else
+						aniId = ID_ANI_MARIO_WALKING_RIGHT;
+				}
+				else if (ax > 0)
 					aniId = ID_ANI_MARIO_BRACE_LEFT;
 				else if (ax == -MARIO_ACCEL_RUN_X)
 					aniId = ID_ANI_MARIO_RUNNING_LEFT;
@@ -231,14 +249,17 @@ void CMario::Render()
 	animations->Get(aniId)->Render(x, y);
 
 	RenderBoundingBox();
-	
+
+	if (ax != 0) {
+		DebugOut(L"[After] a: %f\tvx: %f\tx: %0.2f\Ani:%d\n", ax, vx, x, aniId);
+	}
 	DebugOutTitle(L"Coins: %d", coin);
 }
 
 void CMario::SetState(int state)
 {
 	// DIE is the end state, cannot be changed! 
-	if (this->state == MARIO_STATE_DIE) return; 
+	if (this->state == MARIO_STATE_DIE) return;
 
 	switch (state)
 	{
@@ -287,7 +308,7 @@ void CMario::SetState(int state)
 			state = MARIO_STATE_IDLE;
 			isSitting = true;
 			vx = 0; vy = 0.0f;
-			y +=MARIO_SIT_HEIGHT_ADJUST;
+			y += MARIO_SIT_HEIGHT_ADJUST;
 		}
 		break;
 
@@ -299,12 +320,21 @@ void CMario::SetState(int state)
 			y -= MARIO_SIT_HEIGHT_ADJUST;
 		}
 		break;
-
 	case MARIO_STATE_IDLE:
-		ax = 0.0f;
-		vx = 0.0f;
+		ax = -nx * MARIO_ACCEL_SLOWING_DOWN_X; // TODO: To constant - the slowing down speed
+		if (vx != 0) {
+			vx += -nx * ax;
+			if (nx == 1 && vx < 0) {
+				vx = 0;
+				maxVx = 0;
+			}
+			if (nx == -1 && vx > 0) {
+				vx = 0;
+				maxVx = 0;
+			}
+		}
+		else ax = 0.0f;
 		break;
-
 	case MARIO_STATE_DIE:
 		vy = -MARIO_JUMP_DEFLECT_SPEED;
 		vx = 0;
@@ -315,9 +345,9 @@ void CMario::SetState(int state)
 	CGameObject::SetState(state);
 }
 
-void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom)
+void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
-	if (level==MARIO_LEVEL_BIG)
+	if (level == MARIO_LEVEL_BIG)
 	{
 		if (isSitting)
 		{
@@ -326,18 +356,18 @@ void CMario::GetBoundingBox(float &left, float &top, float &right, float &bottom
 			right = left + MARIO_BIG_SITTING_BBOX_WIDTH;
 			bottom = top + MARIO_BIG_SITTING_BBOX_HEIGHT;
 		}
-		else 
+		else
 		{
-			left = x - MARIO_BIG_BBOX_WIDTH/2;
-			top = y - MARIO_BIG_BBOX_HEIGHT/2;
+			left = x - MARIO_BIG_BBOX_WIDTH / 2;
+			top = y - MARIO_BIG_BBOX_HEIGHT / 2;
 			right = left + MARIO_BIG_BBOX_WIDTH;
 			bottom = top + MARIO_BIG_BBOX_HEIGHT;
 		}
 	}
 	else
 	{
-		left = x - MARIO_SMALL_BBOX_WIDTH/2;
-		top = y - MARIO_SMALL_BBOX_HEIGHT/2;
+		left = x - MARIO_SMALL_BBOX_WIDTH / 2;
+		top = y - MARIO_SMALL_BBOX_HEIGHT / 2;
 		right = left + MARIO_SMALL_BBOX_WIDTH;
 		bottom = top + MARIO_SMALL_BBOX_HEIGHT;
 	}

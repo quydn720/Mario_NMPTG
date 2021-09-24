@@ -36,7 +36,6 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 	DebugOut(L"[INFO] KeyUp: %d\n", KeyCode);
 	switch (KeyCode)
 	{
-
 	case DIK_S:
 		mario->SetState(MARIO_STATE_RELEASE_JUMP);
 		break;

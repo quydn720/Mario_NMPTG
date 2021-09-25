@@ -1,6 +1,6 @@
 /* =============================================================
 	INTRODUCTION TO GAME PROGRAMMING SE102
-	
+
 	SAMPLE 04 - COLLISION
 
 	This sample illustrates how to:
@@ -8,7 +8,7 @@
 		1/ Implement SweptAABB algorithm between moving objects
 		2/ Implement a simple (yet effective) collision frame work, applying on Mario, Brick, Goomba & Coin
 
-	Key functions: 
+	Key functions:
 		CCollision::SweptAABB
 		CCollision::SweptAABBEx
 		CCollision::Scan
@@ -16,7 +16,7 @@
 		CCollision::Process
 
 		CGameObject::GetBoundingBox
-		
+
 ================================================================ */
 
 #include <windows.h>
@@ -40,6 +40,7 @@
 #include "SampleKeyEventHandler.h"
 
 #include "AssetIDs.h"
+#include "Map.h"
 
 #define WINDOW_CLASS_NAME L"SampleWindow"
 #define MAIN_WINDOW_TITLE L"04 - Collision"
@@ -56,15 +57,20 @@
 #define TEXTURE_PATH_MISC TEXTURES_DIR "\\misc.png"
 #define TEXTURE_PATH_ENEMY TEXTURES_DIR "\\enemies.png"
 #define TEXTURE_PATH_BBOX TEXTURES_DIR "\\bbox.png"
+#define TEXTURE_PATH_MAP TEXTURES_DIR "\\map1-1.png"
+
+#define DATA_PATH_MAP L"map1-1.txt"
 
 #define SPRITE_FILE_PATH L"sprites.txt"
 
-CGame *game;
-CMario *mario;
+
+CGame* game;
+CMario* mario;
+Map* map;
 
 list<LPGAMEOBJECT> objects;
 
-CSampleKeyHandler * keyHandler; 
+CSampleKeyHandler* keyHandler;
 
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -87,7 +93,7 @@ void LoadSprites() {
 void LoadAssetsMario()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	
+
 	LPANIMATION ani;
 
 	ani = new CAnimation(100);
@@ -117,7 +123,7 @@ void LoadAssetsMario()
 	animations->Add(ID_ANI_MARIO_RUNNING_RIGHT, ani);
 
 	// Mario runs faster hence animation speed should be faster
-	ani = new CAnimation(50);	
+	ani = new CAnimation(50);
 	ani->Add(ID_SPRITE_MARIO_BIG_RUNNING_LEFT + 1);
 	ani->Add(ID_SPRITE_MARIO_BIG_RUNNING_LEFT + 2);
 	ani->Add(ID_SPRITE_MARIO_BIG_RUNNING_LEFT + 3);
@@ -254,16 +260,9 @@ void LoadAssetsCoin()
 	animations->Add(ID_ANI_COIN, ani);
 }
 
-void LoadAssetsOther()
+void LoadMap()
 {
-	/*CTextures* textures = CTextures::GetInstance();
-	CSprites* sprites = CSprites::GetInstance();
-
-	LPTEXTURE texMisc = textures->Get(ID_TEX_MISC);
-	sprites->Add(ID_SPRITE_CLOUD_BEGIN, 390, 117, 390 + 15, 117 + 14, texMisc);
-	sprites->Add(ID_SPRITE_CLOUD_MIDDLE, 408, 117, 408 + 15, 117 + 14, texMisc);
-	sprites->Add(ID_SPRITE_CLOUD_END, 426, 117, 426 + 15, 117 + 14, texMisc);*/
-
+	map = new Map(DATA_PATH_MAP);
 }
 
 /*
@@ -274,23 +273,25 @@ void LoadAssetsOther()
 */
 void LoadResources()
 {
+	// TODO: load from a file scene
 	CTextures* textures = CTextures::GetInstance();
 
 	textures->Add(ID_TEX_MARIO, TEXTURE_PATH_MARIO);
 	textures->Add(ID_TEX_ENEMY, TEXTURE_PATH_ENEMY);
 	textures->Add(ID_TEX_MISC, TEXTURE_PATH_MISC);
 	textures->Add(ID_TEX_BBOX, TEXTURE_PATH_BBOX);
+	textures->Add(ID_TEX_MAP, TEXTURE_PATH_MAP);
 
 	LoadSprites();
 	LoadAssetsMario();
 	LoadAssetsGoomba();
 	LoadAssetsBrick();
 	LoadAssetsCoin();
-	LoadAssetsOther();
+	LoadMap();
 }
 
 void ClearScene()
-{ 
+{
 	list<LPGAMEOBJECT>::iterator it;
 	for (it = objects.begin(); it != objects.end(); it++)
 	{
@@ -310,8 +311,8 @@ void ClearScene()
 #define NUM_BRICKS 70
 
 /*
-* Reload all objects of current scene 
-* NOTE: super bad way to build a scene! We need to load a scene from data instead of hard-coding like this 
+* Reload all objects of current scene
+* NOTE: super bad way to build a scene! We need to load a scene from data instead of hard-coding like this
 */
 void Reload()
 {
@@ -379,6 +380,8 @@ void Reload()
 		CCoin* c = new CCoin(COIN_X + i * (COIN_WIDTH * 2), GROUND_Y - 96.0f);
 		objects.push_back(c);
 	}
+	//map->Render();
+
 }
 
 bool IsGameObjectDeleted(const LPGAMEOBJECT& o) { return o == NULL; }
@@ -417,7 +420,7 @@ void Update(DWORD dt)
 
 	for (i = objects.begin(); i != objects.end(); ++i)
 	{
-		(*i)->Update(dt,&coObjects);
+		(*i)->Update(dt, &coObjects);
 	}
 
 	PurgeDeletedObjects();
@@ -427,16 +430,17 @@ void Update(DWORD dt)
 	mario->GetPosition(cx, cy);
 
 	cx -= SCREEN_WIDTH / 2;
-	cy = 0;
-	//cy -= SCREEN_HEIGHT / 2;
+	//cy = 0;
+	cy -= SCREEN_HEIGHT / 2;
 
 	if (cx < 0) cx = 0;
 
 	CGame::GetInstance()->SetCamPos(cx, cy);
+	//DebugOut(L"%0.1f", cx);
 }
 
 /*
-	Render a frame 
+	Render a frame
 */
 void Render()
 {
@@ -453,7 +457,8 @@ void Render()
 
 	FLOAT NewBlendFactor[4] = { 0,0,0,0 };
 	pD3DDevice->OMSetBlendState(g->GetAlphaBlending(), NewBlendFactor, 0xffffffff);
-
+	
+	//map->Render();
 	list<LPGAMEOBJECT>::iterator i;
 	for (i = objects.begin(); i != objects.end(); ++i)
 	{
@@ -498,7 +503,7 @@ HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int Sc
 			hInstance,
 			NULL);
 
-	if (!hWnd) 
+	if (!hWnd)
 	{
 		OutputDebugString(L"[ERROR] CreateWindow failed");
 		DWORD ErrCode = GetLastError();
@@ -538,12 +543,12 @@ int Run()
 		{
 			frameStart = now;
 
-			game->ProcessKeyboard();			
+			game->ProcessKeyboard();
 			Update(dt);
 			Render();
 		}
 		else
-			Sleep(tickPerFrame - dt);	
+			Sleep(tickPerFrame - dt);
 	}
 
 	return 1;
@@ -568,7 +573,7 @@ int WINAPI WinMain(
 	LoadResources();
 	Reload();
 
-	SetWindowPos(hWnd, 0, 50, 150, SCREEN_WIDTH*2, SCREEN_HEIGHT*2, SWP_NOZORDER | SWP_SHOWWINDOW);
+	SetWindowPos(hWnd, 0, 50, 150, SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2, SWP_NOZORDER | SWP_SHOWWINDOW);
 
 	Run();
 

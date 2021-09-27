@@ -13,7 +13,6 @@ void Map::Load(std::wstring path)
 	std::ifstream f;
 	f.open(path);
 
-	LPTEXTURE tex = NULL;
 	int numTokens = 0;
 	int section = -1;
 	char str[MAX_CHAR_LINE];
@@ -51,26 +50,19 @@ void Map::Load(std::wstring path)
 			LoadMapFromToken(tokens);
 		}
 	}
+	LoadMapTiles();
 	f.close();
 	DebugOut(L"[MAP] Map loaded successfully!\n");
 }
 
 void Map::Render()
 {
-	// TODO: should we store the texture into map object ?
-	LPTEXTURE tex = CTextures::GetInstance()->Get(30);
 	for (int i = 0; i < numRows; i++) {
 		for (int j = 0; j < numColumns; j++) {
 			int id = tiles[i][j];
-			if (id != -1) {
-				RECT r;
-				r.left = id % numTileColumns * tileSize;
-				r.top = (id / numTileColumns) * tileSize;
-				r.right = r.left + tileSize;
-				r.bottom = r.top + tileSize;
-
-				CGame::GetInstance()->Draw((float)(j * tileSize), (float)(i * tileSize), tex, r.left, r.top, r.right, r.bottom);
-			}
+			float x = tileSize * j;
+			float y = tileSize * i;
+			CSprites::GetInstance()->Get(id)->Draw(x, y);
 		}
 	}
 }
@@ -84,9 +76,27 @@ void Map::LoadInfoFromToken(vector<int> tokens, int numTokens) {
 		tileSize = tokens[4];
 	}
 }
+
 void Map::LoadMapFromToken(vector<int> row) {
 	for (int i = 0; i < row.size(); i++) {
 		tiles[currentRow][i] = row[i] - 1;
 	}
 	currentRow++;
+}
+
+void Map::LoadMapTiles() {
+	int id = 0;
+	for (int i = 0; i < numTileRows; i++)
+	{
+		for (int j = 0; j < numTileColumns; j++)
+		{
+			RECT r;
+			r.left = id % numTileColumns * tileSize;
+			r.top = (id / numTileColumns) * tileSize;
+			r.right = r.left + tileSize;
+			r.bottom = r.top + tileSize;
+			CSprites::GetInstance()->Add(id, r.left, r.top, r.right, r.bottom, tex);
+			id++;
+		}
+	}
 }

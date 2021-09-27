@@ -15,6 +15,8 @@ private:
 	int currentRow = 0;
 	void LoadInfoFromToken(vector<int> tokens, int numTokens);
 	void LoadMapFromToken(vector<int> row);
+	void LoadMapTiles();
+	LPTEXTURE tex = NULL;
 public:
 	Map(std::wstring path);
 	~Map();

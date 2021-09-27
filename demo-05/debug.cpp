@@ -1,6 +1,8 @@
 #include <Windows.h>
 #include "debug.h"
 
+#define MAX_CHAR_LINE 1024
+
 HWND _hwnd = NULL;
 
 void DebugOut(const wchar_t* fmt, ...)

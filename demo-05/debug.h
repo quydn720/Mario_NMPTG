@@ -8,6 +8,11 @@
 #include <time.h>
 #include <stdlib.h>
 
+
+#include "Texture.h"
+#include "Sprites.h"
+#include "Textures.h"
+
 #define _W(x)  __W(x)
 #define __W(x)  L##x
 

@@ -1,13 +1,14 @@
 #pragma once
 #include <Windows.h>
 #include <unordered_map>
-
 #include <d3dx10.h>
 #include <fstream>   
+
 #include "Texture.h"
 #include "Sprite.h"
 #include "Textures.h"
-
+#include "debug.h"
+#include "Game.h"
 
 /*
 	Manage sprite database

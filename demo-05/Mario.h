@@ -12,7 +12,7 @@
 #define MARIO_ACCEL_WALK_X	0.0005f
 #define MARIO_ACCEL_RUN_X	0.0007f
 
-#define MARIO_ACCEL_SLOWING_DOWN_X 0.00015f
+#define MARIO_ACCEL_SLOWING_DOWN_X_PARAM 18
 
 #define MARIO_JUMP_SPEED_Y		0.5f
 #define MARIO_JUMP_RUN_SPEED_Y	0.6f
@@ -82,10 +82,7 @@
 
 #pragma endregion
 
-#define GROUND_Y 160.0f
-
-
-
+#define GROUND_Y 460.0f
 
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
@@ -155,4 +152,18 @@ public:
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+
+	////TODO: delete this function later
+	//void Testing_goingLeft() {
+	//	x -= Testing_speed;
+	//}
+	//void Testing_goingRight() {
+	//	x += Testing_speed;
+	//}
+	//void Testing_goingDown() {
+	//	y += Testing_speed;
+	//}
+	//void Testing_goingUp() {
+	//	y -= Testing_speed;
+	//}
 };

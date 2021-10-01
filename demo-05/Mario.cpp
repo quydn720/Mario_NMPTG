@@ -11,12 +11,16 @@
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	// Because we have some logic for the x axis
+	// on state Idle at setState()
+	// so we can swipe out this state in Update()
 	vy += ay * dt;
-	vx += ax * dt;
+	if (state != MARIO_STATE_IDLE)
+		vx += ax * dt;
+
 
 	if (abs(vx) > abs(maxVx)) {
 		vx = maxVx;
-		DebugOut(L"zo\n");
 	}
 	// reset untouchable timer if untouchable time has passed
 	if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
@@ -196,12 +200,8 @@ int CMario::GetAniIdBig()
 			}
 			else if (vx > 0)
 			{
-				if (ax == -nx * MARIO_ACCEL_SLOWING_DOWN_X)
-				{
-					if (ax * vx < 0)
-						aniId = ID_ANI_MARIO_WALKING_RIGHT;
-					else
-						aniId = ID_ANI_MARIO_WALKING_LEFT;
+				if (state == MARIO_STATE_IDLE) {
+					aniId = ID_ANI_MARIO_WALKING_RIGHT;
 				}
 				else if (ax < 0)
 					aniId = ID_ANI_MARIO_BRACE_RIGHT;
@@ -212,14 +212,8 @@ int CMario::GetAniIdBig()
 			}
 			else // vx < 0
 			{
-				// Because of line [16] vx += ax * dt, it's also depend on dt,
-				// so need to check if vx go oposite with ax
-				// [FIX the bug - ani change to left before go to idle]
-				if (ax == -nx * MARIO_ACCEL_SLOWING_DOWN_X) {
-					if (ax * vx < 0)
-						aniId = ID_ANI_MARIO_WALKING_LEFT;
-					else
-						aniId = ID_ANI_MARIO_WALKING_RIGHT;
+				if (state == MARIO_STATE_IDLE) {
+					aniId = ID_ANI_MARIO_WALKING_LEFT;
 				}
 				else if (ax > 0)
 					aniId = ID_ANI_MARIO_BRACE_LEFT;
@@ -250,8 +244,9 @@ void CMario::Render()
 
 	RenderBoundingBox();
 
+	// Useful debug expression for animation
 	if (ax != 0) {
-		DebugOut(L"[After] a: %f\tvx: %f\tx: %0.2f\Ani:%d\n", ax, vx, x, aniId);
+		DebugOut(L"[After] a: %f\tvx: %f\tx: %0.2f\tAni:%d\n", ax, vx, x, aniId);
 	}
 	DebugOutTitle(L"Coins: %d", coin);
 }
@@ -260,7 +255,6 @@ void CMario::SetState(int state)
 {
 	// DIE is the end state, cannot be changed! 
 	if (this->state == MARIO_STATE_DIE) return;
-
 	switch (state)
 	{
 	case MARIO_STATE_RUNNING_RIGHT:
@@ -321,19 +315,31 @@ void CMario::SetState(int state)
 		}
 		break;
 	case MARIO_STATE_IDLE:
-		ax = -nx * MARIO_ACCEL_SLOWING_DOWN_X; // TODO: To constant - the slowing down speed
-		if (vx != 0) {
-			vx += -nx * ax;
-			if (nx == 1 && vx < 0) {
-				vx = 0;
-				maxVx = 0;
+		if (vx != 0)
+		{
+			// When change from moving state => idle.
+			// We +/- the velocity to 0 => make Mario moving a little bit more before stopping.
+			// MARIO_ACCEL_SLOWING_DOWN_X_PARAM: increase this for Mario moving shorter.
+			if (nx == 1) {
+				vx += -ax * MARIO_ACCEL_SLOWING_DOWN_X_PARAM;
+				maxVx += -ax * MARIO_ACCEL_SLOWING_DOWN_X_PARAM;
+
+				if (vx < 0 || maxVx < 0) {
+					vx = 0;
+					maxVx = 0;
+				}
 			}
-			if (nx == -1 && vx > 0) {
-				vx = 0;
-				maxVx = 0;
+			else {
+				vx -= ax * MARIO_ACCEL_SLOWING_DOWN_X_PARAM;
+				maxVx -= ax * MARIO_ACCEL_SLOWING_DOWN_X_PARAM;
+
+				if (vx > 0 || maxVx > 0) {
+					vx = 0;
+					maxVx = 0;
+				}
 			}
 		}
-		else ax = 0.0f;
+		else ax = 0;
 		break;
 	case MARIO_STATE_DIE:
 		vy = -MARIO_JUMP_DEFLECT_SPEED;

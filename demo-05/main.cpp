@@ -308,7 +308,7 @@ void ClearScene()
 #define COIN_X 100.0f
 
 #define BRICK_Y GROUND_Y + 20.0f
-#define NUM_BRICKS 70
+#define NUM_BRICKS 170
 
 /*
 * Reload all objects of current scene
@@ -321,67 +321,65 @@ void Reload()
 	// Main ground
 	for (int i = 0; i < NUM_BRICKS; i++)
 	{
-		CBrick* b = new CBrick(i * BRICK_WIDTH * 1.0f, BRICK_Y);
+		CBrick* b = new CBrick(i * BRICK_WIDTH * 1.0f, BRICK_Y - 80.0f);
 		objects.push_back(b);
 	}
 
 	// Short, low platform
-	for (int i = 1; i < 3; i++)
-	{
-		CBrick* b = new CBrick(i * BRICK_WIDTH * 1.0f, BRICK_Y - 44.0f);
-		objects.push_back(b);
-	}
+	//for (int i = 1; i < 3; i++)
+	//{
+	//	CBrick* b = new CBrick(i * BRICK_WIDTH * 1.0f, BRICK_Y - 44.0f);
+	//	objects.push_back(b);
+	//}
 
-	// Vertical column 1
-	for (int i = 0; i < 10; i++)
-	{
-		CBrick* b = new CBrick(0, BRICK_Y - i * BRICK_WIDTH);
-		objects.push_back(b);
-	}
+	//// Vertical column 1
+	//for (int i = 0; i < 10; i++)
+	//{
+	//	CBrick* b = new CBrick(0, BRICK_Y - i * BRICK_WIDTH);
+	//	objects.push_back(b);
+	//}
 
-	// Vertical column 2
-	for (int i = 1; i < 3; i++)
-	{
-		CBrick* b = new CBrick(BRICK_X + 300.0f, BRICK_Y - i * BRICK_WIDTH);
-		objects.push_back(b);
-	}
+	//// Vertical column 2
+	//for (int i = 1; i < 3; i++)
+	//{
+	//	CBrick* b = new CBrick(BRICK_X + 300.0f, BRICK_Y - i * BRICK_WIDTH);
+	//	objects.push_back(b);
+	//}
 
 	// Vertical column 3
-	for (int i = 1; i < 4; i++)
+	/*for (int i = 1; i < 4; i++)
 	{
 		CBrick* b = new CBrick(BRICK_X + 400.0f, BRICK_Y - i * BRICK_WIDTH);
 		objects.push_back(b);
-	}
+	}*/
 
 	// Vertical column 4
-	for (int i = 1; i < 5; i++)
+	/*for (int i = 1; i < 5; i++)
 	{
 		CBrick* b = new CBrick(BRICK_X + 500.0f, BRICK_Y - i * BRICK_WIDTH);
 		objects.push_back(b);
-	}
+	}*/
 
-	// Second cloud platform 
-	CPlatform* p = new CPlatform(90.0f, GROUND_Y - 74.0f,
-		16, 15, 16, ID_SPRITE_CLOUD_BEGIN, ID_SPRITE_CLOUD_MIDDLE, ID_SPRITE_CLOUD_END);
-	objects.push_back(p);
+	//// Second cloud platform 
+	//CPlatform* p = new CPlatform(90.0f, GROUND_Y - 74.0f,
+	//	16, 15, 16, ID_SPRITE_CLOUD_BEGIN, ID_SPRITE_CLOUD_MIDDLE, ID_SPRITE_CLOUD_END);
+	//objects.push_back(p);
 
 	mario = new CMario(MARIO_START_X, MARIO_START_Y);
 	objects.push_back(mario);
 
-	for (int j = 0; j < 1; j++)
+	/*for (int j = 0; j < 1; j++)
 	{
 		CGoomba* goomba = new CGoomba(GOOMBA_X + j * 60, GROUND_Y - 120.0f);
 		objects.push_back(goomba);
-	}
+	}*/
 
 	// COINS 
 	for (int i = 0; i < 10; i++)
 	{
-		CCoin* c = new CCoin(COIN_X + i * (COIN_WIDTH * 2), GROUND_Y - 96.0f);
+		CCoin* c = new CCoin(COIN_X + i * (COIN_WIDTH * 2), GROUND_Y - 86.0f); //GROUND_Y - 96.0f
 		objects.push_back(c);
 	}
-	//map->Render();
-
 }
 
 bool IsGameObjectDeleted(const LPGAMEOBJECT& o) { return o == NULL; }
@@ -436,7 +434,6 @@ void Update(DWORD dt)
 	if (cx < 0) cx = 0;
 
 	CGame::GetInstance()->SetCamPos(cx, cy);
-	//DebugOut(L"%0.1f", cx);
 }
 
 /*
@@ -458,7 +455,7 @@ void Render()
 	FLOAT NewBlendFactor[4] = { 0,0,0,0 };
 	pD3DDevice->OMSetBlendState(g->GetAlphaBlending(), NewBlendFactor, 0xffffffff);
 	
-	//map->Render();
+	map->Render();
 	list<LPGAMEOBJECT>::iterator i;
 	for (i = objects.begin(); i != objects.end(); ++i)
 	{

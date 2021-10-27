@@ -29,7 +29,6 @@ void CMap::Load(wstring path)
 			continue;
 		}
 
-
 		switch (section) {
 		case MAP_INFO:
 			_ParseSection_INFO(line);

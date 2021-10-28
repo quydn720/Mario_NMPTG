@@ -200,6 +200,19 @@ void CCollision::Filter( LPGAMEOBJECT objSrc,
 		{
 			continue;
 		}
+		// If only block one side (like the color block)
+		if (filterBlock == 1 && !c->obj->IsBlockingX() && c->obj->IsBlockingY()) {
+			if (c->t < min_ty && c->ny != 0 && filterY == 1) {
+				min_ty = c->t; min_iy = i;
+			}
+			continue;
+		}
+		if (filterBlock == 1 && !c->obj->IsBlockingY() && c->obj->IsBlockingX()) {
+			if (c->t < min_tx && c->nx != 0 && filterX == 1) {
+				min_tx = c->t; min_ix = i;
+			}
+			continue;
+		}
 
 		if (c->t < min_tx && c->nx != 0 && filterX == 1) {
 			min_tx = c->t; min_ix = i;

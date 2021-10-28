@@ -4,7 +4,6 @@
 void CColorBlock::Render()
 {
 	RenderBoundingBox();
-	// can copy from the platform class 
 }
 
 void CColorBlock::GetBoundingBox(float& l, float& t, float& r, float& b)

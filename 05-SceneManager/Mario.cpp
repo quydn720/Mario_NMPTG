@@ -13,6 +13,8 @@
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	isOnPlatform = false;
+
 	vy += ay * dt;
 	vx += ax * dt;
 
@@ -24,10 +26,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable_start = 0;
 		untouchable = 0;
 	}
-
-	isOnPlatform = false;
-
-	DebugOut(L"%0.1f\n", vy);
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
@@ -45,11 +43,10 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e, DWORD dt)
 		vy = 0;
 		if (e->ny < 0) isOnPlatform = true;
 	}
-	else
-		if (e->nx != 0 && e->obj->IsBlocking())
-		{
-			vx = 0;
-		}
+	else if (e->nx != 0 && e->obj->IsBlocking())
+	{
+		vx = 0;
+	}
 
 	if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomba(e);
@@ -62,11 +59,12 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e, DWORD dt)
 }
 
 void CMario::OnCollisionWithColorBlock(LPCOLLISIONEVENT e, DWORD dt) {
-	CColorBlock* cb = dynamic_cast<CColorBlock*>(e->obj);
-	if (e->ny < 0)
+	if (e->nx != 0) {
+		x += vx * dt;
+	}
+	if (e->ny < 0) {
 		vy = 0;
-	else {
-		y += vy * dt;
+		isOnPlatform = true;
 	}
 }
 
@@ -107,7 +105,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
-	e->obj->Delete();
+	//e->obj->Delete();
 	coin++;
 }
 

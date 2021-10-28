@@ -10,6 +10,8 @@ void CColorBlock::Render()
 void CColorBlock::GetBoundingBox(float& l, float& t, float& r, float& b)
 {
 	float cellWidth_div_2 = this->cellWidth / 2;
+	// have not get it ... but this variable will put the block with height > 16 at the right place,
+	// also with the render bounding box above
 	float cellHeight_div_2 = this->cellHeight / 2;
 	float yy = (cellHeight - 16) / 2;
 

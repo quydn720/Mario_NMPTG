@@ -19,7 +19,7 @@ map1-1.txt
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
-0	160	10
+0	200	10
 
 # Item
 8	160	336
@@ -32,7 +32,7 @@ map1-1.txt
 # COIN
 
 #Goomba
-2	300	10
+2	176	200
 
 # Color block
 6	224	352	16	48	3

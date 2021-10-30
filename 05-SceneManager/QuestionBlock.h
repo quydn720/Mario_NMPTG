@@ -13,6 +13,8 @@
 #define STATE_BRICK_EMPTY 311
 #define STATE_BRICK_INIT 312
 
+#define BRICK_OFFSET 0.03f
+
 
 class CQuestionBlock : public CGameObject
 {
@@ -22,12 +24,11 @@ class CQuestionBlock : public CGameObject
 public:
 	CQuestionBlock(float x, float y);
 	void Render();
-	void spawnItem();
+	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
+	virtual void SetState(int state);
+	void GetBoundingBox(float& l, float& t, float& r, float& b);
+
 	void setItem(CItem* i);
 	CItem* getItem();
-	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
-
-	//virtual void SetState(int state);
-	void GetBoundingBox(float& l, float& t, float& r, float& b);
 };
 

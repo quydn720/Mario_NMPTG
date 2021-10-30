@@ -18,6 +18,7 @@ using namespace std;
 CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	CScene(id, filePath)
 {
+	map = NULL;
 	player = NULL;
 	key_handler = new CSampleKeyHandler(this);
 }
@@ -96,6 +97,7 @@ void CPlayScene::_ParseSection_MAP(string line) {
 
 	LoadMap(path.c_str());
 }
+
 void CPlayScene::LoadMap(LPCWSTR mapFile) {
 	DebugOut(L"[INFO] Start loading map from : %s \n", mapFile);
 	map = new CMap(mapFile);
@@ -134,6 +136,15 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x, y); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
 	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
+	case OBJECT_TYPE_QUESTION_BLOCK: {
+		obj = new CQuestionBlock(x, y);
+		questionBlocks.push_back(dynamic_cast<CQuestionBlock*>(obj));
+		break; }
+	case OBJECT_TYPE_ITEM: {
+		obj = new CItem(x, y);
+		items.push_back(dynamic_cast<CItem*>(obj));
+		break;
+	}
 	case OBJECT_TYPE_COLOR_BLOCK: {
 		float cell_width = (float)atof(tokens[3].c_str());
 		float cell_height = (float)atof(tokens[4].c_str());
@@ -179,8 +190,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	// General object setup
 	obj->SetPosition(x, y);
-
-
 	objects.push_back(obj);
 }
 
@@ -255,6 +264,13 @@ void CPlayScene::Load()
 
 	f.close();
 
+	// Assign item to block, then release the vector objects.
+	for (size_t i = 0; i < items.size(); i++) {
+		questionBlocks[i]->setItem(items[i]);
+	}
+	questionBlocks = vector<CQuestionBlock*>();
+	items = vector<CItem*>();
+
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
 }
 
@@ -296,7 +312,7 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
-	map->Render();
+	//map->Render();
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
 }

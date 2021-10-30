@@ -7,6 +7,8 @@
 #include "Mario.h"
 #include "Goomba.h"
 #include "Map.h"
+#include "QuestionBlock.h"
+#include "Item.h"
 //#include "Koopas.h"
 
 
@@ -16,6 +18,9 @@ protected:
 	// A play scene has to have player, right? 
 	LPGAMEOBJECT player;		
 	CMap* map;
+
+	vector<CQuestionBlock*> questionBlocks;
+	vector<CItem*> items;
 
 	vector<LPGAMEOBJECT> objects;
 

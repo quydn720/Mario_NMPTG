@@ -19,7 +19,6 @@ public:
 	void Update(DWORD dt) {}
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 	void RenderBoundingBox();
-	int IsBlockingX() { return 0; }
-	int IsBlockingY() { return 1; }
+	virtual void DirectBlocking(int& l, int& t, int& r, int& b) { l = 0; t = 1; b = 0; r = 0; }
 };
 

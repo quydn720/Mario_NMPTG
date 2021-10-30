@@ -196,22 +196,17 @@ void CCollision::Filter( LPGAMEOBJECT objSrc,
 		if (c->obj->IsDeleted()) continue; 
 
 		// ignore collision event with object having IsBlocking = 0 (like coin, mushroom, etc)
-		if (filterBlock == 1 && !c->obj->IsBlocking()) 
+		if (filterBlock == 1 ) 
 		{
-			continue;
-		}
-		// If only block one side (like the color block)
-		if (filterBlock == 1 && !c->obj->IsBlockingX() && c->obj->IsBlockingY()) {
-			if (c->t < min_ty && c->ny != 0 && filterY == 1) {
-				min_ty = c->t; min_iy = i;
-			}
-			continue;
-		}
-		if (filterBlock == 1 && !c->obj->IsBlockingY() && c->obj->IsBlockingX()) {
-			if (c->t < min_tx && c->nx != 0 && filterX == 1) {
-				min_tx = c->t; min_ix = i;
-			}
-			continue;
+			if (!c->obj->IsBlocking()) continue;
+			int l, t, r, b;
+			c->obj->DirectBlocking(l, t, r, b);
+
+			// If only block with specific direction
+			if (c->nx < 0 && !l) continue;
+			if (c->nx > 0 && !r) continue;
+			if (c->ny < 0 && !t) continue;
+			if (c->ny > 0 && !b) continue;
 		}
 
 		if (c->t < min_tx && c->nx != 0 && filterX == 1) {
@@ -266,7 +261,7 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 				y += colY->t * dy + colY->ny * BLOCK_PUSH_FACTOR;
 				objSrc->SetPosition(x, y);
 
-				objSrc->OnCollisionWith(colY, dt);
+				objSrc->OnCollisionWith(colY);
 
 				//
 				// see if after correction on Y, is there still a collision on X ? 
@@ -287,7 +282,7 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 				if (colX_other != NULL)
 				{
 					x += colX_other->t * dx +colX_other->nx * BLOCK_PUSH_FACTOR;
-					objSrc->OnCollisionWith(colX_other, dt);
+					objSrc->OnCollisionWith(colX_other);
 				}
 				else
 				{
@@ -299,7 +294,7 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 				x += colX->t * dx + colX->nx * BLOCK_PUSH_FACTOR;
 				objSrc->SetPosition(x, y);
 
-				objSrc->OnCollisionWith(colX, dt);
+				objSrc->OnCollisionWith(colX);
 
 				//
 				// see if after correction on X, is there still a collision on Y ? 
@@ -320,7 +315,7 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 				if (colY_other != NULL)
 				{
 					y += colY_other->t * dy + colY_other->ny * BLOCK_PUSH_FACTOR;
-					objSrc->OnCollisionWith(colY_other, dt);
+					objSrc->OnCollisionWith(colY_other);
 				}
 				else
 				{
@@ -333,14 +328,14 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 		{
 			x += colX->t * dx + colX->nx * BLOCK_PUSH_FACTOR;
 			y += dy;
-			objSrc->OnCollisionWith(colX, dt);
+			objSrc->OnCollisionWith(colX);
 		}
 		else 
 			if (colY != NULL)
 			{
 				x += dx;
 				y += colY->t * dy + colY->ny * BLOCK_PUSH_FACTOR;
-				objSrc->OnCollisionWith(colY, dt);
+				objSrc->OnCollisionWith(colY);
 			}
 			else // both colX & colY are NULL 
 			{
@@ -360,7 +355,7 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 		if (e->isDeleted) continue;
 		if (e->obj->IsBlocking()) continue;  // blocking collisions were handled already, skip them
 
-		objSrc->OnCollisionWith(e, dt);			
+		objSrc->OnCollisionWith(e);			
 	}
 
 

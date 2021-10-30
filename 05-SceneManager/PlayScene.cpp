@@ -141,8 +141,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		questionBlocks.push_back(dynamic_cast<CQuestionBlock*>(obj));
 		break; }
 	case OBJECT_TYPE_ITEM: {
-		obj = new CItem(x, y);
-		items.push_back(dynamic_cast<CItem*>(obj));
+		obj = new CMushroom(x, y);
+		items.push_back(dynamic_cast<CMushroom*>(obj));
 		break;
 	}
 	case OBJECT_TYPE_COLOR_BLOCK: {
@@ -269,7 +269,7 @@ void CPlayScene::Load()
 		questionBlocks[i]->setItem(items[i]);
 	}
 	questionBlocks = vector<CQuestionBlock*>();
-	items = vector<CItem*>();
+	items = vector<CMushroom*>();
 
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
 }

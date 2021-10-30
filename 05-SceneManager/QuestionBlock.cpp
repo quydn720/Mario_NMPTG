@@ -9,7 +9,7 @@ CQuestionBlock::CQuestionBlock(float x, float y) : CGameObject(x, y) {
 void CQuestionBlock::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	if (!isEmpty) animations->Get(ID_ANI_QUESTION_BRICK)->Render(x, y);
+	if (state != STATE_BRICK_EMPTY) animations->Get(ID_ANI_QUESTION_BRICK)->Render(x, y);
 	else
 		animations->Get(ID_ANI_QUESTION_BRICK_EMPTY)->Render(x, y);
 }
@@ -18,8 +18,8 @@ void CQuestionBlock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	y += vy * dt;
 	if (state == STATE_BRICK_HIT) {
-		if (y < baseY - 10) {
-			vy = BRICK_OFFSET;
+		if (y < baseY - QBRICK_BOUND_OFFSET) {
+			vy = BRICK_MOVING_SPEED;
 			SetState(STATE_BRICK_EMPTY);
 		}
 	}
@@ -34,10 +34,10 @@ void CQuestionBlock::SetState(int state)
 		vy = 0;
 		y = baseY;
 		isEmpty = true;
-		item->SetState(STATE_MUSHROOM_VISIBLE);
+		item->Spawn(nx);
 		break;
 	case STATE_BRICK_HIT:
-		vy -= BRICK_OFFSET;
+		vy -= BRICK_MOVING_SPEED;
 		break;
 	default:
 		isEmpty = false;
@@ -52,11 +52,17 @@ void CQuestionBlock::GetBoundingBox(float& l, float& t, float& r, float& b)
 	b = t + QBRICK_BBOX_HEIGHT;
 }
 
-void CQuestionBlock::setItem(CItem* i)
+void CQuestionBlock::SpawnItem(int nx)
+{
+	SetState(STATE_BRICK_HIT);
+	this->nx = -nx;
+}
+
+void CQuestionBlock::setItem(CMushroom* i)
 {
 	item = i;
 }
-CItem* CQuestionBlock::getItem()
+CMushroom* CQuestionBlock::getItem()
 {
 	return item;
 }

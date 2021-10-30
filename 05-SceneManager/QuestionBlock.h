@@ -1,6 +1,6 @@
 #pragma once
 #include "GameObject.h"
-#include "Item.h"
+#include "Mushroom.h"
 
 #define ID_ANI_QUESTION_BRICK 727
 #define ID_ANI_QUESTION_BRICK_EMPTY 728
@@ -13,13 +13,12 @@
 #define STATE_BRICK_EMPTY 311
 #define STATE_BRICK_INIT 312
 
-#define BRICK_OFFSET 0.03f
-
+#define BRICK_MOVING_SPEED 0.03f
 
 class CQuestionBlock : public CGameObject
 {
 	bool isEmpty = false;
-	CItem* item = NULL;
+	CMushroom* item = NULL;
 	float baseY;
 public:
 	CQuestionBlock(float x, float y);
@@ -28,7 +27,8 @@ public:
 	virtual void SetState(int state);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 
-	void setItem(CItem* i);
-	CItem* getItem();
+	void SpawnItem(int nx);
+	void setItem(CMushroom* i);
+	CMushroom* getItem();
 };
 

@@ -57,14 +57,15 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CQuestionBlock*>(e->obj))
 		OnCollisionWithQuestionBlock(e);
-	else if (dynamic_cast<CItem*>(e->obj))
+	else if (dynamic_cast<CMushroom*>(e->obj))
 		OnCollisionWithItem(e);
 }
 
 void CMario::OnCollisionWithItem(LPCOLLISIONEVENT e) {
-	CItem* item = dynamic_cast<CItem*>(e->obj);
+	CMushroom* item = dynamic_cast<CMushroom*>(e->obj);
 	if (item->IsAlive) {
 		e->obj->SetState(STATE_MUSHROOM_DIE);
+		SetLevel(MARIO_LEVEL_BIG);
 		e->obj->Delete();
 	}
 }
@@ -73,7 +74,7 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e) {
 	CQuestionBlock* qb = dynamic_cast<CQuestionBlock*>(e->obj);
 	if (e->ny > 0)
 		if (e->obj->GetState() != STATE_BRICK_EMPTY)
-			qb->SetState(STATE_BRICK_HIT);
+			qb->SpawnItem(nx);
 }
 
 
@@ -113,7 +114,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
-	//e->obj->Delete();
+	e->obj->Delete();
 	coin++;
 }
 

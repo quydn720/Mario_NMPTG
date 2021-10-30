@@ -10,6 +10,7 @@
 
 #include "Collision.h"
 #include "ColorBlock.h"
+#include "QuestionBlock.h"
 
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
@@ -36,7 +37,7 @@ void CMario::OnNoCollision(DWORD dt)
 	y += vy * dt;
 }
 
-void CMario::OnCollisionWith(LPCOLLISIONEVENT e, DWORD dt)
+void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (e->ny != 0 && e->obj->IsBlocking())
 	{
@@ -54,18 +55,25 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e, DWORD dt)
 		OnCollisionWithCoin(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
-	else if (dynamic_cast<CColorBlock*>(e->obj))
-		OnCollisionWithColorBlock(e, dt);
+	else if (dynamic_cast<CQuestionBlock*>(e->obj))
+		OnCollisionWithQuestionBlock(e);
+	else if (dynamic_cast<CItem*>(e->obj))
+		OnCollisionWithItem(e);
 }
 
-void CMario::OnCollisionWithColorBlock(LPCOLLISIONEVENT e, DWORD dt) {
-	if (e->nx != 0) {
-		x += vx * dt;
+void CMario::OnCollisionWithItem(LPCOLLISIONEVENT e) {
+	CItem* item = dynamic_cast<CItem*>(e->obj);
+	if (item->IsAlive) {
+		e->obj->SetState(STATE_MUSHROOM_DIE);
+		e->obj->Delete();
 	}
-	if (e->ny < 0) {
-		vy = 0;
-		isOnPlatform = true;
-	}
+}
+
+void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e) {
+	CQuestionBlock* qb = dynamic_cast<CQuestionBlock*>(e->obj);
+	if (e->ny > 0)
+		if (e->obj->GetState() != STATE_BRICK_EMPTY)
+			qb->SetState(STATE_BRICK_HIT);
 }
 
 
@@ -252,7 +260,7 @@ void CMario::Render()
 
 	animations->Get(aniId)->Render(x, y);
 
-	//RenderBoundingBox();
+	RenderBoundingBox();
 
 	DebugOutTitle(L"Coins: %d", coin);
 }

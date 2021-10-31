@@ -1,6 +1,9 @@
 #pragma once
 #include "GameObject.h"
 #include "debug.h"
+#include "Goomba.h"
+#include "Platform.h"
+#include "Item.h"
 
 #define ID_ANI_MUSHROOM_RED 178
 #define ITEM_BBOX_WIDTH 16
@@ -13,13 +16,11 @@
 
 #define GRAVITY 0.002f
 #define TILE_SIZE 16
-#define ITEM_DEFLECT_GRAVITY 0.007f
+#define ITEM_DEFLECT_GRAVITY 0.04f
 #define MUSHROOM_SPEED_X 0.05f
 
-class CMushroom : public CGameObject
+class CMushroom : public Item
 {
-	float baseY;
-	float ax, ay;
 	int isOnPlatform = 0;
 public:
 	bool IsAlive = false;
@@ -29,8 +30,6 @@ public:
 	void Render();
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 
-	virtual int IsCollidable() { return 1; };
-	virtual int IsBlocking() { return 0; }
 	virtual void SetState(int state);
 
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);

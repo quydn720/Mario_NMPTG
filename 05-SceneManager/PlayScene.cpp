@@ -135,14 +135,26 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x, y); break;
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
-	case OBJECT_TYPE_COIN: obj = new CCoin(x, y); break;
 	case OBJECT_TYPE_QUESTION_BLOCK: {
 		obj = new CQuestionBlock(x, y);
 		questionBlocks.push_back(dynamic_cast<CQuestionBlock*>(obj));
 		break; }
 	case OBJECT_TYPE_ITEM: {
-		obj = new CMushroom(x, y);
-		items.push_back(dynamic_cast<CMushroom*>(obj));
+		int type = (int)atoi(tokens[3].c_str());
+		switch (type)
+		{
+		case ItemType::SuperItem:
+			obj = new CMushroom(x, y);
+			break;
+		case ItemType::Coin: {
+			int initState = (int)atoi(tokens[4].c_str());
+			obj = new CCoin(x, y, initState);
+			break;
+		}
+		default:
+			break;
+		}
+		items.push_back(dynamic_cast<Item*>(obj));
 		break;
 	}
 	case OBJECT_TYPE_COLOR_BLOCK: {
@@ -265,11 +277,11 @@ void CPlayScene::Load()
 	f.close();
 
 	// Assign item to block, then release the vector objects.
-	for (size_t i = 0; i < items.size(); i++) {
+	for (size_t i = 0; i < questionBlocks.size(); i++) {
 		questionBlocks[i]->setItem(items[i]);
 	}
 	questionBlocks = vector<CQuestionBlock*>();
-	items = vector<CMushroom*>();
+	items = vector<Item*>();
 
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
 }

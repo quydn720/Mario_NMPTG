@@ -20,7 +20,7 @@ protected:
 	CMap* map;
 
 	vector<CQuestionBlock*> questionBlocks;
-	vector<CMushroom*> items;
+	vector<Item*> items;
 
 	vector<LPGAMEOBJECT> objects;
 

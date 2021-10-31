@@ -9,19 +9,37 @@ CQuestionBlock::CQuestionBlock(float x, float y) : CGameObject(x, y) {
 void CQuestionBlock::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	if (state != STATE_BRICK_EMPTY) animations->Get(ID_ANI_QUESTION_BRICK)->Render(x, y);
-	else
+	if (state == STATE_BRICK_EMPTY || state == STATE_BRICK_HIT) {
 		animations->Get(ID_ANI_QUESTION_BRICK_EMPTY)->Render(x, y);
+	}
+	else {
+		animations->Get(ID_ANI_QUESTION_BRICK)->Render(x, y);
+	}
 }
 
 void CQuestionBlock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	y += vy * dt;
 	if (state == STATE_BRICK_HIT) {
-		if (y < baseY - QBRICK_BOUND_OFFSET) {
-			vy = BRICK_MOVING_SPEED;
-			SetState(STATE_BRICK_EMPTY);
+		switch (item->GetItemType()) {
+		case ItemType::SuperItem: {
+			if (y < baseY - QBRICK_BOUND_OFFSET) {
+				vy = BRICK_MOVING_SPEED;
+				SetState(STATE_BRICK_EMPTY);
+			}
+			break;
 		}
+		case ItemType::Coin: {
+			// The coin doesn't need to wait the brick to finish moving
+			item->Spawn(0);
+			if (y < baseY - QBRICK_BOUND_OFFSET) {
+				vy = BRICK_MOVING_SPEED;
+				SetState(STATE_BRICK_EMPTY);
+			}
+			break;
+		}
+		}
+
 	}
 	CGameObject::Update(dt, coObjects);
 }
@@ -34,7 +52,9 @@ void CQuestionBlock::SetState(int state)
 		vy = 0;
 		y = baseY;
 		isEmpty = true;
-		item->Spawn(nx);
+		if (item->GetItemType() != ItemType::Coin) {
+			item->Spawn(nx);
+		}
 		break;
 	case STATE_BRICK_HIT:
 		vy -= BRICK_MOVING_SPEED;
@@ -52,17 +72,17 @@ void CQuestionBlock::GetBoundingBox(float& l, float& t, float& r, float& b)
 	b = t + QBRICK_BBOX_HEIGHT;
 }
 
-void CQuestionBlock::SpawnItem(int nx)
+void CQuestionBlock::SpawnItem(int nx, int l)
 {
 	SetState(STATE_BRICK_HIT);
 	this->nx = -nx;
 }
 
-void CQuestionBlock::setItem(CMushroom* i)
+void CQuestionBlock::setItem(Item* i)
 {
 	item = i;
 }
-CMushroom* CQuestionBlock::getItem()
+Item* CQuestionBlock::getItem()
 {
 	return item;
 }

@@ -14,23 +14,23 @@ map1-1.txt
 [OBJECTS]
 # type x y extra_settings per object type
 # type: 0 = Mario , 1 = Brick, 2 = Goomba, 3 = Koopas
-# 4: coin, 5: platform, 6: color block,
+# 4: ####, 5: platform, 6: color block,
 # 7: ?brick, 8: item
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
-0	200	10
+0	160	350
 
 # Item
-8	160	336
-8	176	336
+# x y type	coinSetting 
+8	160	336	1	1
+8	176	336	0
+
+8	176	320	1	0
 
 # ? Brick
 7	160	336
 7	176	336
-
-# COIN
-4	176	320
 
 #Goomba
 2	176	200

@@ -1,19 +1,14 @@
 #include "Mushroom.h"
-#include "Goomba.h"
-#include "Platform.h"
-#include "Item.h"
 
-CMushroom::CMushroom(float x, float y) : CGameObject(x, y)
+CMushroom::CMushroom(float x, float y) : Item(x, y, 0)
 {
-	//this->itemType = ItemType::Mushroom;
+	itemType = ItemType::SuperItem;
 	baseY = y;
-	ax = 0;
 	ay = GRAVITY;
 	SetState(STATE_MUSHROOM_INVISIBLE);
 }
 
 void CMushroom::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
-	vx += ax * dt;
 	if (state == STATE_MUSHROOM_VISIBLE) {
 		y -= ITEM_DEFLECT_GRAVITY * dt;
 		if (y <= baseY - TILE_SIZE) {
@@ -89,7 +84,6 @@ void CMushroom::OnNoCollision(DWORD dt)
 
 void CMushroom::Spawn(int nx)
 {
-	DebugOut(L"item nx: %d\n", nx);
 	this->nx = nx;
 	SetState(STATE_MUSHROOM_VISIBLE);
 }

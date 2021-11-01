@@ -1,7 +1,7 @@
 #pragma once
 #include "GameObject.h"
 #include "Mario.h"
-#include "Mushroom.h"
+#include "SuperItem.h"
 
 #define ID_ANI_QUESTION_BRICK 727
 #define ID_ANI_QUESTION_BRICK_EMPTY 728

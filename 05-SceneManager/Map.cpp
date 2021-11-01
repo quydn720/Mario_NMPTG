@@ -50,29 +50,18 @@ void CMap::Load(wstring path)
 
 void CMap::Render()
 {
-	LPTEXTURE tex = CTextures::GetInstance()->Get(30);
-	for (int i = 0; i < row; i++) {
-		for (int j = 0; j < column; j++) {
+	LPTEXTURE tex = CTextures::GetInstance()->Get(MAP_TEXTURE);
+
+	float x, y;
+	CGame::GetInstance()->GetCamPos(x, y);
+	int startX = (int)(x / width * column - 2);
+	int startY = (int)(y / height * row);
+
+	for (int i = startY; i < startY + offsetH; i++) {
+		for (int j = startX; j < startX + offsetW; j++) {
 			int id = tiles[i][j];
 			if (id != -1) {
-				/*RECT r;
-				r.left = id % tileColumn * tileSize;
-				r.top = (id / tileColumn) * tileSize;
-				r.right = r.left + tileSize;
-				r.bottom = r.top + tileSize;*/
-
-				/*float c_left, c_top;
-				c->GetPostion(c_left, c_top);
-				float c_width = c->GetWidth();
-				float c_height = c->GetHeight();*/
-				/*if (r.left > c_left + c_width || r.right < c_left || r.top > c_top + c_height || r.bottom < c_top) {
-					continue;
-				}*/
-				float x = tileSize * j;
-				float y = tileSize * i;
-				CSprites::GetInstance()->Get(id)->Draw(x, y);
-				/*CGame::GetInstance()->Draw((float)(x), (float)(y), tex, r.left, r.top, r.right, r.bottom);*/
-
+				CSprites::GetInstance()->Get(id)->Draw((float)(tileSize * j), (float)(tileSize * i));
 			}
 		}
 	}
@@ -102,6 +91,11 @@ void CMap::_ParseSection_Info(string line)
 	tileColumn = atoi(tokens[3].c_str());
 	tileSize = atoi(tokens[4].c_str());
 	tex = CTextures::GetInstance()->Get(atoi(tokens[5].c_str()));
+	height = row * tileSize;
+	width = column * tileSize;
+
+	offsetW = CGame::GetInstance()->GetBackBufferWidth() / tileSize + EXTRA_TILE;
+	offsetH = CGame::GetInstance()->GetBackBufferHeight() / tileSize + EXTRA_TILE;
 }
 
 void CMap::LoadMapTiles() {

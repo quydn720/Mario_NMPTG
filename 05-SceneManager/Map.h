@@ -5,6 +5,8 @@
 #include "Textures.h"
 
 #define MAX_MAP_LINE			1024
+#define MAP_TEXTURE				30
+#define EXTRA_TILE				4
 
 class CMap {
 	int column, row = 0;
@@ -13,13 +15,15 @@ class CMap {
 	int tiles[30][200] = { -1, -1 };
 	int currentRow = 0; // util for parsing from text.
 	LPTEXTURE tex = NULL;
+	int width, height;
 
+	int offsetW, offsetH;	// number of tile need to render
 public:
 	CMap(wstring path);
 	~CMap();
 
-	int getMapWidth() { return column * tileSize; }
-	int getMapHeight() { return row * tileSize; }
+	int getMapWidth() { return width; }
+	int getMapHeight() { return height; }
 	void Load(wstring path);
 	void Render();
 	void _ParseSection_MapTile(string line);

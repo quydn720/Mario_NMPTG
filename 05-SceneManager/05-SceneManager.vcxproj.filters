@@ -72,9 +72,6 @@
     <ClCompile Include="Map.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Coin.cpp">
-      <Filter>Source Files\GameObjects</Filter>
-    </ClCompile>
     <ClCompile Include="Brick.cpp">
       <Filter>Source Files\GameObjects</Filter>
     </ClCompile>
@@ -96,10 +93,19 @@
     <ClCompile Include="Platform.cpp">
       <Filter>Source Files\GameObjects</Filter>
     </ClCompile>
-    <ClCompile Include="Mushroom.cpp">
+    <ClCompile Include="SuperItem.cpp">
       <Filter>Source Files\GameObjects\Item</Filter>
     </ClCompile>
-    <ClCompile Include="Item.cpp">
+    <ClCompile Include="Coin.cpp">
+      <Filter>Source Files\GameObjects\Item</Filter>
+    </ClCompile>
+    <ClCompile Include="Leaf1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FallDetector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Koopas.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -158,9 +164,6 @@
     <ClInclude Include="Map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Coin.h">
-      <Filter>GameObjects</Filter>
-    </ClInclude>
     <ClInclude Include="Brick.h">
       <Filter>GameObjects</Filter>
     </ClInclude>
@@ -182,10 +185,22 @@
     <ClInclude Include="Platform.h">
       <Filter>GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="Mushroom.h">
+    <ClInclude Include="SuperItem.h">
+      <Filter>GameObjects\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Coin.h">
       <Filter>GameObjects\Item</Filter>
     </ClInclude>
     <ClInclude Include="Item.h">
+      <Filter>GameObjects\Item</Filter>
+    </ClInclude>
+    <ClInclude Include="Leaf1.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FallDetector.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Koopas.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

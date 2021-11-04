@@ -1,4 +1,4 @@
-# id	left	top	right	bottom	texture_id
+#	id	left	top	right	bottom	texture_id
 [SPRITES]
 #WALK
 31001	4	13	22	30	10
@@ -7,7 +7,17 @@
 #DIE
 32001	44	19	62	30	10
 
-# ani_id	sprite1_id	time1	sprite2_id	time2	...
+#	PARA_GOOMBA
+31300	64	11	84	30	10
+31301	87	11	84	107	10
+31302	110	6	130	30	10
+31303	134	6	154	30	10
+
+#	ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 5000	31001	100	31002	100
 5001	32001	100
+
+#jump
+#5002	31301	100	31300	100	31302	100	31303	100
+5002	31300	100	31302	100	31303	100

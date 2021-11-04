@@ -9,7 +9,7 @@
 #include "Map.h"
 #include "QuestionBlock.h"
 #include "Item.h"
-//#include "Koopas.h"
+#include "Koopas.h"
 
 
 class CPlayScene: public CScene

@@ -5,6 +5,8 @@
 #include "Game.h"
 
 #include "Goomba.h"
+#include "Koopas.h"
+
 #include "Coin.h"
 #include "Portal.h"
 
@@ -57,6 +59,9 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithQuestionBlock(e);
 	else if (dynamic_cast<Item*>(e->obj))
 		OnCollisionWithItem(e);
+	else if (dynamic_cast<CKoopas*>(e->obj))
+		OnCollisionWithKoopas(e);
+
 }
 
 void CMario::OnCollisionWithItem(LPCOLLISIONEVENT e) {
@@ -77,7 +82,43 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e) {
 		}
 }
 
+#pragma region Enemies
 
+void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
+{
+	CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
+	if (e->ny < 0)
+	{
+		if (koopas->GetState() != KOOPAS_STATE_SHELL)
+		{
+			koopas->SetState(KOOPAS_STATE_SHELL);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+		else
+		{
+			koopas->SetState(KOOPAS_STATE_SHELL_MOVING);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+	}
+	else // hit by Goomba
+	{
+		if (koopas->GetState() == KOOPAS_STATE_SHELL) {
+			koopas->SetState(KOOPAS_STATE_SHELL_MOVING);
+		}
+		else {
+			if (untouchable == 0) {
+				if (level > MARIO_LEVEL_SMALL) {
+					level = MARIO_LEVEL_SMALL;
+					StartUntouchable();
+				}
+				else {
+					DebugOut(L">>> Mario DIE >>> \n");
+					SetState(MARIO_STATE_DIE);
+				}
+			}
+		}
+	}
+}
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
 	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
@@ -85,9 +126,13 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 	// jump on top >> kill Goomba and deflect a bit 
 	if (e->ny < 0)
 	{
+		if (goomba->GetLevel() == LEVEL_PARA_GOOMBA) {
+		}
 		if (goomba->GetState() != GOOMBA_STATE_DIE)
 		{
-			goomba->SetState(GOOMBA_STATE_DIE);
+			if (goomba->GetLevel() == LEVEL_GOOMBA)	goomba->SetState(GOOMBA_STATE_DIE);
+			else goomba->SetLevel(LEVEL_GOOMBA);
+			
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 	}
@@ -111,6 +156,8 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		}
 	}
 }
+
+#pragma endregion
 
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {

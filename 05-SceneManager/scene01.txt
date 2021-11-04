@@ -7,6 +7,7 @@ coin.txt
 goomba.txt
 cloud.txt
 item.txt
+koopas.txt
 #
 [MAP]
 map1-1.txt
@@ -19,7 +20,11 @@ map1-1.txt
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
-0	160	350
+#0	736	300
+0	200	300
+#0	2500	300
+
+
 
 # Item
 # x y type	coinSetting 
@@ -32,8 +37,12 @@ map1-1.txt
 7	160	336
 7	176	336
 
-#Goomba
-2	176	200
+# Goomba
+#2	688	346	0
+2	650	346	1
+
+# Koopas
+3	300	346
 
 # Color block
 6	224	352	16	48	3
@@ -53,7 +62,11 @@ map1-1.txt
 
 #Platform	
 #	x	y	w	h	l	begins	middles	ends
-5	0	384	16	16	1	-3600	-3600	-3600
+# test
+5	608	320	16	64	1	-3600	-3600	-3600
+5	848	320	16	64	1	-3600	-3600	-3600
+5	736	320	16	16	1	-3600	-3600	-3600
+
 5	0	400	16	16	38	-3600	-3600	-3600
 5	608	384	16	32	29	-3600	-3600	-3600
 5	1136	400	16	16	22	-3600	-3600	-3600

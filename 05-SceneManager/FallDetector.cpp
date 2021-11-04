@@ -1,8 +1,7 @@
 #include "FallDetector.h"
-#include "debug.h"
 
 void FallDetector::Render() {
-	RenderBoundingBox();
+	if (state != FALL_DETECTOR_STATE_INACTIVE) RenderBoundingBox();
 }
 
 void FallDetector::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -15,10 +14,12 @@ void FallDetector::GetBoundingBox(float& left, float& top, float& right, float& 
 
 void FallDetector::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	vy += ay * dt;
-	vx += ax * dt;
-	CGameObject::Update(dt, coObjects);
-	CCollision::GetInstance()->Process(this, dt, coObjects);
+	if (state != FALL_DETECTOR_STATE_INACTIVE) {
+		vy += ay * dt;
+		vx += ax * dt;
+		CGameObject::Update(dt, coObjects);
+		CCollision::GetInstance()->Process(this, dt, coObjects);
+	}
 }
 void FallDetector::OnCollisionWith(LPCOLLISIONEVENT e) {
 	if (!e->obj->IsBlocking()) return;

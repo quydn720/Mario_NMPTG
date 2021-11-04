@@ -119,6 +119,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	float y = (float)atof(tokens[2].c_str());
 
 	CGameObject* obj = NULL;
+	FallDetector* fallDetector = NULL;
 
 	switch (object_type)
 	{
@@ -133,7 +134,22 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
-	case OBJECT_TYPE_GOOMBA: obj = new CGoomba(x, y); break;
+	case OBJECT_TYPE_GOOMBA: { 
+		int level = (int)atoi(tokens[3].c_str());
+		obj = new CGoomba(x, y, level); 
+		break; 
+	}
+	case OBJECT_TYPE_KOOPAS: {
+		// We adding a [FallDetector] when we instantiate a Red Koopas - to the objects vector
+		obj = new CKoopas(x, y);
+		CKoopas* tempKoopas = dynamic_cast<CKoopas*>(obj);
+
+		fallDetector = new FallDetector(x, y);
+		fallDetector->height = KOOPAS_BBOX_HEIGHT;
+		objects.push_back(fallDetector);
+		tempKoopas->fallDetector = fallDetector;
+		break;
+	}
 	case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
 	case OBJECT_TYPE_QUESTION_BLOCK: {
 		obj = new CQuestionBlock(x, y);
@@ -144,7 +160,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		switch (type)
 		{
 		case ItemType::SuperItem:
-			obj = new CMushroom(x, y);
+			obj = new CSuperItem(x, y);
 			break;
 		case ItemType::Coin: {
 			int initState = (int)atoi(tokens[4].c_str());
@@ -324,7 +340,7 @@ void CPlayScene::Update(DWORD dt)
 
 void CPlayScene::Render()
 {
-	//map->Render();
+	map->Render();
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
 }

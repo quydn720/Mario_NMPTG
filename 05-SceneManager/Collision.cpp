@@ -14,7 +14,7 @@ CCollision* CCollision::GetInstance()
 }
 
 /*
-	SweptAABB 
+	SweptAABB
 */
 void CCollision::SweptAABB(
 	float ml, float mt, float mr, float mb,
@@ -165,7 +165,7 @@ void CCollision::Scan(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* objDe
 	{
 		LPCOLLISIONEVENT e = SweptAABB(objSrc, dt, objDests->at(i));
 
-		if (e->WasCollided()==1)
+		if (e->WasCollided() == 1)
 			coEvents.push_back(e);
 		else
 			delete e;
@@ -174,10 +174,10 @@ void CCollision::Scan(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* objDe
 	//std::sort(coEvents.begin(), coEvents.end(), CCollisionEvent::compare);
 }
 
-void CCollision::Filter( LPGAMEOBJECT objSrc,
+void CCollision::Filter(LPGAMEOBJECT objSrc,
 	vector<LPCOLLISIONEVENT>& coEvents,
-	LPCOLLISIONEVENT &colX,
-	LPCOLLISIONEVENT &colY,
+	LPCOLLISIONEVENT& colX,
+	LPCOLLISIONEVENT& colY,
 	int filterBlock = 1,		// 1 = only filter block collisions, 0 = filter all collisions 
 	int filterX = 1,			// 1 = process events on X-axis, 0 = skip events on X 
 	int filterY = 1)			// 1 = process events on Y-axis, 0 = skip events on Y
@@ -191,20 +191,23 @@ void CCollision::Filter( LPGAMEOBJECT objSrc,
 
 	for (UINT i = 0; i < coEvents.size(); i++)
 	{
+
 		LPCOLLISIONEVENT c = coEvents[i];
 		if (c->isDeleted) continue;
-		if (c->obj->IsDeleted()) continue; 
+		if (c->obj->IsDeleted()) continue;
 
 		// ignore collision event with object having IsBlocking = 0 (like coin, mushroom, etc)
-		if (filterBlock == 1 ) 
+		if (filterBlock == 1)
 		{
-			if (!c->obj->IsBlocking()) continue;
 			int l, t, r, b;
+			if (!c->obj->IsBlocking()) continue;
 			c->obj->DirectBlocking(l, t, r, b);
 
 			// If only block with specific direction
 			if (c->nx < 0 && !l) continue;
 			if (c->nx > 0 && !r) continue;
+			// Mario jump top down - ny = -1
+			// CColorBlock t = 1, so false --> then not block
 			if (c->ny < 0 && !t) continue;
 			if (c->ny > 0 && !b) continue;
 		}
@@ -213,6 +216,8 @@ void CCollision::Filter( LPGAMEOBJECT objSrc,
 			min_tx = c->t; min_ix = i;
 		}
 
+		// So it will go to this -> colY.... wait, so the min_iy => the index of koopas, which 
+		// is under the color block in my case => 
 		if (c->t < min_ty && c->ny != 0 && filterY == 1) {
 			min_ty = c->t; min_iy = i;
 		}
@@ -223,13 +228,13 @@ void CCollision::Filter( LPGAMEOBJECT objSrc,
 }
 
 /*
-*  Simple/Sample collision framework 
-*  NOTE: Student might need to improve this based on game logic 
+*  Simple/Sample collision framework
+*  NOTE: Student might need to improve this based on game logic
 */
 void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	vector<LPCOLLISIONEVENT> coEvents;
-	LPCOLLISIONEVENT colX = NULL; 
+	LPCOLLISIONEVENT colX = NULL;
 	LPCOLLISIONEVENT colY = NULL;
 
 	coEvents.clear();
@@ -238,7 +243,7 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 	{
 		Scan(objSrc, dt, coObjects, coEvents);
 	}
-	
+
 	// No collision detected
 	if (coEvents.size() == 0)
 	{
@@ -254,7 +259,7 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 		dx = vx * dt;
 		dy = vy * dt;
 
-		if (colX != NULL && colY != NULL) 
+		if (colX != NULL && colY != NULL)
 		{
 			if (colY->t < colX->t)	// was collision on Y first ?
 			{
@@ -281,7 +286,7 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 
 				if (colX_other != NULL)
 				{
-					x += colX_other->t * dx +colX_other->nx * BLOCK_PUSH_FACTOR;
+					x += colX_other->t * dx + colX_other->nx * BLOCK_PUSH_FACTOR;
 					objSrc->OnCollisionWith(colX_other);
 				}
 				else
@@ -324,24 +329,24 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 			}
 		}
 		else
-		if (colX != NULL)
-		{
-			x += colX->t * dx + colX->nx * BLOCK_PUSH_FACTOR;
-			y += dy;
-			objSrc->OnCollisionWith(colX);
-		}
-		else 
-			if (colY != NULL)
+			if (colX != NULL)
 			{
-				x += dx;
-				y += colY->t * dy + colY->ny * BLOCK_PUSH_FACTOR;
-				objSrc->OnCollisionWith(colY);
-			}
-			else // both colX & colY are NULL 
-			{
-				x += dx;
+				x += colX->t * dx + colX->nx * BLOCK_PUSH_FACTOR;
 				y += dy;
+				objSrc->OnCollisionWith(colX);
 			}
+			else
+				if (colY != NULL)
+				{
+					x += dx;
+					y += colY->t * dy + colY->ny * BLOCK_PUSH_FACTOR;
+					objSrc->OnCollisionWith(colY);
+				}
+				else // both colX & colY are NULL 
+				{
+					x += dx;
+					y += dy;
+				}
 
 		objSrc->SetPosition(x, y);
 	}
@@ -349,15 +354,25 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 	//
 	// Scan all non-blocking collisions for further collision logic
 	//
-	// TODO: Va chạm koopas ở dưới gạch ?
+	LPGAMEOBJECT blockingObj;
+	float x2 = 999999, y2 = 999999;
 	for (UINT i = 0; i < coEvents.size(); i++)
 	{
 		LPCOLLISIONEVENT e = coEvents[i];
 		if (e->isDeleted) continue;
-		//if (e->obj->IsBlocking()) continue;  // blocking collisions were handled already, skip them
-		if (e->obj->IsBlocking()) break;  // skip all below - don't know if I have crashed any case - if yes, this maybe a problem
+		if (e->obj->IsBlocking())
+		{
+			blockingObj = e->obj;
+			blockingObj->GetPosition(x2, y2);
 
-		objSrc->OnCollisionWith(e);			
+			continue;
+		} // blocking collisions were handled already, skip them
+		float x, y;
+		e->obj->GetPosition(x, y);
+		// This logic I'm not sure => to check if obj is coverred by the Blocking object
+		if (x > x2 && y > y2) continue;
+
+		objSrc->OnCollisionWith(e);
 	}
 
 

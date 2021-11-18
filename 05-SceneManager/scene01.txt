@@ -20,11 +20,7 @@ map1-1.txt
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
-#0	736	300
-0	200	300
-#0	2500	300
-
-
+0	550	300
 
 # Item
 # x y type	coinSetting 
@@ -36,13 +32,6 @@ map1-1.txt
 # ? Brick
 7	160	336
 7	176	336
-
-# Goomba
-#2	688	346	0
-2	650	346	1
-
-# Koopas
-3	300	346
 
 # Color block
 6	224	352	16	48	3
@@ -90,3 +79,9 @@ map1-1.txt
 #Portal	
 #50	300	120	316	160	2
 
+# Goomba
+#2	688	346	0
+2	650	346	1
+
+# Koopas
+3	520	360

@@ -1,4 +1,4 @@
-#include "Collision.h"
+﻿#include "Collision.h"
 #include "GameObject.h"
 
 #include "debug.h"
@@ -238,7 +238,7 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 	{
 		Scan(objSrc, dt, coObjects, coEvents);
 	}
-
+	
 	// No collision detected
 	if (coEvents.size() == 0)
 	{
@@ -349,11 +349,13 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 	//
 	// Scan all non-blocking collisions for further collision logic
 	//
+	// TODO: Va chạm koopas ở dưới gạch ?
 	for (UINT i = 0; i < coEvents.size(); i++)
 	{
 		LPCOLLISIONEVENT e = coEvents[i];
 		if (e->isDeleted) continue;
-		if (e->obj->IsBlocking()) continue;  // blocking collisions were handled already, skip them
+		//if (e->obj->IsBlocking()) continue;  // blocking collisions were handled already, skip them
+		if (e->obj->IsBlocking()) break;  // skip all below - don't know if I have crashed any case - if yes, this maybe a problem
 
 		objSrc->OnCollisionWith(e);			
 	}

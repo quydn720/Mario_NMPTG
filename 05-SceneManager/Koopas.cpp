@@ -35,7 +35,7 @@ void CKoopas::SetState(int state)
 	switch (state)
 	{
 	case KOOPAS_STATE_SHELL_MOVING:
-		vx = nx * 0.1;
+		vx = nx * 0.1f;
 		nx = -nx;
 		fallDetector->SetState(FALL_DETECTOR_STATE_INACTIVE);
 		break;
@@ -77,7 +77,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		vx = -vx;
 		nx = -nx;
 	}
-	DebugOut(L"%0.2f\n", vx);
+
 	vy += ay * dt;
 	vx += ax * dt;
 

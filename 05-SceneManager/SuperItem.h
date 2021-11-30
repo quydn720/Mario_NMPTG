@@ -21,7 +21,7 @@
 #define ITEM_DEFLECT_GRAVITY 0.04f
 #define MUSHROOM_SPEED_X 0.05f
 
-// type 0: mushroom, 1: leaf
+// SuperItem can be Mushroom or Leaf based on the level of Mario
 class CSuperItem : public Item
 {
 	int isOnPlatform = 0;

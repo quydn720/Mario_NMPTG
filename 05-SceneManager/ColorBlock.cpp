@@ -3,7 +3,7 @@
 
 void CColorBlock::Render()
 {
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }
 
 void CColorBlock::GetBoundingBox(float& l, float& t, float& r, float& b)

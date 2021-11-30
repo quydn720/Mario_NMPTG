@@ -10,6 +10,7 @@
 #include "QuestionBlock.h"
 #include "Item.h"
 #include "Koopas.h"
+#include "Plant.h"
 
 
 class CPlayScene: public CScene

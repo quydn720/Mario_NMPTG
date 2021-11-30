@@ -13,17 +13,20 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="GameObjects">
-      <UniqueIdentifier>{37d89ba7-1c70-4fa0-8468-e319cca2e4d3}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\GameObjects">
       <UniqueIdentifier>{e36b3324-f239-4323-80f7-bca668a31260}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source Files\GameObjects\Item">
       <UniqueIdentifier>{55b345d8-c330-49ba-aeb4-b7b974c3388e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameObjects\Item">
+    <Filter Include="Header Files\GameObjects">
+      <UniqueIdentifier>{37d89ba7-1c70-4fa0-8468-e319cca2e4d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GameObjects\Item">
       <UniqueIdentifier>{71e03478-88ae-4e83-9415-a1d3aed694ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\GameObjects\Enemies">
+      <UniqueIdentifier>{89ef3c8a-bafa-4159-8bfb-36df3cd91faa}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -108,6 +111,9 @@
     <ClCompile Include="Koopas.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Plant.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -165,34 +171,31 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Brick.h">
-      <Filter>GameObjects</Filter>
+      <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="ColorBlock.h">
-      <Filter>GameObjects</Filter>
+      <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="Mario.h">
-      <Filter>GameObjects</Filter>
+      <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="QuestionBlock.h">
-      <Filter>GameObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="Goomba.h">
-      <Filter>GameObjects</Filter>
+      <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="Portal.h">
-      <Filter>GameObjects</Filter>
+      <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="Platform.h">
-      <Filter>GameObjects</Filter>
+      <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
     <ClInclude Include="SuperItem.h">
-      <Filter>GameObjects\Item</Filter>
+      <Filter>Header Files\GameObjects\Item</Filter>
     </ClInclude>
     <ClInclude Include="Coin.h">
-      <Filter>GameObjects\Item</Filter>
+      <Filter>Header Files\GameObjects\Item</Filter>
     </ClInclude>
     <ClInclude Include="Item.h">
-      <Filter>GameObjects\Item</Filter>
+      <Filter>Header Files\GameObjects\Item</Filter>
     </ClInclude>
     <ClInclude Include="Leaf1.h">
       <Filter>Header Files</Filter>
@@ -200,8 +203,14 @@
     <ClInclude Include="FallDetector.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Goomba.h">
+      <Filter>Header Files\GameObjects\Enemies</Filter>
+    </ClInclude>
     <ClInclude Include="Koopas.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\GameObjects\Enemies</Filter>
+    </ClInclude>
+    <ClInclude Include="Plant.h">
+      <Filter>Header Files\GameObjects\Enemies</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

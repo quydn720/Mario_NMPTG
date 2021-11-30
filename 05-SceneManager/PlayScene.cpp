@@ -131,13 +131,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		}
 		obj = new CMario(x, y);
 		player = (CMario*)obj;
+		CMario::SetInstance((CMario*)obj);
 
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
-	case OBJECT_TYPE_GOOMBA: { 
+	case OBJECT_TYPE_GOOMBA: {
 		int level = (int)atoi(tokens[3].c_str());
-		obj = new CGoomba(x, y, level); 
-		break; 
+		obj = new CGoomba(x, y, level);
+		break;
 	}
 	case OBJECT_TYPE_KOOPAS: {
 		// We adding a [FallDetector] when we instantiate a Red Koopas - to the objects vector
@@ -150,7 +151,14 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		tempKoopas->fallDetector = fallDetector;
 		break;
 	}
-	case OBJECT_TYPE_BRICK: obj = new CBrick(x, y); break;
+	case OBJECT_TYPE_PLANT: {
+		obj = new CPlant(x, y);
+		break;
+	}
+	case OBJECT_TYPE_BRICK: {
+		obj = new CBrick(x, y);
+		break;
+	}
 	case OBJECT_TYPE_QUESTION_BLOCK: {
 		obj = new CQuestionBlock(x, y);
 		questionBlocks.push_back(dynamic_cast<CQuestionBlock*>(obj));

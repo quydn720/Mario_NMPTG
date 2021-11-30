@@ -2,11 +2,19 @@
 #include "GameObject.h"
 
 #define PLANT_STATE_INVISIBLE	357
-#define PLANT_STATE_REST		356
-#define PLANT_STATE_VISIBLE		355
+#define PLANT_STATE_UP		356
+#define PLANT_STATE_DOWN		355
 
 #define PLANT_BBOX_WIDTH	16
 #define PLANT_BBOX_HEIGHT	32
+#define PLANT_BBOX_HEIGHT_OFFSET	8
+
+#define PLANT_ANI_BOTTOM_LEFT	11500
+#define PLANT_ANI_BOTTOM_RIGHT	11501
+#define PLANT_ANI_UP_LEFT	11502
+#define PLANT_ANI_UP_RIGHT	11503
+
+#define PLANT_VY	0.04f
 
 
 class CPlant : public CGameObject

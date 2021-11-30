@@ -7,33 +7,38 @@
 
 CPlant::CPlant(float x, float y)
 {
-	SetState(PLANT_STATE_REST);
+	SetState(PLANT_STATE_UP);
 	baseY = y;
 }
 
 void CPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
-	DebugOut(L"%d\n", state);
+
+	DebugOut(L"%s\n", (state == 355) ? L"down" : L"up");
+
 	y += vy * dt;
 
 	float mx = CMario::GetInstance()->getX();
 	bool marioInRange = abs(x - mx) <= PLANT_SHOOTING_RANGE;
 
-	if (state == PLANT_STATE_VISIBLE) {
-		if (y > baseY) {
+	if (state == PLANT_STATE_DOWN && marioInRange) {
+		nx = (int)(x - mx); // Plant will fixed direction when below the pipe
+		if (y >= baseY) {
 			y = baseY;
+			vy = 0;
 			if (GetTickCount64() - timer >= 2000) {
-				SetState(PLANT_STATE_REST);
+				SetState(PLANT_STATE_UP);
 			}
 		}
 	}
 	//TODO: Get position of mario
 	//TODO: if (state == rest && marioX in range [150-150] change to state visible
 	//TODO: after a period of time, shoot, then go rest state.
-	else if (state == PLANT_STATE_REST && marioInRange) {
-		if (y < baseY - 30) {
-			y = baseY - 30;
+	else if (state == PLANT_STATE_UP) {
+		if (y <= baseY - PLANT_BBOX_HEIGHT) {
+			y = baseY - PLANT_BBOX_HEIGHT;
+			vy = 0;
 			if (GetTickCount64() - timer >= 5000) {
-				SetState(PLANT_STATE_VISIBLE); // shoot
+				SetState(PLANT_STATE_DOWN); // shoot
 			}
 		}
 	}
@@ -42,11 +47,23 @@ void CPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 }
 void CPlant::Render() {
 	int aniId = -1;
+	float my = CMario::GetInstance()->getY();
 
 	// TODO: Can reduce the animation, when fully behind the [pipe]
 	// (at the waiting time)
-	aniId = 11500;
-	CAnimations::GetInstance()->Get(aniId)->Render(x, y + 8);
+	if (nx > 0) {
+		if (y <= my)
+			aniId = PLANT_ANI_BOTTOM_LEFT;
+		else
+			aniId = PLANT_ANI_UP_LEFT;
+	}
+	else {
+		if (y <= my)
+			aniId = PLANT_ANI_BOTTOM_RIGHT;
+		else
+			aniId = PLANT_ANI_UP_RIGHT;
+	}
+	CAnimations::GetInstance()->Get(aniId)->Render(x, y + PLANT_BBOX_HEIGHT_OFFSET);
 
 	RenderBoundingBox();
 }
@@ -61,12 +78,12 @@ void CPlant::OnCollisionWith(LPCOLLISIONEVENT e) {
 void CPlant::SetState(int state) {
 	switch (state)
 	{
-	case PLANT_STATE_VISIBLE:
-		vy = 0.04f;
+	case PLANT_STATE_DOWN:
+		vy = PLANT_VY;
 		timer = GetTickCount64();
 		break;
-	case PLANT_STATE_REST:
-		vy = -0.04f;
+	case PLANT_STATE_UP:
+		vy = -PLANT_VY;
 		timer = GetTickCount64();
 		break;
 	default:
@@ -81,8 +98,8 @@ void CPlant::GetBoundingBox(float& left, float& top, float& right, float& bottom
 	float yy = (PLANT_BBOX_HEIGHT - 16) / 2;
 	left = x - PLANT_BBOX_WIDTH / 2;
 	top = y - PLANT_BBOX_HEIGHT / 2 + yy;
-	right = left + 16;
-	bottom = top + 32;
+	right = left + PLANT_BBOX_WIDTH;
+	bottom = top + PLANT_BBOX_HEIGHT;
 }
 void CPlant::RenderBoundingBox()
 {

@@ -134,7 +134,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithPlant(LPCOLLISIONEVENT e)
 {
 	CPlant* plant = dynamic_cast<CPlant*>(e->obj);
-	if (plant->GetState() == PLANT_STATE_REST) {
+	if (plant->GetState() == PLANT_STATE_UP) {
 		if (untouchable == 0) {
 			if (level > MARIO_LEVEL_SMALL) {
 				level = MARIO_LEVEL_SMALL;

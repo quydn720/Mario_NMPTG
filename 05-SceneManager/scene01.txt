@@ -9,6 +9,7 @@ cloud.txt
 item.txt
 koopas.txt
 plant.txt
+pipe.txt
 #
 [MAP]
 map1-1.txt
@@ -29,6 +30,9 @@ map1-1.txt
 8	176	336	0
 
 8	176	320	1	0
+
+# Pipe
+10	336	352	48
 
 # ? Brick
 7	160	336

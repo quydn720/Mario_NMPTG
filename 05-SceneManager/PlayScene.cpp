@@ -10,6 +10,7 @@
 #include "Coin.h"
 #include "Platform.h"
 #include "ColorBlock.h"
+#include "WarpPipe.h"
 
 #include "SampleKeyEventHandler.h"
 
@@ -157,6 +158,12 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_BRICK: {
 		obj = new CBrick(x, y);
+		break;
+	}
+	case OBJECT_TYPE_PIPE: {
+		float height = (int)atoi(tokens[3].c_str());
+
+		obj = new CWarpPipe(x, y, height);
 		break;
 	}
 	case OBJECT_TYPE_QUESTION_BLOCK: {

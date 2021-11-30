@@ -161,7 +161,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_PIPE: {
-		float height = (int)atoi(tokens[3].c_str());
+		float height = (float)atoi(tokens[3].c_str());
 
 		obj = new CWarpPipe(x, y, height);
 		break;

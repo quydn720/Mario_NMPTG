@@ -13,7 +13,18 @@
 #include "Collision.h"
 #include "ColorBlock.h"
 #include "QuestionBlock.h"
+#include "Plant.h"
 
+CMario* CMario::__instance = NULL;
+
+CMario* CMario::GetInstance()
+{
+	return __instance;
+}
+void CMario::SetInstance(CMario* p)
+{
+	__instance = p;
+}
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	isOnPlatform = false;
@@ -61,7 +72,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithItem(e);
 	else if (dynamic_cast<CKoopas*>(e->obj))
 		OnCollisionWithKoopas(e);
-
+	else if (dynamic_cast<CPlant*>(e->obj))
+		OnCollisionWithPlant(e);
 }
 
 void CMario::OnCollisionWithItem(LPCOLLISIONEVENT e) {
@@ -100,7 +112,7 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 	}
-	else // hit by Goomba
+	else
 	{
 		if (koopas->GetState() == KOOPAS_STATE_SHELL) {
 			koopas->SetState(KOOPAS_STATE_SHELL_MOVING);
@@ -119,6 +131,22 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 		}
 	}
 }
+void CMario::OnCollisionWithPlant(LPCOLLISIONEVENT e)
+{
+	CPlant* plant = dynamic_cast<CPlant*>(e->obj);
+	if (plant->GetState() == PLANT_STATE_REST) {
+		if (untouchable == 0) {
+			if (level > MARIO_LEVEL_SMALL) {
+				level = MARIO_LEVEL_SMALL;
+				StartUntouchable();
+			}
+			else {
+				DebugOut(L">>> Mario DIE >>> \n");
+				SetState(MARIO_STATE_DIE);
+			}
+		}
+	}
+}
 void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 {
 	CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
@@ -132,7 +160,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 		{
 			if (goomba->GetLevel() == LEVEL_GOOMBA)	goomba->SetState(GOOMBA_STATE_DIE);
 			else goomba->SetLevel(LEVEL_GOOMBA);
-			
+
 			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 	}

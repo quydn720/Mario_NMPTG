@@ -6,6 +6,11 @@
 
 #include "debug.h"
 
+#pragma region define
+
+#define MARIO_ACCEL_SLOWING_DOWN_X 0.00015f
+#define MARIO_ACCEL_SLOWING_DOWN_X_PARAM 25
+
 #define MARIO_WALKING_SPEED		0.1f
 #define MARIO_RUNNING_SPEED		0.2f
 
@@ -83,8 +88,6 @@
 #define GROUND_Y 160.0f
 
 
-
-
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
 
@@ -100,9 +103,12 @@
 
 
 #define MARIO_UNTOUCHABLE_TIME 2500
+#pragma endregion
 
 class CMario : public CGameObject
 {
+	static CMario* __instance;
+
 	BOOLEAN isSitting;
 	float maxVx;
 	float ax;				// acceleration on x 
@@ -116,6 +122,7 @@ class CMario : public CGameObject
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
+	void OnCollisionWithPlant(LPCOLLISIONEVENT e);
 
 	void OnCollisionWithPortal(LPCOLLISIONEVENT e);
 	void OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e);
@@ -128,6 +135,11 @@ class CMario : public CGameObject
 	int GetAniIdSmall();
 
 public:
+	static CMario* GetInstance();
+	
+	// Use only one in the initial playscene. not a good practice to put as public method.
+	static void SetInstance(CMario* p);
+
 	CMario(float x, float y) : CGameObject(x, y)
 	{
 		isSitting = false;
@@ -159,4 +171,7 @@ public:
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+
+	float getX(){ return x; }
+	float getY(){ return y; }
 };

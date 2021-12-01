@@ -83,6 +83,31 @@
 #define ID_ANI_MARIO_SMALL_JUMP_RUN_RIGHT 1600
 #define ID_ANI_MARIO_SMALL_JUMP_RUN_LEFT 1601
 
+// TAIL
+#define ID_ANI_MARIO_TAIL_IDLE_RIGHT 3100
+#define ID_ANI_MARIO_TAIL_IDLE_LEFT 3102
+					 
+#define ID_ANI_MARIO_TAIL_WALKING_RIGHT 3200
+#define ID_ANI_MARIO_TAIL_WALKING_LEFT 3201
+					 
+#define ID_ANI_MARIO_TAIL_RUNNING_RIGHT 3300
+#define ID_ANI_MARIO_TAIL_RUNNING_LEFT 3301
+					 
+#define ID_ANI_MARIO_TAIL_BRACE_RIGHT 3400
+#define ID_ANI_MARIO_TAIL_BRACE_LEFT 3401
+					 
+#define ID_ANI_MARIO_TAIL_JUMP_UP_RIGHT 3500
+#define ID_ANI_MARIO_TAIL_JUMP_DOWN_RIGHT 3501
+
+#define ID_ANI_MARIO_TAIL_JUMP_UP_LEFT 3502
+#define ID_ANI_MARIO_TAIL_JUMP_DOWN_LEFT 3503
+					 
+#define ID_ANI_MARIO_TAIL_JUMP_RUN_RIGHT 3600
+#define ID_ANI_MARIO_TAIL_JUMP_RUN_LEFT 3601
+
+#define ID_ANI_MARIO_TAIL_SIT_RIGHT 3900
+#define ID_ANI_MARIO_TAIL_SIT_LEFT 3901
+
 #pragma endregion
 
 #define GROUND_Y 160.0f
@@ -90,11 +115,14 @@
 
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
+#define	MARIO_LEVEL_TAIL		3
 
 #define MARIO_BIG_BBOX_WIDTH  14
 #define MARIO_BIG_BBOX_HEIGHT 24
 #define MARIO_BIG_SITTING_BBOX_WIDTH  14
 #define MARIO_BIG_SITTING_BBOX_HEIGHT 16
+
+#define MARIO_TAIL_WIDTH 4
 
 #define MARIO_SIT_HEIGHT_ADJUST ((MARIO_BIG_BBOX_HEIGHT-MARIO_BIG_SITTING_BBOX_HEIGHT)/2)
 
@@ -129,10 +157,12 @@ class CMario : public CGameObject
 	// Item
 	void OnCollisionWithItem(LPCOLLISIONEVENT e);
 	void OnCollisionWithMushroom(LPCOLLISIONEVENT e);
+	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
+	int GetAniIdTail();
 
 public:
 	static CMario* GetInstance();
@@ -147,7 +177,7 @@ public:
 		ax = 0.0f;
 		ay = MARIO_GRAVITY; 
 
-		level = MARIO_LEVEL_BIG;
+		level = MARIO_LEVEL_TAIL;
 		untouchable = 0;
 		untouchable_start = -1;
 		isOnPlatform = false;

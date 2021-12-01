@@ -22,14 +22,19 @@ map1-1.txt
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
-0	400	350
+0	650	350
+
+# NOTE: The item & the brick must match with each other
+# coinSetting: 1: inside the brick, 0: not inside the brick
 
 # Item
 # x y type	coinSetting 
 8	160	336	1	1
 8	176	336	0
+8	400	304	1	1
 
-8	176	320	1	0
+# coin not in brick
+#8	176	320	1	0
 
 # ? Brick
 7	160	336
@@ -84,13 +89,13 @@ map1-1.txt
 
 # Goomba
 #2	688	346	0
-2	650	346	1
+#2	650	346	1
 
 # Koopas
 #3	520	360
 
 # Plant
-9	344	352
+#9	344	352
 
 # Pipe
-10	336	352	48
+#10	336	352	48

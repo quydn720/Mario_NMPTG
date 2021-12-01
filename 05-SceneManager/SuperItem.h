@@ -7,27 +7,33 @@
 
 #define ID_ANI_MUSHROOM_RED 178
 #define ID_ANI_MUSHROOM_GREEN 179
+#define ID_ANI_LEAF 177
 
 #define ITEM_BBOX_WIDTH 16
 #define ITEM_BBOX_HEIGHT 16
 
-#define STATE_MUSHROOM_VISIBLE 20
-#define STATE_MUSHROOM_INVISIBLE 21
-#define STATE_MUSHROOM_SPAWN 22
-#define STATE_MUSHROOM_DIE 23
+#define STATE_ITEM_VISIBLE 20
+#define STATE_ITEM_INVISIBLE 21
+#define STATE_ITEM_SPAWN 22
+#define STATE_ITEM_DIE 23
 
 #define GRAVITY 0.002f
 #define TILE_SIZE 16
 #define ITEM_DEFLECT_GRAVITY 0.04f
 #define MUSHROOM_SPEED_X 0.05f
 
+enum SuperItemType {
+	RedMushroom, GreenMushroom, Leaf,
+};
+
 // SuperItem can be Mushroom or Leaf based on the level of Mario
 class CSuperItem : public Item
 {
 	int isOnPlatform = 0;
+	ULONGLONG timer;
 public:
 	bool IsAlive = false;
-	int type = 0;
+	SuperItemType type = SuperItemType::RedMushroom;
 
 	CSuperItem(float x, float y);
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

@@ -4,8 +4,12 @@
 176	300	189	316	205	20
 # green mushroom
 177	318	189	334	205	20
+# leaf
+175	300	208	316	222	20
+174	0	0	16	14	33
 
 # ani_id	sprite1_id	time1	sprite2_id	time2	...
 [ANIMATIONS]
 178	176	100
 179	177	100
+177	174	400	175	400

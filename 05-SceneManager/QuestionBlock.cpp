@@ -76,8 +76,10 @@ void CQuestionBlock::SpawnItem(int nx, int l)
 {
 	SetState(STATE_BRICK_HIT);
 	this->nx = -nx;
-	if (item->GetItemType() == ItemType::SuperItem)
-		dynamic_cast<CSuperItem*>(item)->type = l == MARIO_LEVEL_SMALL ? 2 : 1;
+	if (item->GetItemType() == ItemType::SuperItem) {
+		dynamic_cast<CSuperItem*>(item)->type =
+			(l == MARIO_LEVEL_SMALL) ? SuperItemType::RedMushroom : SuperItemType::Leaf;
+	}
 }
 
 void CQuestionBlock::setItem(Item* i)

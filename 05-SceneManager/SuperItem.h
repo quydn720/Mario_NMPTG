@@ -20,7 +20,9 @@
 #define GRAVITY 0.002f
 #define TILE_SIZE 16
 #define ITEM_DEFLECT_GRAVITY 0.04f
+#define LEAF_DEFLECT_GRAVITY 0.08f
 #define MUSHROOM_SPEED_X 0.05f
+#define LEAF_SPEED_Y 0.05f
 
 enum SuperItemType {
 	RedMushroom, GreenMushroom, Leaf,

@@ -22,7 +22,7 @@ map1-1.txt
 # See OBJECT_TYPE constants in AssetIDs.h
 
 # MARIO
-0	650	350
+0	177	350
 
 # NOTE: The item & the brick must match with each other
 # coinSetting: 1: inside the brick, 0: not inside the brick
@@ -60,9 +60,9 @@ map1-1.txt
 #Platform	
 #	x	y	w	h	l	begins	middles	ends
 # test
-5	608	320	16	64	1	-3600	-3600	-3600
-5	848	320	16	64	1	-3600	-3600	-3600
-5	736	320	16	16	1	-3600	-3600	-3600
+#5	608	320	16	64	1	-3600	-3600	-3600
+#5	848	320	16	64	1	-3600	-3600	-3600
+#5	736	320	16	16	1	-3600	-3600	-3600
 
 5	0	400	16	16	38	-3600	-3600	-3600
 5	608	384	16	32	29	-3600	-3600	-3600

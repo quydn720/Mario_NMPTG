@@ -18,8 +18,8 @@ void CSuperItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		}
 		// if this a leaf
 		else {
-			y -= 0.08f * dt;
-			if (y <= baseY - TILE_SIZE * 6) {
+			y -= LEAF_DEFLECT_GRAVITY * dt;
+			if (y <= baseY - TILE_SIZE * 4) {	// How far the leaf will pop up before drop down
 				SetState(STATE_ITEM_SPAWN);
 			}
 		}
@@ -29,8 +29,8 @@ void CSuperItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		vy += ay * dt;
 
 		if (type == SuperItemType::Leaf) {
-			vy = 0.04f;
-			if (GetTickCount64() - timer >= 400) {
+			vy = LEAF_SPEED_Y;
+			if (GetTickCount64() - timer >= 500) {
 				vx = -vx;
 				timer = GetTickCount64();
 			}
@@ -97,9 +97,9 @@ void CSuperItem::Render() {
 		else if (type == SuperItemType::GreenMushroom)
 			animations->Get(ID_ANI_MUSHROOM_GREEN)->Render(x, y);
 		else if (type == SuperItemType::Leaf)
-			animations->Get(ID_ANI_LEAF)->Render(x, y);
+			(vx > 0) ? animations->Get(ID_ANI_LEAF)->Render(x, y) : animations->Get(173)->Render(x, y);;
 	}
-	RenderBoundingBox();
+	//RenderBoundingBox();
 }
 
 void CSuperItem::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -107,7 +107,7 @@ void CSuperItem::GetBoundingBox(float& l, float& t, float& r, float& b)
 	l = x - ITEM_BBOX_WIDTH / 2;
 	t = y - ITEM_BBOX_HEIGHT / 2;
 	r = l + ITEM_BBOX_WIDTH;
-	b = t + ITEM_BBOX_HEIGHT;
+	b = t + ITEM_BBOX_HEIGHT - 1;
 }
 
 void CSuperItem::OnNoCollision(DWORD dt)

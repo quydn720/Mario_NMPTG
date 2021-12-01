@@ -169,7 +169,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_QUESTION_BLOCK: {
 		obj = new CQuestionBlock(x, y);
 		questionBlocks.push_back(dynamic_cast<CQuestionBlock*>(obj));
-		break; }
+		break; 
+	}
 	case OBJECT_TYPE_ITEM: {
 		int type = (int)atoi(tokens[3].c_str());
 		switch (type)
@@ -178,8 +179,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			obj = new CSuperItem(x, y);
 			break;
 		case ItemType::Coin: {
-			int initState = (int)atoi(tokens[4].c_str());
-			obj = new CCoin(x, y, initState);
+			int isInsideBrick = (int)atoi(tokens[4].c_str());
+			obj = new CCoin(x, y, isInsideBrick);
 			break;
 		}
 		default:

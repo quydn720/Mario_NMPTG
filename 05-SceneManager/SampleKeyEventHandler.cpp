@@ -25,8 +25,15 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_2:
 		mario->SetLevel(MARIO_LEVEL_BIG);
 		break;
+	case DIK_3:
+		mario->SetLevel(MARIO_LEVEL_TAIL);
+		break;
 	case DIK_0:
 		mario->SetState(MARIO_STATE_DIE);
+		break;
+	case DIK_A:
+		if (mario->GetLevel() == MARIO_LEVEL_TAIL)
+			mario->tail->SetState(TAIL_ATTACK);
 		break;
 	case DIK_R: // reset
 		//Reload();

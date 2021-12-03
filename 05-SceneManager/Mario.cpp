@@ -37,7 +37,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (level == MARIO_LEVEL_TAIL) {
 		if (tail->GetState() == TAIL_ACTIVE)
-			tail->SetPosition((nx > 0) ? x - 8 : x + 8, y);
+			tail->SetPosition((nx > 0) ? x - TAIL_LENGTH : x + TAIL_LENGTH, y);
 	}
 
 	// reset untouchable timer if untouchable time has passed

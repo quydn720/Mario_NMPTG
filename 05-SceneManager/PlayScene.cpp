@@ -121,10 +121,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	CGameObject* obj = NULL;
 	FallDetector* fallDetector = NULL;
+	CTail* tail = NULL;
 
 	switch (object_type)
 	{
-	case OBJECT_TYPE_MARIO:
+	case OBJECT_TYPE_MARIO: {
 		if (player != NULL)
 		{
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
@@ -134,8 +135,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		player = (CMario*)obj;
 		CMario::SetInstance((CMario*)obj);
 
+		tail = new CTail(x, y);
+		objects.push_back(tail);
+		CMario* tempMario = dynamic_cast<CMario*>(obj);
+		tempMario->tail = tail;
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
+	}
 	case OBJECT_TYPE_GOOMBA: {
 		int level = (int)atoi(tokens[3].c_str());
 		obj = new CGoomba(x, y, level);

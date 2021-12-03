@@ -5,6 +5,7 @@
 #include "Animations.h"
 
 #include "debug.h"
+#include "Tail.h"
 
 #pragma region define
 
@@ -86,22 +87,22 @@
 // TAIL
 #define ID_ANI_MARIO_TAIL_IDLE_RIGHT 3100
 #define ID_ANI_MARIO_TAIL_IDLE_LEFT 3102
-					 
+
 #define ID_ANI_MARIO_TAIL_WALKING_RIGHT 3200
 #define ID_ANI_MARIO_TAIL_WALKING_LEFT 3201
-					 
+
 #define ID_ANI_MARIO_TAIL_RUNNING_RIGHT 3300
 #define ID_ANI_MARIO_TAIL_RUNNING_LEFT 3301
-					 
+
 #define ID_ANI_MARIO_TAIL_BRACE_RIGHT 3400
 #define ID_ANI_MARIO_TAIL_BRACE_LEFT 3401
-					 
+
 #define ID_ANI_MARIO_TAIL_JUMP_UP_RIGHT 3500
 #define ID_ANI_MARIO_TAIL_JUMP_DOWN_RIGHT 3501
 
 #define ID_ANI_MARIO_TAIL_JUMP_UP_LEFT 3502
 #define ID_ANI_MARIO_TAIL_JUMP_DOWN_LEFT 3503
-					 
+
 #define ID_ANI_MARIO_TAIL_JUMP_RUN_UP_RIGHT 3600
 #define ID_ANI_MARIO_TAIL_JUMP_RUN_DOWN_RIGHT 3601
 
@@ -145,11 +146,12 @@ class CMario : public CGameObject
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
 
-	int level; 
-	int untouchable; 
+	int level;
+	int untouchable;
 	ULONGLONG untouchable_start;
 	BOOLEAN isOnPlatform;
-	int coin; 
+
+	void RenderBoundingBox();
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
@@ -169,7 +171,9 @@ class CMario : public CGameObject
 
 public:
 	static CMario* GetInstance();
-	
+	CTail* tail;
+	int coin;
+
 	// Use only one in the initial playscene. not a good practice to put as public method.
 	static void SetInstance(CMario* p);
 
@@ -178,33 +182,36 @@ public:
 		isSitting = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
-		ay = MARIO_GRAVITY; 
+		ay = MARIO_GRAVITY;
 
 		level = MARIO_LEVEL_TAIL;
 		untouchable = 0;
 		untouchable_start = -1;
 		isOnPlatform = false;
 		coin = 0;
+		tail = NULL;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
 	void SetState(int state);
 
 	int IsCollidable()
-	{ 
-		return (state != MARIO_STATE_DIE); 
+	{
+		return (state != MARIO_STATE_DIE);
 	}
 
-	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable==0); }
+	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 
 	void SetLevel(int l);
+	int GetLevel() { return level; }
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 
-	float getX(){ return x; }
-	float getY(){ return y; }
+	float getX() { return x; }
+	float getY() { return y; }
+	int getNx() { return nx; }
 };

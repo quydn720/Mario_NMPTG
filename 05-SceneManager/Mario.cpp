@@ -14,6 +14,7 @@
 #include "ColorBlock.h"
 #include "QuestionBlock.h"
 #include "Plant.h"
+#include "Textures.h"
 
 CMario* CMario::__instance = NULL;
 
@@ -33,6 +34,11 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	vx += ax * dt;
 
 	if (abs(vx) > abs(maxVx)) vx = maxVx;
+
+	if (level == MARIO_LEVEL_TAIL) {
+		if (tail->GetState() == TAIL_ACTIVE)
+			tail->SetPosition((nx > 0) ? x - 8 : x + 8, y);
+	}
 
 	// reset untouchable timer if untouchable time has passed
 	if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
@@ -91,13 +97,9 @@ void CMario::OnCollisionWithItem(LPCOLLISIONEVENT e) {
 
 void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e) {
 	CQuestionBlock* qb = dynamic_cast<CQuestionBlock*>(e->obj);
-	if (e->ny > 0)
-		if (e->obj->GetState() != STATE_BRICK_EMPTY) {
-			qb->SpawnItem(nx, level);
-			if (qb->getItem()->GetItemType() == ItemType::Coin) {
-				coin++;
-			}
-		}
+	if (e->ny > 0) {
+		qb->SpawnItem(nx, level);
+	}
 }
 
 #pragma region Enemies
@@ -285,7 +287,6 @@ int CMario::GetAniIdSmall()
 
 	return aniId;
 }
-
 
 //
 // Get animdation ID for big Mario
@@ -567,3 +568,27 @@ void CMario::SetLevel(int l)
 	level = l;
 }
 
+void CMario::RenderBoundingBox()
+{
+	D3DXVECTOR3 p(x, y, 0);
+	RECT rect;
+
+	LPTEXTURE bbox = CTextures::GetInstance()->Get(ID_TEX_BBOX);
+
+	float l, t, r, b;
+
+	GetBoundingBox(l, t, r, b);
+	rect.left = 0;
+	rect.top = 0;
+	rect.right = (int)r - (int)l;
+	rect.bottom = (int)b - (int)t;
+
+	float cx, cy;
+	CGame::GetInstance()->GetCamPos(cx, cy);
+
+	float tx;
+	tx = (x - cx);
+	if (level == MARIO_LEVEL_TAIL)
+		tx += (nx < 0) ? -MARIO_TAIL_WIDTH : MARIO_TAIL_WIDTH;
+	CGame::GetInstance()->Draw(tx, y - cy, bbox, &rect, BBOX_ALPHA);
+}

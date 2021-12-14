@@ -21,9 +21,6 @@ map1-1.txt
 # 7: ?brick, 8: item
 # See OBJECT_TYPE constants in AssetIDs.h
 
-# MARIO
-0	600	350
-
 # NOTE: The item & the brick must match with each other
 # coinSetting: 1: inside the brick, 0: not inside the brick
 
@@ -35,7 +32,7 @@ map1-1.txt
 8	640	368	1	1
 
 # coin not in brick
-#8	176	320	1	0
+8	176	320	1	0
 
 # ? Brick
 7	160	336
@@ -86,9 +83,6 @@ map1-1.txt
 5	2240	352	16	16	2	-3600	-3600	-3600
 5	2240	288	16	16	2	-3600	-3600	-3600
 
-#Portal	
-#50	300	120	316	160	2
-
 # Goomba
 2	177	346	0
 2	200	346	0
@@ -101,5 +95,9 @@ map1-1.txt
 # Plant
 #9	344	352
 
+# MARIO
+0	336	200
+
 # Pipe
-#10	336	352	48
+10	336	352	48	2	1
+

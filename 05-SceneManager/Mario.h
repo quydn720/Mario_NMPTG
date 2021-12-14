@@ -15,13 +15,14 @@
 #define MARIO_WALKING_SPEED		0.1f
 #define MARIO_RUNNING_SPEED		0.2f
 
-#define MARIO_ACCEL_WALK_X	0.0005f
-#define MARIO_ACCEL_RUN_X	0.0007f
+#define MARIO_ACCEL_WALK_X	0.0002f
+#define MARIO_ACCEL_RUN_X	0.0005f
 
 #define MARIO_JUMP_SPEED_Y		0.5f
 #define MARIO_JUMP_RUN_SPEED_Y	0.6f
 
 #define MARIO_GRAVITY			0.002f
+#define MARIO_PIPING_VY			0.0055f
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.4f
 
@@ -38,6 +39,11 @@
 
 #define MARIO_STATE_SIT				600
 #define MARIO_STATE_SIT_RELEASE		601
+
+#define MARIO_STATE_FLY 303
+
+#define MARIO_STATE_DOWN_PIPE 305
+//#define MARIO_STATE_DOWN_PIPE 303
 
 
 #pragma region ANIMATION_ID
@@ -112,6 +118,8 @@
 #define ID_ANI_MARIO_TAIL_SIT_RIGHT 3900
 #define ID_ANI_MARIO_TAIL_SIT_LEFT 3901
 
+#define ID_ANI_MARIO_TAIL_PIPING -2000
+
 #pragma endregion
 
 #define GROUND_Y 160.0f
@@ -127,12 +135,15 @@
 #define MARIO_BIG_SITTING_BBOX_HEIGHT 16
 
 #define MARIO_TAIL_WIDTH 4
+#define MARIO_TAIL_BBOX_WIDTH  22
+#define MARIO_TAIL_BBOX_HEIGHT 28
 
 #define MARIO_SIT_HEIGHT_ADJUST ((MARIO_BIG_BBOX_HEIGHT-MARIO_BIG_SITTING_BBOX_HEIGHT)/2)
 
 #define MARIO_SMALL_BBOX_WIDTH  13
 #define MARIO_SMALL_BBOX_HEIGHT 12
 
+#define MARIO_PIPING_TIME	2500
 
 #define MARIO_UNTOUCHABLE_TIME 2500
 #pragma endregion
@@ -164,6 +175,7 @@ class CMario : public CGameObject
 	void OnCollisionWithMushroom(LPCOLLISIONEVENT e);
 	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
+	void OnCollisionWithPipe(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
@@ -173,7 +185,10 @@ public:
 	static CMario* GetInstance();
 	CTail* tail;
 	int coin;
-
+	bool isOnTopWarpPipe;
+	bool isUnderWarpPipe;
+	bool isPiping;
+	ULONGLONG timer;
 	// Use only one in the initial playscene. not a good practice to put as public method.
 	static void SetInstance(CMario* p);
 

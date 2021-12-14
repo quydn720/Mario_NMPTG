@@ -6,6 +6,12 @@
 #define PIPE_ANI_ID_BODY_LEFT 1013 
 #define PIPE_ANI_ID_BODY_RIGHT 1014
 #define PIPE_BBOX_WIDTH		32
+#define PIPE_BBOX_DOWN_RANGE		16
+
+#define B_PIPE_ANI_ID_BODY_LEFT 1021
+#define B_PIPE_ANI_ID_BODY_RIGHT 1022
+#define B_PIPE_ANI_ID_TOP_LEFT 1023
+#define B_PIPE_ANI_ID_TOP_RIGHT 1024
 
 #define TILE_SIZE 16
 
@@ -22,7 +28,7 @@ public:
 		height = h;
 		length = (int)height / TILE_SIZE;
 	}
-	int canGoThroughtScreen() { return sceneId; }
+	int canGoThroughtScene() { return sceneId; }
 	void Render();
 	void Update(DWORD dt) {}
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);

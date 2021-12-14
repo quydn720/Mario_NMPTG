@@ -20,5 +20,7 @@ height	240
 12	textures\another_enemies.png
 20	textures\misc.png
 30	textures\map1-1.png
+31	textures\hidden-map1-1.png
 32	textures\pipe.png
 33	textures\leaf-flip.png
+34	textures\black-pipe.png

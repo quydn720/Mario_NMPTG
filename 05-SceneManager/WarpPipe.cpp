@@ -1,10 +1,6 @@
 #include "WarpPipe.h"
 #include "Textures.h"
 
-#define B_PIPE_ANI_ID_BODY_LEFT 1021
-#define B_PIPE_ANI_ID_BODY_RIGHT 1022
-#define B_PIPE_ANI_ID_TOP_LEFT 1023
-#define B_PIPE_ANI_ID_TOP_RIGHT 1024
 void CWarpPipe::Render()
 {
 	RenderBoundingBox();

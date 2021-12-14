@@ -1,15 +1,29 @@
 #include "WarpPipe.h"
 #include "Textures.h"
 
+#define B_PIPE_ANI_ID_BODY_LEFT 1021
+#define B_PIPE_ANI_ID_BODY_RIGHT 1022
+#define B_PIPE_ANI_ID_TOP_LEFT 1023
+#define B_PIPE_ANI_ID_TOP_RIGHT 1024
 void CWarpPipe::Render()
 {
 	RenderBoundingBox();
-
-	CAnimations::GetInstance()->Get(PIPE_ANI_ID)->Render(x, y);
-	CAnimations::GetInstance()->Get(PIPE_ANI_ID_TOP_RIGHT)->Render(x + 16, y);
-	for (int i = 1; i < length; i++) {
-		CAnimations::GetInstance()->Get(PIPE_ANI_ID_BODY_LEFT)->Render(x, y + 16 * i);
-		CAnimations::GetInstance()->Get(PIPE_ANI_ID_BODY_RIGHT)->Render(x + 16, y + 16 * i);
+	
+	if (green < 0) {
+		CAnimations::GetInstance()->Get(B_PIPE_ANI_ID_BODY_LEFT)->Render(x, y);
+		CAnimations::GetInstance()->Get(B_PIPE_ANI_ID_BODY_RIGHT)->Render(x + 16, y);
+		for (int i = 1; i < length; i++) {
+			CAnimations::GetInstance()->Get(B_PIPE_ANI_ID_TOP_LEFT)->Render(x, y + 16 * i);
+			CAnimations::GetInstance()->Get(B_PIPE_ANI_ID_TOP_RIGHT)->Render(x + 16, y + 16 * i);
+		}
+	}
+	else {
+		CAnimations::GetInstance()->Get(PIPE_ANI_ID_TOP_LEFT)->Render(x, y);
+		CAnimations::GetInstance()->Get(PIPE_ANI_ID_TOP_RIGHT)->Render(x + 16, y);
+		for (int i = 1; i < length; i++) {
+			CAnimations::GetInstance()->Get(PIPE_ANI_ID_BODY_LEFT)->Render(x, y + 16 * i);
+			CAnimations::GetInstance()->Get(PIPE_ANI_ID_BODY_RIGHT)->Render(x + 16, y + 16 * i);
+		}
 	}
 }
 

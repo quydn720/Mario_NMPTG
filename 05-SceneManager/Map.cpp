@@ -56,13 +56,12 @@ void CMap::Render()
 	CGame::GetInstance()->GetCamPos(x, y);
 	int startX = (int)(x / width * column - 2);
 	int startY = (int)(y / height * row);
-
-	for (int i = startY; i < startY + offsetH; i++) {
-		for (int j = startX; j < startX + offsetW; j++) {
+	int endX = startX + offsetW > column ? column :startX + offsetW ;
+	int endY = startY + offsetH > row ? row :startY+ offsetH;
+	for (int i = startY; i < endY; i++) {
+		for (int j = startX; j < endX; j++) {
 			int id = tiles[i][j];
-			if (id != -1) {
-				CSprites::GetInstance()->Get(id)->Draw((float)(tileSize * j), (float)(tileSize * i));
-			}
+			CSprites::GetInstance()->Get(id)->Draw((float)(tileSize * j), (float)(tileSize * i));
 		}
 	}
 }

@@ -11,6 +11,7 @@
 #include "Item.h"
 #include "Koopas.h"
 #include "Plant.h"
+#include "Camera.h"
 
 
 class CPlayScene: public CScene
@@ -19,6 +20,7 @@ protected:
 	// A play scene has to have player, right? 
 	LPGAMEOBJECT player;		
 	CMap* map;
+	CCamera* camera;
 
 	vector<CQuestionBlock*> questionBlocks;
 	vector<Item*> items;

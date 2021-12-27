@@ -11,12 +11,23 @@
 #include "Platform.h"
 #include "ColorBlock.h"
 #include "WarpPipe.h"
+#include "BreakableBrick.h"
 
 #include "SampleKeyEventHandler.h"
 #include "Hud.h"
 
 using namespace std;
 #define _game CGame::GetInstance() 
+
+CPlayScene* CPlayScene::__instance = NULL;
+
+CPlayScene::CPlayScene()
+{
+	map = NULL;
+	player = NULL;
+	camera = NULL;
+	key_handler = new CSampleKeyHandler(this);
+}
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	CScene(id, filePath)
@@ -227,6 +238,17 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 
+	case OBJECT_TYPE_BREAKBLEBRICK: {
+		bool HaveButton = false;
+		int Item = atoi(tokens[3].c_str());
+		if (Item == 1)
+		{
+			HaveButton = true;
+		}
+		obj = new BreakableBrick(x, y, HaveButton);
+		
+	}
+								  break;
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = (float)atof(tokens[3].c_str());

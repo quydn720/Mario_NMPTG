@@ -1,0 +1,15 @@
+# id	left	top	right	bottom	texture_id
+[SPRITES]
+# HUD background
+1910	5	244	257	278	35
+# ARROW W
+1911	35	109	43	117	35
+# P W
+1912	50	109	66	117	35
+# P B
+1913	101	162	115	170	35
+
+# ani_id	sprite1_id	time1	sprite2_id	time2	...
+[ANIMATIONS]
+# flashing P
+1918	1913	100	1912	100

@@ -10,6 +10,7 @@ item.txt
 koopas.txt
 plant.txt
 pipe.txt
+hud.txt
 #
 [MAP]
 map1-1.txt
@@ -21,23 +22,24 @@ map1-1.txt
 # 7: ?brick, 8: item
 # See OBJECT_TYPE constants in AssetIDs.h
 
-# MARIO
-0	400	350
+# NOTE: The item & the brick must match with each other
+# coinSetting: 1: inside the brick, 0: not inside the brick
 
 # Item
 # x y type	coinSetting 
 8	160	336	1	1
 8	176	336	0
+8	400	304	1	1
+8	640	368	1	1
 
+# coin not in brick
 8	176	320	1	0
-
-# Pipe
-10	336	352	48
 
 # ? Brick
 7	160	336
 7	176	336
 7	400	304
+7	640	368
 
 # Color block
 6	224	352	16	48	3
@@ -58,9 +60,9 @@ map1-1.txt
 #Platform	
 #	x	y	w	h	l	begins	middles	ends
 # test
-5	608	320	16	64	1	-3600	-3600	-3600
-5	848	320	16	64	1	-3600	-3600	-3600
-5	736	320	16	16	1	-3600	-3600	-3600
+#5	608	320	16	64	1	-3600	-3600	-3600
+#5	848	320	16	64	1	-3600	-3600	-3600
+#5	736	320	16	16	1	-3600	-3600	-3600
 
 5	0	400	16	16	38	-3600	-3600	-3600
 5	608	384	16	32	29	-3600	-3600	-3600
@@ -82,15 +84,21 @@ map1-1.txt
 5	2240	352	16	16	2	-3600	-3600	-3600
 5	2240	288	16	16	2	-3600	-3600	-3600
 
-#Portal	
-#50	300	120	316	160	2
-
 # Goomba
-#2	688	346	0
-2	650	346	1
+2	177	346	0
+2	200	346	0
+2	220	346	0
+#2	650	346	1
 
 # Koopas
-#3	520	360
+3	550	320
 
 # Plant
-9	344	352
+#9	344	352
+
+# MARIO
+0	500	320
+
+# Pipe
+10	336	352	48	2	1
+

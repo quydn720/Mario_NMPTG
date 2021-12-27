@@ -13,14 +13,17 @@
 #include "WarpPipe.h"
 
 #include "SampleKeyEventHandler.h"
+#include "Hud.h"
 
 using namespace std;
+#define _game CGame::GetInstance() 
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	CScene(id, filePath)
 {
 	map = NULL;
 	player = NULL;
+	camera = NULL;
 	key_handler = new CSampleKeyHandler(this);
 }
 
@@ -81,7 +84,7 @@ void CPlayScene::_ParseSection_ANIMATIONS(string line)
 	LPANIMATION ani = new CAnimation();
 
 	int ani_id = atoi(tokens[0].c_str());
-	for (int i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
+	for (size_t i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
 	{
 		int sprite_id = atoi(tokens[i].c_str());
 		int frame_time = atoi(tokens[i + 1].c_str());
@@ -121,10 +124,11 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	CGameObject* obj = NULL;
 	FallDetector* fallDetector = NULL;
+	CTail* tail = NULL;
 
 	switch (object_type)
 	{
-	case OBJECT_TYPE_MARIO:
+	case OBJECT_TYPE_MARIO: {
 		if (player != NULL)
 		{
 			DebugOut(L"[ERROR] MARIO object was created before!\n");
@@ -134,8 +138,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		player = (CMario*)obj;
 		CMario::SetInstance((CMario*)obj);
 
+		tail = new CTail(x, y);
+		objects.push_back(tail);
+		CMario* tempMario = dynamic_cast<CMario*>(obj);
+		tempMario->tail = tail;
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
+	}
 	case OBJECT_TYPE_GOOMBA: {
 		int level = (int)atoi(tokens[3].c_str());
 		obj = new CGoomba(x, y, level);
@@ -161,15 +170,17 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 	case OBJECT_TYPE_PIPE: {
-		float height = (int)atoi(tokens[3].c_str());
-
-		obj = new CWarpPipe(x, y, height);
+		float height = (float)atoi(tokens[3].c_str());
+		int hidden = atoi(tokens[4].c_str());
+		int green = atoi(tokens[5].c_str());
+		obj = new CWarpPipe(x, y, height, hidden, green);
 		break;
 	}
 	case OBJECT_TYPE_QUESTION_BLOCK: {
 		obj = new CQuestionBlock(x, y);
 		questionBlocks.push_back(dynamic_cast<CQuestionBlock*>(obj));
-		break; }
+		break; 
+	}
 	case OBJECT_TYPE_ITEM: {
 		int type = (int)atoi(tokens[3].c_str());
 		switch (type)
@@ -178,8 +189,8 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			obj = new CSuperItem(x, y);
 			break;
 		case ItemType::Coin: {
-			int initState = (int)atoi(tokens[4].c_str());
-			obj = new CCoin(x, y, initState);
+			int isInsideBrick = (int)atoi(tokens[4].c_str());
+			obj = new CCoin(x, y, isInsideBrick);
 			break;
 		}
 		default:
@@ -225,7 +236,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	break;
 
-
+	
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
 		return;
@@ -313,6 +324,7 @@ void CPlayScene::Load()
 	}
 	questionBlocks = vector<CQuestionBlock*>();
 	items = vector<Item*>();
+	camera = new CCamera(map->getMapWidth(), map->getMapHeight(), _game->GetBackBufferWidth(), _game->GetBackBufferHeight());
 
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
 }
@@ -339,16 +351,9 @@ void CPlayScene::Update(DWORD dt)
 	// Update camera to follow mario
 	float cx, cy;
 	player->GetPosition(cx, cy);
-
+	camera->SetPosition(cx, cy);
 	CGame* game = CGame::GetInstance();
-	cx -= game->GetBackBufferWidth() / 2;
-	cy -= game->GetBackBufferHeight() / 2;
-
-	if (cx > map->getMapWidth() - game->GetBackBufferWidth()) cx = float(map->getMapWidth() - game->GetBackBufferWidth());
-	if (cy > map->getMapHeight() - game->GetBackBufferHeight() - 8) cy = float(map->getMapHeight() - game->GetBackBufferHeight() - 8);
-	if (cx < 0) cx = 0;
-	if (cy < 0) cy = 0;
-	CGame::GetInstance()->SetCamPos(cx, cy);
+	_game->SetCamPos(cx, cy);
 
 	PurgeDeletedObjects();
 }
@@ -358,6 +363,7 @@ void CPlayScene::Render()
 	map->Render();
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
+	Hud::GetInstance()->Render();
 }
 
 /*

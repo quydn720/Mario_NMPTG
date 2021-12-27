@@ -91,7 +91,7 @@ void CGoomba::Render()
 {
 	int aniId = -1;
 	if (level == LEVEL_PARA_GOOMBA) {
-		aniId = 5002;
+		aniId = ID_ANI_PARA_GOOMBA_WALKING;
 	}
 	else {
 		aniId = ID_ANI_GOOMBA_WALKING;

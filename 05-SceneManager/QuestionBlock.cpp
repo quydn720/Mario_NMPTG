@@ -74,10 +74,17 @@ void CQuestionBlock::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 void CQuestionBlock::SpawnItem(int nx, int l)
 {
-	SetState(STATE_BRICK_HIT);
-	this->nx = -nx;
-	if (item->GetItemType() == ItemType::SuperItem)
-		dynamic_cast<CSuperItem*>(item)->type = l == MARIO_LEVEL_SMALL ? 2 : 1;
+	if (state != STATE_BRICK_EMPTY) {
+		SetState(STATE_BRICK_HIT);
+		this->nx = -nx;
+		if (item->GetItemType() == ItemType::SuperItem) {
+			dynamic_cast<CSuperItem*>(item)->type =
+				(l == MARIO_LEVEL_SMALL) ? SuperItemType::RedMushroom : SuperItemType::Leaf;
+		}
+	}
+	if (item->GetItemType() == ItemType::Coin) {
+		CMario::GetInstance()->coin++;
+	}
 }
 
 void CQuestionBlock::setItem(Item* i)

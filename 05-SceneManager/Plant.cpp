@@ -5,7 +5,7 @@
 
 #define PLANT_SHOOTING_RANGE 160 // half of the screen
 
-CPlant::CPlant(float x, float y)
+CPlant::CPlant(float x, float y) : CGameObject(x, y)
 {
 	SetState(PLANT_STATE_UP);
 	baseY = y;
@@ -13,7 +13,7 @@ CPlant::CPlant(float x, float y)
 
 void CPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
-	DebugOut(L"%s\n", (state == 355) ? L"down" : L"up");
+	//DebugOut(L"%s\n", (state == 355) ? L"down" : L"up");
 
 	y += vy * dt;
 

@@ -378,3 +378,11 @@ void CCollision::Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* co
 
 	for (UINT i = 0; i < coEvents.size(); i++) delete coEvents[i];
 }
+bool CCollision::CheckAABB(LPGAMEOBJECT objSrc, LPGAMEOBJECT objDest)
+{
+	float Left, Top, Right, Bottom, left, top, right, bottom;
+	objSrc->GetBoundingBox(Left, Top, Right, Bottom); // Get bbox of objsrc
+	objDest->GetBoundingBox(left, top, right, bottom); // Get bbox of objColliable
+
+	return(!(Left > right || Top > bottom || Right < left || Bottom < top));
+}

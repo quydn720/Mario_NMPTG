@@ -5,6 +5,7 @@
 #include "Animations.h"
 
 #include "debug.h"
+#include "Tail.h"
 
 #pragma region define
 
@@ -14,13 +15,14 @@
 #define MARIO_WALKING_SPEED		0.1f
 #define MARIO_RUNNING_SPEED		0.2f
 
-#define MARIO_ACCEL_WALK_X	0.0005f
-#define MARIO_ACCEL_RUN_X	0.0007f
+#define MARIO_ACCEL_WALK_X	0.0002f
+#define MARIO_ACCEL_RUN_X	0.0004f
 
 #define MARIO_JUMP_SPEED_Y		0.5f
 #define MARIO_JUMP_RUN_SPEED_Y	0.6f
 
 #define MARIO_GRAVITY			0.002f
+#define MARIO_PIPING_VY			0.0055f
 
 #define MARIO_JUMP_DEFLECT_SPEED  0.4f
 
@@ -37,6 +39,11 @@
 
 #define MARIO_STATE_SIT				600
 #define MARIO_STATE_SIT_RELEASE		601
+
+#define MARIO_STATE_FLY 303
+
+#define MARIO_STATE_DOWN_PIPE 305
+//#define MARIO_STATE_DOWN_PIPE 303
 
 
 #pragma region ANIMATION_ID
@@ -83,6 +90,40 @@
 #define ID_ANI_MARIO_SMALL_JUMP_RUN_RIGHT 1600
 #define ID_ANI_MARIO_SMALL_JUMP_RUN_LEFT 1601
 
+// TAIL
+#define ID_ANI_MARIO_TAIL_IDLE_RIGHT 3100
+#define ID_ANI_MARIO_TAIL_IDLE_LEFT 3102
+
+#define ID_ANI_MARIO_TAIL_WALKING_RIGHT 3200
+#define ID_ANI_MARIO_TAIL_WALKING_RIGHT_FAST 3202
+#define ID_ANI_MARIO_TAIL_WALKING_LEFT 3201
+#define ID_ANI_MARIO_TAIL_WALKING_LEFT_FAST 3203
+
+#define ID_ANI_MARIO_TAIL_RUNNING_RIGHT 3300
+#define ID_ANI_MARIO_TAIL_RUNNING_LEFT 3301
+
+#define ID_ANI_MARIO_TAIL_BRACE_RIGHT 3400
+#define ID_ANI_MARIO_TAIL_BRACE_LEFT 3401
+
+#define ID_ANI_MARIO_TAIL_JUMP_UP_RIGHT 3500
+#define ID_ANI_MARIO_TAIL_JUMP_DOWN_RIGHT 3501
+
+#define ID_ANI_MARIO_TAIL_JUMP_UP_LEFT 3502
+#define ID_ANI_MARIO_TAIL_JUMP_DOWN_LEFT 3503
+
+#define ID_ANI_MARIO_TAIL_JUMP_RUN_UP_RIGHT 3600
+#define ID_ANI_MARIO_TAIL_JUMP_RUN_DOWN_RIGHT 3601
+
+#define ID_ANI_MARIO_TAIL_JUMP_RUN_UP_LEFT 3602
+#define ID_ANI_MARIO_TAIL_JUMP_RUN_DOWN_LEFT 3603
+
+#define ID_ANI_MARIO_TAIL_SIT_RIGHT 3900
+#define ID_ANI_MARIO_TAIL_SIT_LEFT 3901
+
+#define ID_ANI_MARIO_TAIL_PIPING -2000
+#define ID_ANI_MARIO_TAIL_KICKING_RIGHT -2010
+#define ID_ANI_MARIO_TAIL_KICKING_LEFT -2011
+
 #pragma endregion
 
 #define GROUND_Y 160.0f
@@ -90,17 +131,23 @@
 
 #define	MARIO_LEVEL_SMALL	1
 #define	MARIO_LEVEL_BIG		2
+#define	MARIO_LEVEL_TAIL		3
 
 #define MARIO_BIG_BBOX_WIDTH  14
 #define MARIO_BIG_BBOX_HEIGHT 24
 #define MARIO_BIG_SITTING_BBOX_WIDTH  14
 #define MARIO_BIG_SITTING_BBOX_HEIGHT 16
 
+#define MARIO_TAIL_WIDTH 4
+#define MARIO_TAIL_BBOX_WIDTH  22
+#define MARIO_TAIL_BBOX_HEIGHT 28
+
 #define MARIO_SIT_HEIGHT_ADJUST ((MARIO_BIG_BBOX_HEIGHT-MARIO_BIG_SITTING_BBOX_HEIGHT)/2)
 
 #define MARIO_SMALL_BBOX_WIDTH  13
 #define MARIO_SMALL_BBOX_HEIGHT 12
 
+#define MARIO_PIPING_TIME	2500
 
 #define MARIO_UNTOUCHABLE_TIME 2500
 #pragma endregion
@@ -114,11 +161,12 @@ class CMario : public CGameObject
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
 
-	int level; 
-	int untouchable; 
+	int level;
+	int untouchable;
 	ULONGLONG untouchable_start;
 	BOOLEAN isOnPlatform;
-	int coin; 
+
+	void RenderBoundingBox();
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
@@ -129,14 +177,23 @@ class CMario : public CGameObject
 	// Item
 	void OnCollisionWithItem(LPCOLLISIONEVENT e);
 	void OnCollisionWithMushroom(LPCOLLISIONEVENT e);
+	void OnCollisionWithLeaf(LPCOLLISIONEVENT e);
 	void OnCollisionWithCoin(LPCOLLISIONEVENT e);
+	void OnCollisionWithPipe(LPCOLLISIONEVENT e);
 
 	int GetAniIdBig();
 	int GetAniIdSmall();
+	int GetAniIdTail();
 
 public:
 	static CMario* GetInstance();
-	
+	CTail* tail;
+	int coin;
+	bool isOnTopWarpPipe;
+	bool isPiping;
+	bool isKicking;
+	bool isAttack;
+	ULONGLONG timer;
 	// Use only one in the initial playscene. not a good practice to put as public method.
 	static void SetInstance(CMario* p);
 
@@ -145,33 +202,36 @@ public:
 		isSitting = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
-		ay = MARIO_GRAVITY; 
+		ay = MARIO_GRAVITY;
 
-		level = MARIO_LEVEL_BIG;
+		level = MARIO_LEVEL_TAIL;
 		untouchable = 0;
 		untouchable_start = -1;
 		isOnPlatform = false;
 		coin = 0;
+		tail = NULL;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
 	void SetState(int state);
 
 	int IsCollidable()
-	{ 
-		return (state != MARIO_STATE_DIE); 
+	{
+		return (state != MARIO_STATE_DIE);
 	}
 
-	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable==0); }
+	int IsBlocking() { return (state != MARIO_STATE_DIE && untouchable == 0); }
 
 	void OnNoCollision(DWORD dt);
 	void OnCollisionWith(LPCOLLISIONEVENT e);
 
 	void SetLevel(int l);
+	int GetLevel() { return level; }
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 
-	float getX(){ return x; }
-	float getY(){ return y; }
+	float getX() { return x; }
+	float getY() { return y; }
+	int getNx() { return nx; }
 };

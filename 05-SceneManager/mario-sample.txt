@@ -13,6 +13,7 @@ height	240
 # id	file 
 [TEXTURES]
 -100	textures\bbox.png
+-101	textures\hud-bg.png
 0	textures\mario.png
 1	textures\mario1.png
 10	textures\enemies.png
@@ -24,5 +25,5 @@ height	240
 32	textures\pipe.png
 33	textures\leaf-flip.png
 34	textures\black-pipe.png
-35	textures\example-hud.png
+35	textures\HUD.png
 36	textures\koopas-shell-moving.png

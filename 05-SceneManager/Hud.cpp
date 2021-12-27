@@ -5,6 +5,8 @@
 #define MAX_STACK_SPEED 6
 #define BASE_ARROW_POSITION_X 80
 #define BASE_ARROW_POSITION_Y 178
+#define ARROW_SIZE 8
+#define ARROW_P_DISTANCE 11.5
 
 Hud* Hud::_instance = nullptr;
 
@@ -18,9 +20,6 @@ Hud* Hud::GetInstance()
 Hud::Hud()
 {
 	NumSpeed = 0;
-	bbox = CTextures::GetInstance()->Get(BBOX_BLACK);
-	auto sprites = CSprites::GetInstance();
-	speed = sprites->Get(ID_ANI_ARROW);
 }
 
 void Hud::Update(DWORD dt)
@@ -67,7 +66,7 @@ void Hud::Update(DWORD dt)
 			}
 		}
 	}
-	DebugOut(L"%0.2d\n", NumSpeed);
+	//DebugOut(L"%0.2d\n", NumSpeed);
 }
 
 void Hud::Render()
@@ -76,24 +75,24 @@ void Hud::Render()
 	RECT* r = NULL;
 	CSprites* sprites = CSprites::GetInstance();
 	
-	float a = game->GetBackBufferWidth() / 2;
-	float b = game->GetBackBufferHeight() - 20;
-
-	game->Draw(a, b, bbox, r, 1.0f, game->GetBackBufferWidth(), 40);
-	
+	float a =(float) game->GetBackBufferWidth() / 2;
+	float b =(float) game->GetBackBufferHeight() - 20;
+	// black bg
+	game->Draw(a, b, CTextures::GetInstance()->Get(BBOX_BLACK), r, 1.0f, game->GetBackBufferWidth(), HUD_SIZE);
+	// hud bg
 	sprites->Get(ID_HUD_BG)->DrawFixPos(152, 183);
-	
+	// arrow / p
 	if (NumSpeed > 0)
 	{
 		for (int i = 1; i <= NumSpeed; i++)
 		{
 			if (i == MAX_STACK_SPEED)
 			{
-				sprites->Get(ID_HUD_ANI_P)->DrawFixPos(float(BASE_ARROW_POSITION_X + ((6) * 8) + 11), BASE_ARROW_POSITION_Y); // fix pos
-				sprites->Get(ID_HUD_ANI_ARROW)->DrawFixPos(float(BASE_ARROW_POSITION_X + (i * 8)), BASE_ARROW_POSITION_Y);
+				sprites->Get(ID_HUD_SPRITE_ARROW)->DrawFixPos(float(BASE_ARROW_POSITION_X + (i * ARROW_SIZE)), BASE_ARROW_POSITION_Y);
+				CAnimations::GetInstance()->Get(ID_ANI_FLASHING_P)->RenderFixPos(float(BASE_ARROW_POSITION_X + ((i) * ARROW_SIZE) + ARROW_P_DISTANCE), BASE_ARROW_POSITION_Y);
 			}
 			else
-				sprites->Get(ID_HUD_ANI_ARROW)->DrawFixPos(float(BASE_ARROW_POSITION_X + (i * 8)), BASE_ARROW_POSITION_Y);
+				sprites->Get(ID_HUD_SPRITE_ARROW)->DrawFixPos(float(BASE_ARROW_POSITION_X + (i * ARROW_SIZE)), BASE_ARROW_POSITION_Y);
 		}
 	}
 }

@@ -84,4 +84,5 @@ public:
 	void Process(LPGAMEOBJECT objSrc, DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 
 	static CCollision* GetInstance();
+	bool CheckAABB(LPGAMEOBJECT objSrc, LPGAMEOBJECT objDest);
 };

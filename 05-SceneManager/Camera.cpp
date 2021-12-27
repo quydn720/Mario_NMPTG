@@ -1,5 +1,14 @@
 #include "Camera.h"
 #define HUD_SIZE 40
+
+CCamera::CCamera() {
+	mapW = 0;
+	mapH = 0;
+	width = 0;
+	height = 0;
+	left = top = 0; //TODO size = screen size, top left theo mario
+}
+
 CCamera::CCamera(int mw, int mh, float w, float h) {
 	mapW = mw;
 	mapH = mh;

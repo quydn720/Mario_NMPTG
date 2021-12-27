@@ -23,7 +23,6 @@ public:
 	bool isBrickToCoin;
 	ULONGLONG AppearTime;
 
-
 	CCoin(float x, float y);
 	CCoin(float x, float y, int insideB) : Item(x, y, 0) { itemType = ItemType::Coin; insideBrick = insideB; }
 	void Render();

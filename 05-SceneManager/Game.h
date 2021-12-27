@@ -17,7 +17,7 @@ using namespace std;
 #define KEYBOARD_BUFFER_SIZE 1024
 #define KEYBOARD_STATE_SIZE 256
 
-
+#define _PlayScene CPlayScene::GetInstance()
 
 /*
 	Our simple game framework

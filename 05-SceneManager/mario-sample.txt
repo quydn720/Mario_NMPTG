@@ -25,3 +25,4 @@ height	240
 33	textures\leaf-flip.png
 34	textures\black-pipe.png
 35	textures\example-hud.png
+36	textures\koopas-shell-moving.png

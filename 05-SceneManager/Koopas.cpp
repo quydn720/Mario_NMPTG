@@ -8,6 +8,7 @@ CKoopas::CKoopas(float x, float y)
 	die_start = -1;
 	nx = -1;
 	SetState(KOOPAS_STATE_WALKING);
+	timer = 0;
 }
 
 void CKoopas::GetBoundingBox(float& left, float& top, float& right, float& bottom)
@@ -19,7 +20,7 @@ void CKoopas::GetBoundingBox(float& left, float& top, float& right, float& botto
 		right = left + KOOPAS_BBOX_WIDTH;
 		bottom = top + KOOPAS_BBOX_HEIGHT;
 	}
-	else 
+	else
 	{
 		left = x - KOOPAS_BBOX_WIDTH / 2;
 		top = y - KOOPAS_BBOX_HEIGHT_SHELL / 2;
@@ -35,13 +36,13 @@ void CKoopas::SetState(int state)
 	switch (state)
 	{
 	case KOOPAS_STATE_SHELL_MOVING:
-		vx = nx * 0.1f;
+		vx = nx * KOOPAS_WALKING_SPEED;
 		nx = -nx;
 		fallDetector->SetState(FALL_DETECTOR_STATE_INACTIVE);
 		break;
 	case KOOPAS_STATE_SHELL:
-		y += (KOOPAS_BBOX_HEIGHT - KOOPAS_BBOX_HEIGHT_SHELL) / 2;
 		vx = 0;
+		timer = GetTickCount64();
 		fallDetector->SetState(FALL_DETECTOR_STATE_INACTIVE);
 		break;
 	case KOOPAS_STATE_WALKING:
@@ -78,6 +79,20 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		nx = -nx;
 	}
 
+	if (state == KOOPAS_STATE_GOING_UP) {
+		if (GetTickCount64() - timer >= KOOPAS_SPLASH_TIMEOUT) {
+			fallDetector->SetState(FALL_DETECTOR_STATE_ACTIVE);
+			y -= ((KOOPAS_BBOX_HEIGHT - KOOPAS_BBOX_HEIGHT_SHELL) / 2 + 1);
+			SetState(KOOPAS_STATE_WALKING);
+		}
+	}
+	if (state == KOOPAS_STATE_SHELL) {
+		if (GetTickCount64() - timer >= KOOPAS_SHELL_TIMEOUT) {
+			SetState(KOOPAS_STATE_GOING_UP);
+			timer = GetTickCount64();
+		}
+	}
+
 	vy += ay * dt;
 	vx += ax * dt;
 
@@ -90,6 +105,10 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
+void CKoopas::changeFromSmallToBig() {
+	y -= 1;
+}
+
 void CKoopas::Render()
 {
 	int aniId = ID_ANI_KOOPAS_WALKING_LEFT;
@@ -100,15 +119,19 @@ void CKoopas::Render()
 		break;
 	case KOOPAS_STATE_SHELL_MOVING:
 		aniId = ID_ANI_KOOPAS_SHELL_MOVING;
+		vx = nx * KOOPAS_SHELL_SPEED;
 		break;
 	case KOOPAS_STATE_WALKING:
 		if (vx < 0) aniId = ID_ANI_KOOPAS_WALKING_LEFT;
 		else aniId = ID_ANI_KOOPAS_WALKING_RIGHT;
 		break;
+	case KOOPAS_STATE_GOING_UP:
+		aniId = ID_ANI_KOOPAS_GOING_UP;
+		break;
 	default: {
-		break;	
+		break;
 	}
 	}
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-	//RenderBoundingBox();
+	RenderBoundingBox();
 }

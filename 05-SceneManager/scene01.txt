@@ -10,6 +10,7 @@ item.txt
 koopas.txt
 plant.txt
 pipe.txt
+hud.txt
 #
 [MAP]
 map1-1.txt
@@ -90,13 +91,13 @@ map1-1.txt
 #2	650	346	1
 
 # Koopas
-#3	520	360
+3	550	320
 
 # Plant
 #9	344	352
 
 # MARIO
-0	336	200
+0	500	320
 
 # Pipe
 10	336	352	48	2	1

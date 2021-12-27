@@ -31,8 +31,13 @@ void CMario::SetInstance(CMario* p)
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	isOnPlatform = false;
-	vx += ax * dt;
-	if (abs(vx) > abs(maxVx)) vx = maxVx;
+
+	if (state != MARIO_STATE_IDLE)
+		vx += ax * dt;
+
+	if (abs(vx) > abs(maxVx)) {
+		vx = maxVx;
+	}
 
 	if (isAttack)
 	{
@@ -48,7 +53,6 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			isAttack = false;
 			timer = 0;
 		}
-		DebugOut(L"kicking");
 	}
 
 	if (isKicking) {
@@ -405,7 +409,10 @@ int CMario::GetAniIdBig()
 			}
 			else if (vx > 0)
 			{
-				if (ax < 0)
+				if (state == MARIO_STATE_IDLE) {
+					aniId = ID_ANI_MARIO_WALKING_RIGHT;
+				}
+				else if (ax < 0)
 					aniId = ID_ANI_MARIO_BRACE_RIGHT;
 				else if (ax == MARIO_ACCEL_RUN_X)
 					aniId = ID_ANI_MARIO_RUNNING_RIGHT;
@@ -414,7 +421,10 @@ int CMario::GetAniIdBig()
 			}
 			else // vx < 0
 			{
-				if (ax > 0)
+				if (state == MARIO_STATE_IDLE) {
+					aniId = ID_ANI_MARIO_WALKING_LEFT;
+				}
+				else if (ax > 0)
 					aniId = ID_ANI_MARIO_BRACE_LEFT;
 				else if (ax == -MARIO_ACCEL_RUN_X)
 					aniId = ID_ANI_MARIO_RUNNING_LEFT;
@@ -430,6 +440,7 @@ int CMario::GetAniIdBig()
 int CMario::GetAniIdTail()
 {
 	int aniId = -1;
+	// ON AIR
 	if (!isOnPlatform)
 	{
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
@@ -448,6 +459,7 @@ int CMario::GetAniIdTail()
 		}
 	}
 	else
+		// SIT
 		if (isSitting)
 		{
 			if (nx > 0)
@@ -456,6 +468,7 @@ int CMario::GetAniIdTail()
 				aniId = ID_ANI_MARIO_TAIL_SIT_LEFT;
 		}
 		else
+			// GROUND
 			if (vx == 0)
 			{
 				if (nx > 0) aniId = ID_ANI_MARIO_TAIL_IDLE_RIGHT;
@@ -463,7 +476,10 @@ int CMario::GetAniIdTail()
 			}
 			else if (vx > 0)
 			{
-				if (ax < 0)
+				if (state == MARIO_STATE_IDLE) {
+					aniId = ID_ANI_MARIO_WALKING_RIGHT;
+				}
+				else if (ax < 0)
 					aniId = ID_ANI_MARIO_TAIL_BRACE_RIGHT;
 				else if (ax == MARIO_ACCEL_RUN_X)
 					aniId = ID_ANI_MARIO_TAIL_RUNNING_RIGHT;
@@ -472,7 +488,10 @@ int CMario::GetAniIdTail()
 			}
 			else // vx < 0
 			{
-				if (ax > 0)
+				if (state == MARIO_STATE_IDLE) {
+					aniId = ID_ANI_MARIO_WALKING_LEFT;
+				}
+				else if (ax > 0)
 					aniId = ID_ANI_MARIO_TAIL_BRACE_LEFT;
 				else if (ax == -MARIO_ACCEL_RUN_X)
 					aniId = ID_ANI_MARIO_TAIL_RUNNING_LEFT;
@@ -486,6 +505,7 @@ int CMario::GetAniIdTail()
 	if (isKicking) { // TODO: add another level ani
 		aniId = (nx > 0) ? ID_ANI_MARIO_TAIL_KICKING_RIGHT : ID_ANI_MARIO_TAIL_KICKING_LEFT;
 	}
+
 	if (aniId == -1) aniId = ID_ANI_MARIO_TAIL_IDLE_RIGHT;
 
 	return aniId;
@@ -506,9 +526,10 @@ void CMario::Render()
 		aniId = GetAniIdTail();
 	animations->Get(aniId)->Render(x, y);
 	RenderBoundingBox();
-	//DebugOut(L"%d\t%0.2f\n", aniId, vx);
-	//DebugOut(L"%d\t\n", state);
 
+	if (ax != 0) {
+		DebugOut(L"[After] a: %f\tvx: %f\tx: %0.2f\Ani:%d\n", ax, vx, x, aniId);
+	}
 	DebugOutTitle(L"Coins: %d", coin);
 }
 
@@ -598,9 +619,31 @@ void CMario::SetState(int state)
 		break;
 
 	case MARIO_STATE_IDLE:
-		ax = 0.0f;
-		vx = 0.0f;
-		ay = MARIO_GRAVITY;
+		if (vx != 0)
+		{
+			// When change from moving state => idle.
+			// We +/- the velocity to 0 => make Mario moving a little bit more before stopping.
+			// MARIO_ACCEL_SLOWING_DOWN_X_PARAM: increase this for Mario moving shorter.
+			if (nx == 1) {
+				vx += -ax * MARIO_ACCEL_SLOWING_DOWN_X_PARAM;
+				maxVx += -ax * MARIO_ACCEL_SLOWING_DOWN_X_PARAM;
+
+				if (vx < 0 || maxVx < 0) {
+					vx = 0;
+					maxVx = 0;
+				}
+			}
+			else {
+				vx -= ax * MARIO_ACCEL_SLOWING_DOWN_X_PARAM;
+				maxVx -= ax * MARIO_ACCEL_SLOWING_DOWN_X_PARAM;
+
+				if (vx > 0 || maxVx > 0) {
+					vx = 0;
+					maxVx = 0;
+				}
+			}
+		}
+		else ax = 0;
 		break;
 
 	case MARIO_STATE_DIE:

@@ -4,6 +4,7 @@
 #include "Mario.h"
 #include "Goomba.h"
 #include "QuestionBlock.h"
+#include "Koopas.h"
 
 void CTail::Render() {
 	RenderBoundingBox();
@@ -19,17 +20,23 @@ void CTail::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 
 void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (state != TAIL_INACTIVE) { // If inactive - mario != tail form
-		vy += ay * dt;
-		x += vx * dt;
-		if (state == TAIL_ATTACK) {
-			float mx = CMario::GetInstance()->getX();
-			if (abs(x - mx) >= 22) {
-				SetState(TAIL_ACTIVE);
+	for (int i = 0; i < coObjects->size(); i++) {
+		if (CCollision::GetInstance()->CheckAABB(this, coObjects->at(i)))
+		{
+			if (dynamic_cast<CGoomba*>(coObjects->at(i)))
+			{
+				CGoomba* g = dynamic_cast<CGoomba*>(coObjects->at(i));
+				g->SetState(GOOMBA_STATE_DIE);
 			}
-			y = CMario::GetInstance()->getY();
+			else if (dynamic_cast<CQuestionBlock*>(coObjects->at(i))) {
+				CQuestionBlock* qb = dynamic_cast<CQuestionBlock*>(coObjects->at(i));
+				qb->SpawnItem(CMario::GetInstance()->getNx(), MARIO_LEVEL_TAIL);
+			}
+			else if (dynamic_cast<CKoopas*>(coObjects->at(i))) {
+				CKoopas* qb = dynamic_cast<CKoopas*>(coObjects->at(i));
+				qb->SetState(KOOPAS_STATE_SHELL);
+			}
 		}
-		CCollision::GetInstance()->Process(this, dt, coObjects);
 	}
 }
 

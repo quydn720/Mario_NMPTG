@@ -16,7 +16,7 @@
 #define MARIO_RUNNING_SPEED		0.2f
 
 #define MARIO_ACCEL_WALK_X	0.0002f
-#define MARIO_ACCEL_RUN_X	0.0005f
+#define MARIO_ACCEL_RUN_X	0.0004f
 
 #define MARIO_JUMP_SPEED_Y		0.5f
 #define MARIO_JUMP_RUN_SPEED_Y	0.6f
@@ -95,7 +95,9 @@
 #define ID_ANI_MARIO_TAIL_IDLE_LEFT 3102
 
 #define ID_ANI_MARIO_TAIL_WALKING_RIGHT 3200
+#define ID_ANI_MARIO_TAIL_WALKING_RIGHT_FAST 3202
 #define ID_ANI_MARIO_TAIL_WALKING_LEFT 3201
+#define ID_ANI_MARIO_TAIL_WALKING_LEFT_FAST 3203
 
 #define ID_ANI_MARIO_TAIL_RUNNING_RIGHT 3300
 #define ID_ANI_MARIO_TAIL_RUNNING_LEFT 3301
@@ -119,6 +121,8 @@
 #define ID_ANI_MARIO_TAIL_SIT_LEFT 3901
 
 #define ID_ANI_MARIO_TAIL_PIPING -2000
+#define ID_ANI_MARIO_TAIL_KICKING_RIGHT -2010
+#define ID_ANI_MARIO_TAIL_KICKING_LEFT -2011
 
 #pragma endregion
 
@@ -186,8 +190,9 @@ public:
 	CTail* tail;
 	int coin;
 	bool isOnTopWarpPipe;
-	bool isUnderWarpPipe;
 	bool isPiping;
+	bool isKicking;
+	bool isAttack;
 	ULONGLONG timer;
 	// Use only one in the initial playscene. not a good practice to put as public method.
 	static void SetInstance(CMario* p);

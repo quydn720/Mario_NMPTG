@@ -31,10 +31,32 @@ void CMario::SetInstance(CMario* p)
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	isOnPlatform = false;
-	isUnderWarpPipe = false;
-
 	vx += ax * dt;
+	if (abs(vx) > abs(maxVx)) vx = maxVx;
 
+	if (isAttack)
+	{
+		if (nx > 0)
+			tail->SetPosition(x + MARIO_BIG_BBOX_WIDTH / 2 + 8 / 2, y + 5);
+		else
+			tail->SetPosition(x - MARIO_BIG_BBOX_WIDTH / 2 - 8 / 2, y + 5);
+
+
+		tail->Update(dt, coObjects);
+		if (GetTickCount64() - timer >= 300)
+		{
+			isAttack = false;
+			timer = 0;
+		}
+		DebugOut(L"kicking");
+	}
+
+	if (isKicking) {
+		if (GetTickCount64() - timer >= 300) {
+			isKicking = false;
+			timer = 0;
+		}
+	}
 	if (isSitting) {
 		state = MARIO_STATE_SIT;
 	}
@@ -44,6 +66,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	else {
 		if (GetTickCount64() - timer >= MARIO_PIPING_TIME) {
 			isPiping = false;
+
 			CGame::GetInstance()->InitiateSwitchScene(_switchSceneId);
 		}
 		else {
@@ -53,13 +76,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 
-	if (abs(vx) > abs(maxVx)) vx = maxVx;
-
 	if (level == MARIO_LEVEL_TAIL) {
 		if (tail->GetState() == TAIL_ACTIVE)
 			tail->SetPosition((nx > 0) ? x - TAIL_LENGTH : x + TAIL_LENGTH, y);
 	}
-	//DebugOut(L"%0.2f\t%0.2f\n", vy, ay);
 
 	// reset untouchable timer if untouchable time has passed
 	if (GetTickCount64() - untouchable_start > MARIO_UNTOUCHABLE_TIME)
@@ -85,7 +105,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 	else if (e->nx != 0 && e->obj->IsBlocking())
 	{
-		vx = 0;
+		//vx = 0;
 	}
 
 	if (dynamic_cast<CGoomba*>(e->obj))
@@ -129,7 +149,6 @@ void CMario::OnCollisionWithPipe(LPCOLLISIONEVENT e) {
 	if (pipe->canGoThroughtScene()) {
 		float x1, y1;
 		pipe->GetPosition(x1, y1);
-
 		if (e->ny < 0) {
 			if (x > x1 && x < x1 + PIPE_BBOX_DOWN_RANGE) {
 				if (state == MARIO_STATE_SIT) {
@@ -156,25 +175,16 @@ void CMario::OnCollisionWithPipe(LPCOLLISIONEVENT e) {
 void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 {
 	CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
-	if (e->ny < 0)
-	{
-		if (koopas->GetState() != KOOPAS_STATE_SHELL)
-		{
-			koopas->SetState(KOOPAS_STATE_SHELL);
-			vy = -MARIO_JUMP_DEFLECT_SPEED;
-		}
-		else
-		{
-			koopas->SetState(KOOPAS_STATE_SHELL_MOVING);
-			vy = -MARIO_JUMP_DEFLECT_SPEED;
-		}
-	}
-	else
-	{
-		if (koopas->GetState() == KOOPAS_STATE_SHELL) {
+	if (e->nx != 0) {	// horizontal
+		if (koopas->GetState() == KOOPAS_STATE_SHELL || koopas->GetState() == KOOPAS_STATE_GOING_UP) {
+			// shell idle => kick
+			timer = GetTickCount64();
+			isKicking = true;
+			koopas->beingKicked(nx);
 			koopas->SetState(KOOPAS_STATE_SHELL_MOVING);
 		}
 		else {
+			// shell moving & walking => die
 			if (untouchable == 0) {
 				if (level > MARIO_LEVEL_SMALL) {
 					level = MARIO_LEVEL_SMALL;
@@ -185,6 +195,25 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 					SetState(MARIO_STATE_DIE);
 				}
 			}
+		}
+	}
+	if (e->ny < 0) {// jump on top
+		if (koopas->GetState() == KOOPAS_STATE_SHELL_MOVING) {
+			// shell moving => shell idle
+			koopas->changeFromSmallToBig();
+			koopas->SetState(KOOPAS_STATE_SHELL);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+		else if (koopas->GetState() == KOOPAS_STATE_WALKING) {
+			// walking => shell idle
+			koopas->SetState(KOOPAS_STATE_SHELL);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
+		}
+		else if (koopas->GetState() == KOOPAS_STATE_SHELL || koopas->GetState() == KOOPAS_STATE_GOING_UP) {
+			// shell idle / going up => kick
+			koopas->beingKicked(nx);
+			koopas->SetState(KOOPAS_STATE_SHELL_MOVING);
+			vy = -MARIO_JUMP_DEFLECT_SPEED;
 		}
 	}
 }
@@ -451,10 +480,12 @@ int CMario::GetAniIdTail()
 					aniId = ID_ANI_MARIO_TAIL_WALKING_LEFT;
 			}
 
-	if (isPiping) {
+	if (isPiping) { // TODO: add another level ani
 		aniId = ID_ANI_MARIO_TAIL_PIPING;
 	}
-
+	if (isKicking) { // TODO: add another level ani
+		aniId = (nx > 0) ? ID_ANI_MARIO_TAIL_KICKING_RIGHT : ID_ANI_MARIO_TAIL_KICKING_LEFT;
+	}
 	if (aniId == -1) aniId = ID_ANI_MARIO_TAIL_IDLE_RIGHT;
 
 	return aniId;
@@ -475,6 +506,8 @@ void CMario::Render()
 		aniId = GetAniIdTail();
 	animations->Get(aniId)->Render(x, y);
 	RenderBoundingBox();
+	//DebugOut(L"%d\t%0.2f\n", aniId, vx);
+	//DebugOut(L"%d\t\n", state);
 
 	DebugOutTitle(L"Coins: %d", coin);
 }
@@ -486,6 +519,10 @@ void CMario::SetState(int state)
 
 	switch (state)
 	{
+	case -99:
+		isAttack = true;
+		timer = GetTickCount64();
+		break;
 	case MARIO_STATE_RUNNING_RIGHT:
 		if (isSitting) break;
 		maxVx = MARIO_RUNNING_SPEED;

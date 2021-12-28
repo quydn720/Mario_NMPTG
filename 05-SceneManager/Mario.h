@@ -42,6 +42,8 @@
 #define MARIO_STATE_FLY 303
 
 #define MARIO_STATE_DOWN_PIPE 305
+
+#define MARIO_STATE_ATTACK	800
 //#define MARIO_STATE_DOWN_PIPE 303
 
 
@@ -119,6 +121,9 @@
 #define ID_ANI_MARIO_TAIL_SIT_RIGHT 3900
 #define ID_ANI_MARIO_TAIL_SIT_LEFT 3901
 
+#define ID_ANI_MARIO_TAIL_ATTACK_RIGHT	19180
+#define ID_ANI_MARIO_TAIL_ATTACK_LEFT	19190
+
 #define ID_ANI_MARIO_TAIL_PIPING -2000
 #define ID_ANI_MARIO_TAIL_KICKING_RIGHT -2010
 #define ID_ANI_MARIO_TAIL_KICKING_LEFT -2011
@@ -149,6 +154,7 @@
 #define MARIO_PIPING_TIME	2500
 
 #define MARIO_UNTOUCHABLE_TIME 2500
+#define RACOON_ATTACK_TIME 250
 #pragma endregion
 
 class CMario : public CGameObject
@@ -187,18 +193,20 @@ class CMario : public CGameObject
 public:
 	static CMario* GetInstance();
 	CTail* tail;
+
 	int coin;
 	bool isOnTopWarpPipe;
 	bool isPiping;
 	bool isKicking;
-	bool isAttack;
+	bool IsAttack;
+	DWORD AttackTime;
 	ULONGLONG timer;
 	// Use only one in the initial playscene. not a good practice to put as public method.
 	static void SetInstance(CMario* p);
 
 	CMario(float x, float y) : CGameObject(x, y)
 	{
-		isSitting = false;
+		IsAttack = isSitting = false;
 		maxVx = 0.0f;
 		ax = 0.0f;
 		ay = MARIO_GRAVITY;
@@ -209,6 +217,7 @@ public:
 		isOnPlatform = false;
 		coin = 0;
 		tail = NULL;
+		AttackTime = 0;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	void Render();
@@ -229,6 +238,8 @@ public:
 	void StartUntouchable() { untouchable = 1; untouchable_start = GetTickCount64(); }
 
 	void GetBoundingBox(float& left, float& top, float& right, float& bottom);
+
+	void HandleRacoonAttack(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 
 	float getX() { return x; }
 	float getY() { return y; }

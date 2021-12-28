@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "GameObject.h"
 #include "Animation.h"
@@ -14,10 +14,16 @@
 #define COIN_DEFLECT_GRAVITY 0.15f
 #define COIN_OFFSET 70
 
-// Mario only collision with coin when state == VISIBLE
+#define COIN_APPEAR_TIME 15000
+
 class CCoin : public Item {
 	int insideBrick;	
 public:
+	// các biến hỗ trợ việc tiền biến thành gạch lại như cũ
+	bool isBrickToCoin;
+	ULONGLONG AppearTime;
+
+	CCoin(float x, float y);
 	CCoin(float x, float y, int insideB) : Item(x, y, 0) { itemType = ItemType::Coin; insideBrick = insideB; }
 	void Render();
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

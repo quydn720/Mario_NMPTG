@@ -6,7 +6,7 @@
 #define BASE_ARROW_POSITION_X 80
 #define BASE_ARROW_POSITION_Y 178
 #define ARROW_SIZE 8
-#define ARROW_P_DISTANCE 11.5
+#define ARROW_P_DISTANCE 12.5
 
 Hud* Hud::_instance = nullptr;
 
@@ -26,7 +26,7 @@ void Hud::Update(DWORD dt)
 {
 	float vx, vy;
 	CMario::GetInstance()->GetSpeed(vx, vy);
-
+	NumSpeed = 0;
 	if (0.1f < abs(vx) && abs(vx) <= 0.115f)
 	{
 		NumSpeed = 1;

@@ -524,6 +524,8 @@ void CGame::SwitchScene()
 	current_scene = next_scene;
 	LPSCENE s = scenes[next_scene];
 	this->SetKeyHandler(s->GetKeyEventHandler());
+
+	_PlayScene->__instance = (CPlayScene*)s;
 	s->Load();
 
 	// lan dau load mario - k goi InitiateSwitchScene

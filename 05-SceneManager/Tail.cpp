@@ -5,6 +5,9 @@
 #include "Goomba.h"
 #include "QuestionBlock.h"
 #include "Koopas.h"
+#include "BreakableBrick.h"
+#include "ButtonP.h"
+#include "AssetIDs.h"
 
 void CTail::Render() {
 	RenderBoundingBox();
@@ -36,6 +39,8 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				CKoopas* qb = dynamic_cast<CKoopas*>(coObjects->at(i));
 				qb->SetState(KOOPAS_STATE_SHELL);
 			}
+			else if (dynamic_cast<BreakableBrick*>(coObjects->at(i)))
+				OnCollisionWithBreakableBrick(coObjects->at(i));
 		}
 	}
 }
@@ -95,5 +100,23 @@ void CTail::SetState(int state)
 		break;
 	default:
 		break;
+	}
+}
+
+void CTail::OnCollisionWithBreakableBrick(LPGAMEOBJECT& obj)
+{
+	if (IsActive == true)
+	{
+		BreakableBrick* breakableBrick = dynamic_cast<BreakableBrick*>(obj);
+		if (breakableBrick->haveButton && !breakableBrick->buttonCreated)
+		{
+			ButtonP* brickitem = new ButtonP(breakableBrick->x, breakableBrick->y - 16);
+			_PlayScene->objects.push_back(brickitem);
+		}
+		else if (!breakableBrick->haveButton)
+		{
+			breakableBrick->SetState(BREAKABLE_BRICK_STATE_BREAK_DOWN);
+		}
+		IsActive = false;
 	}
 }

@@ -11,12 +11,23 @@
 #include "Platform.h"
 #include "ColorBlock.h"
 #include "WarpPipe.h"
+#include "BreakableBrick.h"
 
 #include "SampleKeyEventHandler.h"
 #include "Hud.h"
 
 using namespace std;
 #define _game CGame::GetInstance() 
+
+CPlayScene* CPlayScene::__instance = NULL;
+
+CPlayScene::CPlayScene()
+{
+	map = NULL;
+	player = NULL;
+	camera = NULL;
+	key_handler = new CSampleKeyHandler(this);
+}
 
 CPlayScene::CPlayScene(int id, LPCWSTR filePath) :
 	CScene(id, filePath)
@@ -227,6 +238,17 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 
+	case OBJECT_TYPE_BREAKABLE_BRICK: {
+		bool HaveButton = false;
+		int Item = atoi(tokens[3].c_str());
+		if (Item == 1)
+		{
+			HaveButton = true;
+		}
+		obj = new BreakableBrick(x, y, HaveButton);
+		
+	}
+								  break;
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = (float)atof(tokens[3].c_str());
@@ -324,7 +346,7 @@ void CPlayScene::Load()
 	}
 	questionBlocks = vector<CQuestionBlock*>();
 	items = vector<Item*>();
-	camera = new CCamera(map->getMapWidth(), map->getMapHeight(), _game->GetBackBufferWidth(), _game->GetBackBufferHeight());
+	camera = new CCamera(map->getMapWidth(), map->getMapHeight(), (float) _game->GetBackBufferWidth(), (float)_game->GetBackBufferHeight());
 
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
 }
@@ -354,6 +376,7 @@ void CPlayScene::Update(DWORD dt)
 	camera->SetPosition(cx, cy);
 	CGame* game = CGame::GetInstance();
 	_game->SetCamPos(cx, cy);
+	Hud::GetInstance()->Update(dt);
 
 	PurgeDeletedObjects();
 }

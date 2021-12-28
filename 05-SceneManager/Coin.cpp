@@ -1,5 +1,15 @@
 #include "Coin.h"
 #include "debug.h"
+#include "BreakableBrick.h"
+
+CCoin::CCoin(float x, float y) : Item(x, y, 0)
+{
+	itemType = ItemType::Coin;
+	vx = vy = 0.0f;
+	isBrickToCoin = false;
+	SetPosition(x, y);
+	AppearTime = 0;
+}
 
 void CCoin::Render()
 {
@@ -27,6 +37,15 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	}
 	else {
 		SetState(STATE_ITEM_VISIBLE);
+		if (isBrickToCoin == true && GetTickCount64() - AppearTime >= COIN_APPEAR_TIME)
+		{
+			BreakableBrick* itembrick = new BreakableBrick(this->x, this->y, false);
+			
+			_PlayScene->objects.push_back(itembrick);
+			this->isDeleted = true;
+			isBrickToCoin = false;
+			AppearTime = 0;
+		}
 	}
 	CGameObject::Update(dt, coObjects);
 	CCollision::GetInstance()->Process(this, dt, coObjects);

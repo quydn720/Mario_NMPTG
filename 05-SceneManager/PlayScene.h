@@ -16,7 +16,7 @@
 
 class CPlayScene: public CScene
 {
-protected: 
+public: 
 	// A play scene has to have player, right? 
 	LPGAMEOBJECT player;		
 	CMap* map;
@@ -38,6 +38,16 @@ protected:
 	void LoadMap(LPCWSTR assetFile);
 	
 public: 
+	static CPlayScene* __instance;
+
+	static CPlayScene* GetInstance()
+	{
+		if (__instance == NULL) __instance = new CPlayScene();
+		return __instance;
+	}
+
+	CPlayScene();
+
 	CPlayScene(int id, LPCWSTR filePath);
 
 	virtual void Load();

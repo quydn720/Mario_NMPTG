@@ -16,6 +16,7 @@
 #include "Plant.h"
 #include "Textures.h"
 #include "WarpPipe.h"
+#include "ButtonP.h"
 
 CMario* CMario::__instance = NULL;
 int _switchSceneId = 0;
@@ -39,21 +40,21 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		vx = maxVx;
 	}
 
-	if (isAttack)
-	{
-		if (nx > 0)
-			tail->SetPosition(x + MARIO_BIG_BBOX_WIDTH / 2 + 8 / 2, y + 5);
-		else
-			tail->SetPosition(x - MARIO_BIG_BBOX_WIDTH / 2 - 8 / 2, y + 5);
+	//if (isAttack)
+	//{
+	//	if (nx > 0)
+	//		tail->SetPosition(x + MARIO_BIG_BBOX_WIDTH / 2 + 8 / 2, y + 5);
+	//	else
+	//		tail->SetPosition(x - MARIO_BIG_BBOX_WIDTH / 2 - 8 / 2, y + 5);
 
 
-		tail->Update(dt, coObjects);
-		if (GetTickCount64() - timer >= 300)
-		{
-			isAttack = false;
-			timer = 0;
-		}
-	}
+	//	tail->Update(dt, coObjects);
+	//	if (GetTickCount64() - timer >= 300)
+	//	{
+	//		isAttack = false;
+	//		timer = 0;
+	//	}
+	//}
 
 	if (isKicking) {
 		if (GetTickCount64() - timer >= 300) {
@@ -92,6 +93,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable = 0;
 	}
 	CCollision::GetInstance()->Process(this, dt, coObjects);
+	HandleRacoonAttack(dt, coObjects);
 }
 
 void CMario::OnNoCollision(DWORD dt)
@@ -126,6 +128,11 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPlant(e);
 	else if (dynamic_cast<CWarpPipe*>(e->obj))
 		OnCollisionWithPipe(e);
+	else if (dynamic_cast<ButtonP*>(e->obj))
+	{
+		ButtonP* brickitem = dynamic_cast<ButtonP*>(e->obj);
+		brickitem->SetState(BUTTON_P_STATE_PUSHED);
+	}
 }
 
 void CMario::OnCollisionWithItem(LPCOLLISIONEVENT e) {
@@ -279,7 +286,8 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
-	if (e->obj->GetState() == STATE_ITEM_VISIBLE) {
+	//if (e->obj->GetState() == STATE_ITEM_VISIBLE) 
+	{
 		e->obj->Delete();
 		coin++;
 	}
@@ -440,6 +448,8 @@ int CMario::GetAniIdBig()
 int CMario::GetAniIdTail()
 {
 	int aniId = -1;
+	CAnimations* animations = CAnimations::GetInstance();
+
 	// ON AIR
 	if (!isOnPlatform)
 	{
@@ -477,7 +487,7 @@ int CMario::GetAniIdTail()
 			else if (vx > 0)
 			{
 				if (state == MARIO_STATE_IDLE) {
-					aniId = ID_ANI_MARIO_WALKING_RIGHT;
+					aniId = ID_ANI_MARIO_TAIL_WALKING_RIGHT;
 				}
 				else if (ax < 0)
 					aniId = ID_ANI_MARIO_TAIL_BRACE_RIGHT;
@@ -489,7 +499,7 @@ int CMario::GetAniIdTail()
 			else // vx < 0
 			{
 				if (state == MARIO_STATE_IDLE) {
-					aniId = ID_ANI_MARIO_WALKING_LEFT;
+					aniId = ID_ANI_MARIO_TAIL_WALKING_LEFT;
 				}
 				else if (ax > 0)
 					aniId = ID_ANI_MARIO_TAIL_BRACE_LEFT;
@@ -505,7 +515,11 @@ int CMario::GetAniIdTail()
 	if (isKicking) { // TODO: add another level ani
 		aniId = (nx > 0) ? ID_ANI_MARIO_TAIL_KICKING_RIGHT : ID_ANI_MARIO_TAIL_KICKING_LEFT;
 	}
-
+	if (IsAttack)
+	{
+		if (nx > 0)aniId = ID_ANI_MARIO_TAIL_ATTACK_RIGHT;
+		else aniId = ID_ANI_MARIO_TAIL_ATTACK_LEFT;
+	}
 	if (aniId == -1) aniId = ID_ANI_MARIO_TAIL_IDLE_RIGHT;
 
 	return aniId;
@@ -540,10 +554,6 @@ void CMario::SetState(int state)
 
 	switch (state)
 	{
-	case -99:
-		isAttack = true;
-		timer = GetTickCount64();
-		break;
 	case MARIO_STATE_RUNNING_RIGHT:
 		if (isSitting) break;
 		maxVx = MARIO_RUNNING_SPEED;
@@ -651,6 +661,15 @@ void CMario::SetState(int state)
 		vx = 0;
 		ax = 0;
 		break;
+
+	case MARIO_STATE_ATTACK:
+		if (level == MARIO_LEVEL_TAIL)
+		{
+			IsAttack = true;
+			AttackTime = GetTickCount64();
+			tail->IsActive = true;
+		}
+		break;
 	}
 
 	CGameObject::SetState(state);
@@ -701,6 +720,25 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
 		top = y - MARIO_SMALL_BBOX_HEIGHT / 2;
 		right = left + MARIO_SMALL_BBOX_WIDTH;
 		bottom = top + MARIO_SMALL_BBOX_HEIGHT;
+	}
+}
+
+void CMario::HandleRacoonAttack(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	if (IsAttack)
+	{
+		if (nx > 0)
+			tail->SetPosition(x + (MARIO_BIG_BBOX_WIDTH / 2) + (TAIL_BBOX_WIDTH / 2) + 2, y + TAIL_BBOX_HEIGHT );
+		else
+			tail->SetPosition((x - MARIO_BIG_BBOX_WIDTH / 2 - TAIL_BBOX_WIDTH / 2) - 2, y + TAIL_BBOX_HEIGHT);
+		tail->nx = nx;
+
+		tail->Update(dt, coObjects);
+		if (GetTickCount64() - AttackTime >= RACOON_ATTACK_TIME)
+		{
+			IsAttack = false;
+			tail->IsActive = false;
+		}
 	}
 }
 

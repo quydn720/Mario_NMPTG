@@ -16,6 +16,7 @@ height	240
 -101	textures\hud-bg.png
 0	textures\mario.png
 1	textures\mario1.png
+2	textures\mario2.png
 10	textures\enemies.png
 11	textures\enemiesFlip.png
 12	textures\another_enemies.png
@@ -27,3 +28,4 @@ height	240
 34	textures\black-pipe.png
 35	textures\HUD.png
 36	textures\koopas-shell-moving.png
+40	textures\misc1.png

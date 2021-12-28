@@ -10,12 +10,16 @@
 #define TAIL_OFFSET 22
 #define TAIL_VELOCITY 0.1f
 
+#define TAIL_BBOX_WIDTH 8
+#define TAIL_BBOX_HEIGHT 3
+
 class CTail : public CGameObject
 {
 protected:
 	float ax, ay;
 	float baseX;
 public:
+	bool IsActive;
 	CTail(float x, float y) : CGameObject(x, y) {
 		baseX = x;
 		vx = 0;
@@ -35,5 +39,6 @@ public:
 	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 	void RenderBoundingBox();
 	void SetState(int state);
+	void OnCollisionWithBreakableBrick(LPGAMEOBJECT& obj);
 };
 

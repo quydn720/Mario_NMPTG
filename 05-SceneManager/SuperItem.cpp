@@ -44,9 +44,7 @@ void CSuperItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 void CSuperItem::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (type == SuperItemType::Leaf) {
-		if (e->obj->IsBlocking()) {
-			vy = 0.04f;
-		}
+		return;
 	}
 	else {
 		if (!e->obj->IsBlocking()) return;

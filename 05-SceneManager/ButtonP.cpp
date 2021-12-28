@@ -43,12 +43,11 @@ void ButtonP::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		{
 			if (dynamic_cast<BreakableBrick*>(coObjects->at(i)))
 			{
-				BreakableBrick* itembrick = (BreakableBrick*)coObjects->at(i);
-
+				BreakableBrick* brick = (BreakableBrick*)coObjects->at(i);
+				if(brick->Item == TYPE_NORMAL)
 				{
-					itembrick->isDeleted = true;
-
-					CCoin* coin = new CCoin(itembrick->x, itembrick->y);
+					brick->isDeleted = true;
+					CCoin* coin = new CCoin(brick->x, brick->y);
 					coin->isBrickToCoin = true;
 					coin->AppearTime = GetTickCount64();
 					_PlayScene->objects.push_back(coin);

@@ -9,6 +9,7 @@ CCoin::CCoin(float x, float y) : Item(x, y, 0)
 	isBrickToCoin = false;
 	SetPosition(x, y);
 	AppearTime = 0;
+	insideBrick = -1;
 }
 
 void CCoin::Render()
@@ -21,7 +22,7 @@ void CCoin::Render()
 
 // Make the coin bouncing before die
 void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
-	if (insideBrick) {
+	if (insideBrick >= 0) {
 		if (state == STATE_ITEM_VISIBLE) {
 			y -= COIN_DEFLECT_GRAVITY * dt;
 			if (y <= baseY - COIN_OFFSET) {

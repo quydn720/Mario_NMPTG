@@ -16,7 +16,7 @@ using namespace std;
 
 class CGameObject
 {
-protected:
+public:
 
 	float x;
 	float y;
@@ -27,7 +27,8 @@ protected:
 	int nx;
 
 	int state;
-
+	int objType;
+	bool isInit;
 	bool isDeleted;
 
 public:

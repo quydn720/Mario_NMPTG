@@ -2,7 +2,7 @@
 #include "debug.h"
 #include "BreakableBrick.h"
 
-CCoin::CCoin(float x, float y)
+CCoin::CCoin(float x, float y) : Item(x, y, 0)
 {
 	itemType = ItemType::Coin;
 	vx = vy = 0.0f;
@@ -37,7 +37,7 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	}
 	else {
 		SetState(STATE_ITEM_VISIBLE);
-		if (isBrickToCoin == true && GetTickCount64() - AppearTime >= COIN_APPEARTIME)
+		if (isBrickToCoin == true && GetTickCount64() - AppearTime >= COIN_APPEAR_TIME)
 		{
 			BreakableBrick* itembrick = new BreakableBrick(this->x, this->y, false);
 			

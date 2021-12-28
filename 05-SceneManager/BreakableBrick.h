@@ -3,6 +3,7 @@
 #include "Coin.h"
 #include "BreakableBrickPiece.h"
 #include "PlayScene.h"
+#include "AssetIds.h"
 
 #define BRICK_BBOX_WIDTH	16
 #define BRICK_BBOX_HEIGHT	16
@@ -11,10 +12,6 @@
 #define BREAKABLE_BRICK_STATE_CREATE_BUTTON	3
 #define COIN_STATE_TRANSFORMS_BRICK	4
 
-
-#define OBJECT_TYPE_COIN	31
-
-#define ID_ANI_COIN 80005
 #define ID_ANI_BREAKABLE_BRICK 10001
 #define ID_ANI_BREAKABLE_BRICK_IS_UP	10002
 
@@ -27,9 +24,9 @@ class BreakableBrick :
 {
 public:
 	int isBlocking;
-	int startY;
+	float startY;
 	bool InitCoin;
-	DWORD ChangeBackToBrickTime;
+	ULONGLONG ChangeBackToBrickTime;
 	bool haveButton;
 	bool buttonCreated, isBreakDown;
 	BreakableBrickEffect* piece1;

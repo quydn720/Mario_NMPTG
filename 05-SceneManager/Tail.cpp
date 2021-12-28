@@ -108,14 +108,16 @@ void CTail::OnCollisionWithBreakableBrick(LPGAMEOBJECT& obj)
 	if (IsActive == true)
 	{
 		BreakableBrick* breakableBrick = dynamic_cast<BreakableBrick*>(obj);
-		if (breakableBrick->haveButton && !breakableBrick->buttonCreated)
+		if (breakableBrick->hasItem == true)
 		{
+			breakableBrick->SetState(BRICK_STATE_COLLISION);
 			ButtonP* brickitem = new ButtonP(breakableBrick->x, breakableBrick->y - 16);
 			_PlayScene->objects.push_back(brickitem);
 		}
-		else if (!breakableBrick->haveButton)
+		else
 		{
-			breakableBrick->SetState(BREAKABLE_BRICK_STATE_BREAK_DOWN);
+			if (breakableBrick->isCollision == false)
+				breakableBrick->SetState(BRICK_STATE_DIE);
 		}
 		IsActive = false;
 	}

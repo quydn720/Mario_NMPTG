@@ -221,7 +221,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	case OBJECT_TYPE_PLATFORM:
 	{
-
 		float cell_width = (float)atof(tokens[3].c_str());
 		float cell_height = (float)atof(tokens[4].c_str());
 		int length = atoi(tokens[5].c_str());
@@ -234,21 +233,18 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 			cell_width, cell_height, length,
 			sprite_begin, sprite_middle, sprite_end
 		);
-
-		break;
 	}
+	break;
 
-	case OBJECT_TYPE_BREAKABLE_BRICK: {
+	case OBJECT_TYPE_BREAKABLE_BRICK: 
+	{
 		bool HaveButton = false;
 		int Item = atoi(tokens[3].c_str());
-		if (Item == 1)
-		{
-			HaveButton = true;
-		}
-		obj = new BreakableBrick(x, y, HaveButton);
+		obj = new BreakableBrick(x, y, Item);
 		
 	}
-								  break;
+	break;
+	
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = (float)atof(tokens[3].c_str());

@@ -21,7 +21,7 @@ void CQuestionBlock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 	y += vy * dt;
 	if (state == STATE_BRICK_HIT) {
-		switch (item->GetItemType()) {
+		switch (item->itemType) {
 		case ItemType::SuperItem: {
 			if (y < baseY - QBRICK_BOUND_OFFSET) {
 				vy = BRICK_MOVING_SPEED;
@@ -52,7 +52,7 @@ void CQuestionBlock::SetState(int state)
 		vy = 0;
 		y = baseY;
 		isEmpty = true;
-		if (item->GetItemType() != ItemType::Coin) {
+		if (item->itemType != ItemType::Coin) {
 			item->Spawn(nx);
 		}
 		break;
@@ -77,12 +77,12 @@ void CQuestionBlock::SpawnItem(int nx, int l)
 	if (state != STATE_BRICK_EMPTY) {
 		SetState(STATE_BRICK_HIT);
 		this->nx = -nx;
-		if (item->GetItemType() == ItemType::SuperItem) {
+		if (item->itemType == ItemType::SuperItem) {
 			dynamic_cast<CSuperItem*>(item)->type =
 				(l == MARIO_LEVEL_SMALL) ? SuperItemType::RedMushroom : SuperItemType::Leaf;
 		}
 	}
-	if (item->GetItemType() == ItemType::Coin) {
+	if (item->itemType == ItemType::Coin) {
 		CMario::GetInstance()->coin++;
 	}
 }

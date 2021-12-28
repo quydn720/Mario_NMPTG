@@ -19,6 +19,10 @@ public:
 		this->sceneFilePath = filePath;
 		this->key_handler = NULL;
 	}
+	CScene()
+	{
+	}
+
 
 	LPKEYEVENTHANDLER GetKeyEventHandler() { return key_handler; }
 	virtual void Load() = 0;

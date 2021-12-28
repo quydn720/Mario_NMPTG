@@ -238,7 +238,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		break;
 	}
 
-	case OBJECT_TYPE_BREAKBLEBRICK: {
+	case OBJECT_TYPE_BREAKABLE_BRICK: {
 		bool HaveButton = false;
 		int Item = atoi(tokens[3].c_str());
 		if (Item == 1)
@@ -346,7 +346,7 @@ void CPlayScene::Load()
 	}
 	questionBlocks = vector<CQuestionBlock*>();
 	items = vector<Item*>();
-	camera = new CCamera(map->getMapWidth(), map->getMapHeight(), _game->GetBackBufferWidth(), _game->GetBackBufferHeight());
+	camera = new CCamera(map->getMapWidth(), map->getMapHeight(), (float) _game->GetBackBufferWidth(), (float)_game->GetBackBufferHeight());
 
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
 }
@@ -376,6 +376,7 @@ void CPlayScene::Update(DWORD dt)
 	camera->SetPosition(cx, cy);
 	CGame* game = CGame::GetInstance();
 	_game->SetCamPos(cx, cy);
+	Hud::GetInstance()->Update(dt);
 
 	PurgeDeletedObjects();
 }

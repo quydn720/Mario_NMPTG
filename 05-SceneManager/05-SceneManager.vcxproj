@@ -163,7 +163,6 @@
     <ClCompile Include="Koopas.cpp" />
     <ClCompile Include="Leaf1.cpp" />
     <ClCompile Include="Plant.cpp" />
-    <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SuperItem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />

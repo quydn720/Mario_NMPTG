@@ -37,7 +37,8 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		CMario::GetInstance()->pressA = true;
 		if (CMario::GetInstance()->GetLevel() == MARIO_LEVEL_TAIL)
 		{
-			CMario::GetInstance()->SetState(MARIO_STATE_ATTACK);
+			if(CMario::GetInstance()->isHolding == false)
+				CMario::GetInstance()->SetState(MARIO_STATE_ATTACK);
 		}
 	}
 	break;

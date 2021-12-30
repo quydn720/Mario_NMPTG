@@ -46,10 +46,11 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 				this->SetPosition(CMario::GetInstance()->x + (MARIO_BIG_BBOX_WIDTH / 2) + (TAIL_BBOX_WIDTH / 2) + 2, CMario::GetInstance()->y + TAIL_BBOX_HEIGHT);
 
-				if (GetTickCount64() - CMario::GetInstance()->AttackTime >= RACOON_ATTACK_TIME)
+				if (CMario::GetInstance()->AttackTime != 0 && GetTickCount64() - CMario::GetInstance()->AttackTime >= RACOON_ATTACK_TIME)
 				{
 					CMario::GetInstance()->IsAttack = false;
 					IsActive = false;
+					CMario::GetInstance()->AttackTime = 0;
 				}
 			}
 		}
@@ -126,6 +127,7 @@ void CTail::OnNoCollision(DWORD dt)
 	x += vx * dt;
 	y += vy * dt;
 }
+
 void CTail::RenderBoundingBox()
 {
 	D3DXVECTOR3 p(x, y, 0);

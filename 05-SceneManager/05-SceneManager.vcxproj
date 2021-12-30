@@ -201,11 +201,11 @@
     <ClInclude Include="Item.h" />
     <ClInclude Include="Koopas.h" />
     <ClInclude Include="Leaf1.h" />
+    <ClInclude Include="Mario.h" />
     <ClInclude Include="Plant.h" />
     <ClInclude Include="SuperItem.h" />
     <ClInclude Include="KeyEventHandler.h" />
     <ClInclude Include="Map.h" />
-    <ClInclude Include="Mario.h" />
     <ClInclude Include="Platform.h" />
     <ClInclude Include="PlayScene.h" />
     <ClInclude Include="Portal.h" />

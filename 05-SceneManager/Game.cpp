@@ -9,7 +9,7 @@
 #include "PlayScene.h"
 
 CGame* CGame::__instance = NULL;
-int _marioLevel = -1;
+int _marioLevel = 2;
 int score = 0;
 
 /*

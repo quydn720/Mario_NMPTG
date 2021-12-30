@@ -1,10 +1,5 @@
-#pragma once
+﻿#pragma once
 #include "GameObject.h"
-
-#include "Animation.h"
-#include "Animations.h"
-
-#include "debug.h"
 #include "Tail.h"
 
 #pragma region define
@@ -44,11 +39,14 @@
 #define MARIO_STATE_DOWN_PIPE 305
 
 #define MARIO_STATE_ATTACK	800
-//#define MARIO_STATE_DOWN_PIPE 303
-
+#define MARIO_STATE_HOLDING_IDLE	900
+#define MARIO_STATE_FLYING_HIGH_RIGHT	1000
+#define MARIO_STATE_FLYING_HIGH_LEFT	1100
+#define MARIO_STATE_HOLDING_RIGHT		1200
+#define MARIO_STATE_HOLDING_LEFT		1300
 
 #pragma region ANIMATION_ID
-
+// BIG
 #define ID_ANI_MARIO_IDLE_RIGHT 400
 #define ID_ANI_MARIO_IDLE_LEFT 401
 
@@ -67,8 +65,17 @@
 #define ID_ANI_MARIO_SIT_RIGHT 900
 #define ID_ANI_MARIO_SIT_LEFT 901
 
-#define ID_ANI_MARIO_BRACE_RIGHT 1000
-#define ID_ANI_MARIO_BRACE_LEFT 1001
+#define ID_ANI_MARIO_BRACE_RIGHT 1001
+#define ID_ANI_MARIO_BRACE_LEFT 1000
+
+#define ID_ANI_MARIO_HOLDING_IDLE_RIGHT 1002
+#define ID_ANI_MARIO_HOLDING_IDLE_LEFT 1003
+#define ID_ANI_MARIO_HOLDING_WALKING_RIGHT 1004
+#define ID_ANI_MARIO_HOLDING_WALKING_LEFT 1005
+#define ID_ANI_MARIO_HOLDING_JUMPING_RIGHT 1006
+#define ID_ANI_MARIO_HOLDING_JUMPING_LEFT 1007
+#define ID_ANI_MARIO_KICKING_RIGHT 1008
+#define ID_ANI_MARIO_KICKING_LEFT 1009
 
 #define ID_ANI_MARIO_DIE 999
 
@@ -142,7 +149,6 @@
 #define MARIO_BIG_SITTING_BBOX_WIDTH  14
 #define MARIO_BIG_SITTING_BBOX_HEIGHT 16
 
-#define MARIO_TAIL_WIDTH 4
 #define MARIO_TAIL_BBOX_WIDTH  22
 #define MARIO_TAIL_BBOX_HEIGHT 28
 
@@ -166,7 +172,7 @@ class CMario : public CGameObject
 	float ax;				// acceleration on x 
 	float ay;				// acceleration on y 
 
-	int level;
+	
 	int untouchable;
 	ULONGLONG untouchable_start;
 	BOOLEAN isOnPlatform;
@@ -191,13 +197,17 @@ class CMario : public CGameObject
 	int GetAniIdTail();
 
 public:
+	int level;
 	static CMario* GetInstance();
+
+	bool render_tail; // Đã vẽ đuôi hay chưa để thoát vòng lặp vẽ đuôi bên playscene
 	CTail* tail;
 
+	bool isHolding = false, pressA = false, canKick = false;
+	bool changeDirection = false;
 	int coin;
 	bool isOnTopWarpPipe;
 	bool isPiping;
-	bool isKicking;
 	bool IsAttack;
 	DWORD AttackTime;
 	ULONGLONG timer;
@@ -211,7 +221,7 @@ public:
 		ax = 0.0f;
 		ay = MARIO_GRAVITY;
 
-		level = MARIO_LEVEL_TAIL;
+		level = MARIO_LEVEL_BIG;
 		untouchable = 0;
 		untouchable_start = -1;
 		isOnPlatform = false;

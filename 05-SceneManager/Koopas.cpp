@@ -3,6 +3,8 @@
 #include "Mario.h"
 #include "Platform.h"
 #include "ColorBlock.h"
+#include "QuestionBlock.h"
+#include "BreakableBrick.h"
 
 CKoopas::CKoopas(float x, float y)
 {
@@ -138,12 +140,18 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 
 	if (GetState() == ENEMY_STATE_INIT)
 		SetState(ENEMY_STATE_WALKING_LEFT);
+
 	if (dynamic_cast<CPlatform*>(e->obj) || dynamic_cast<CColorBlock*>(e->obj))
 	{
 		if (e->ny < 0 && isShell == false && isShell_2==false)
 			if(fallDetector->GetState() == FALL_DETECTOR_STATE_INACTIVE)
 				fallDetector->SetState(FALL_DETECTOR_STATE_ACTIVE);
 	}
+	else if (dynamic_cast<CQuestionBlock*>(e->obj)) {
+		CQuestionBlock* qb = dynamic_cast<CQuestionBlock*>(e->obj);
+		qb->SpawnItem(CMario::GetInstance()->getNx(), MARIO_LEVEL_TAIL);
+	}
+
 	if (e->ny != 0)
 	{
 		vy = 0;
@@ -187,44 +195,38 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		// rùa đang bị cầm và nút A đang giữ
 		else
 		{
-			//this->vx = CMario::GetInstance()->vx;
-			//this->nx = CMario::GetInstance()->nx;
 			if (CMario::GetInstance()->nx == 1)
 			{
 				if (isShell == true)
 				{
 					if (CMario::GetInstance()->level == MARIO_LEVEL_SMALL) // chuẩn
 					{
-						this->x = float(CMario::GetInstance()->x + MARIO_SMALL_BBOX_WIDTH + 1);
+						this->x = float(CMario::GetInstance()->x + MARIO_SMALL_BBOX_WIDTH + 1.0f);
 						this->y = CMario::GetInstance()->y - 2;
 					}
-					else if (CMario::GetInstance()->level == MARIO_LEVEL_TAIL) // chuẩn
+					else
 					{
-						this->x = CMario::GetInstance()->x + MARIO_TAIL_BBOX_WIDTH - 1.0f;
-						this->y = CMario::GetInstance()->y + 6;
-					}
-					else // chuẩn
-					{
-						this->x = float(CMario::GetInstance()->x + MARIO_BIG_BBOX_WIDTH - 1.0f);
-						this->y = CMario::GetInstance()->y + 6;
+						this->y = CMario::GetInstance()->y + 2;
+						if (CMario::GetInstance()->level == MARIO_LEVEL_TAIL) // chuẩn
+							this->x = CMario::GetInstance()->x + MARIO_TAIL_BBOX_WIDTH - 4.0f;
+						else 
+							this->x = float(CMario::GetInstance()->x + MARIO_BIG_BBOX_WIDTH - 1.0f);
 					}
 				}
 				else if (isShell_2 == true)
 				{
 					if (CMario::GetInstance()->level == MARIO_LEVEL_SMALL) // chuẩn
 					{
-						this->x = float(CMario::GetInstance()->x + MARIO_SMALL_BBOX_WIDTH - 1);
-						this->y = float(CMario::GetInstance()->y - 4);
+						this->x = float(CMario::GetInstance()->x + MARIO_SMALL_BBOX_WIDTH + 1.0f);
+						this->y = float(CMario::GetInstance()->y - 2);
 					}
-					else if (CMario::GetInstance()->level == MARIO_LEVEL_TAIL) // chuẩn
+					else
 					{
-						this->x = float(CMario::GetInstance()->x + MARIO_TAIL_BBOX_WIDTH - 2);
-						this->y = CMario::GetInstance()->y + 6;
-					}
-					else // chuẩn
-					{
-						this->x = float(CMario::GetInstance()->x + MARIO_BIG_BBOX_WIDTH - 2);
-						this->y = CMario::GetInstance()->y + 6;
+						this->y = CMario::GetInstance()->y + 1;
+						if (CMario::GetInstance()->level == MARIO_LEVEL_TAIL) // chuẩn
+							this->x = float(CMario::GetInstance()->x + MARIO_TAIL_BBOX_WIDTH - 5.0f);
+						else 
+							this->x = float(CMario::GetInstance()->x + MARIO_BIG_BBOX_WIDTH - 2.0f);
 					}
 				}
 			}
@@ -239,8 +241,11 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					}
 					else
 					{
-						this->x = float(CMario::GetInstance()->x - KOOPAS_BBOX_WIDTH + 1.0f);
-						this->y = CMario::GetInstance()->y + 5;
+						this->y = CMario::GetInstance()->y + 2;
+						if (CMario::GetInstance()->level == MARIO_LEVEL_TAIL) // chuẩn
+							this->x = float(CMario::GetInstance()->x - KOOPAS_BBOX_WIDTH - 2.0f);
+						else
+							this->x = float(CMario::GetInstance()->x - KOOPAS_BBOX_WIDTH + 1.0f);
 					}
 				}
 				else
@@ -248,12 +253,17 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					if (CMario::GetInstance()->level == MARIO_LEVEL_SMALL)
 					{
 						this->x = float(CMario::GetInstance()->x - KOOPAS_BBOX_WIDTH + 3.0f);
-						this->y = CMario::GetInstance()->y - 4;
+						this->y = CMario::GetInstance()->y - 2;
 					}
 					else
 					{
-						this->x = float(CMario::GetInstance()->x - KOOPAS_BBOX_WIDTH + 2.0f);
-						this->y = CMario::GetInstance()->y + 5;
+						this->y = CMario::GetInstance()->y + 1;
+						if (CMario::GetInstance()->level == MARIO_LEVEL_TAIL) // chuẩn
+							this->x = float(CMario::GetInstance()->x - KOOPAS_BBOX_WIDTH - 1.0f);
+						else
+							this->x = float(CMario::GetInstance()->x - KOOPAS_BBOX_WIDTH + 3.0f);
+
+						
 					}
 				}
 			}

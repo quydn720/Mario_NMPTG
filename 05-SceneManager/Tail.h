@@ -5,8 +5,8 @@
 #define TAIL_INACTIVE 2
 #define TAIL_ATTACK 3
 
-#define TAIL_LENGTH 8
-#define TAIL_HEIGHT 4
+#define MARIO_TAIL_WIDTH  9.0f//8.0f
+#define MARIO_TAIL_HEIGHT 6.0f//2.0f
 #define TAIL_OFFSET 22
 #define TAIL_VELOCITY 0.1f
 

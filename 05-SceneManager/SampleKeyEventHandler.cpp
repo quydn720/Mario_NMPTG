@@ -1,4 +1,4 @@
-#include "SampleKeyEventHandler.h"
+﻿#include "SampleKeyEventHandler.h"
 
 #include "debug.h"
 #include "Game.h"
@@ -32,8 +32,16 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 		mario->SetState(MARIO_STATE_DIE);
 		break;
 	case DIK_A:
-		mario->SetState(MARIO_STATE_ATTACK);
-		break;
+	{
+		DebugOut(L"Down A\n");
+		CMario::GetInstance()->pressA = true;
+		if (CMario::GetInstance()->GetLevel() == MARIO_LEVEL_TAIL)
+		{
+			CMario::GetInstance()->SetState(MARIO_STATE_ATTACK);
+		}
+	}
+	break;
+
 	case DIK_R: // reset
 		//Reload();
 		break;
@@ -47,6 +55,19 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 	switch (KeyCode)
 	{
+	case DIK_A:
+	{
+		DebugOut(L"Up A\n");
+		CMario::GetInstance()->pressA = false;
+		/*if (CMario::GetInstance()->isHolding == true)
+			CMario::GetInstance()->isHolding = false;*/
+		if (CMario::GetInstance()->isHolding == true) // đang giữ rùa, thả nút a thì chuyển sang đá
+		{
+			CMario::GetInstance()->canKick = true;
+			CMario::GetInstance()->isHolding = false;
+		}
+	}break;
+
 	case DIK_S:
 		mario->SetState(MARIO_STATE_RELEASE_JUMP);
 		break;

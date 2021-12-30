@@ -200,9 +200,6 @@
     <ClInclude Include="ColorBlock.h">
       <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
-    <ClInclude Include="Mario.h">
-      <Filter>Header Files\GameObjects</Filter>
-    </ClInclude>
     <ClInclude Include="QuestionBlock.h">
       <Filter>Header Files\GameObjects</Filter>
     </ClInclude>
@@ -255,6 +252,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ButtonP.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Mario.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

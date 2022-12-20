@@ -15,13 +15,17 @@ CCoin::CCoin(float x, float y) : Item(x, y, 0)
 void CCoin::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
+	// TODO: o trong gach thi ko render
 	animations->Get(ID_ANI_COIN)->Render(x, y);
 
-	//RenderBoundingBox();
+	// RenderBoundingBox();
 }
 
 // Make the coin bouncing before die
 void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
+
+	y += vy * dt;
+
 	if (insideBrick >= 0) {
 		if (state == STATE_ITEM_VISIBLE) {
 			y -= COIN_DEFLECT_GRAVITY * dt;

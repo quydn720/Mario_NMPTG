@@ -1,4 +1,4 @@
-#include "QuestionBlock.h"
+﻿#include "QuestionBlock.h"
 #include "debug.h"
 
 CQuestionBlock::CQuestionBlock(float x, float y) : CGameObject(x, y) {
@@ -17,27 +17,26 @@ void CQuestionBlock::Render()
 	}
 }
 
-void CQuestionBlock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
+void CQuestionBlock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
+	
 	y += vy * dt;
+
 	if (state == STATE_BRICK_HIT) {
+		// gạch nhảy lên khi bị mario đụng
+		if (y < baseY - QBRICK_BOUND_OFFSET) {
+			vy = BRICK_MOVING_SPEED;
+			SetState(STATE_BRICK_EMPTY);
+		}
+		
 		switch (item->itemType) {
-		case ItemType::SuperItem: {
-			if (y < baseY - QBRICK_BOUND_OFFSET) {
-				vy = BRICK_MOVING_SPEED;
-				SetState(STATE_BRICK_EMPTY);
+			case ItemType::SuperItem: {	
+				break;
 			}
-			break;
-		}
-		case ItemType::Coin: {
-			// The coin doesn't need to wait the brick to finish moving
-			item->Spawn(0);
-			if (y < baseY - QBRICK_BOUND_OFFSET) {
-				vy = BRICK_MOVING_SPEED;
-				SetState(STATE_BRICK_EMPTY);
+			case ItemType::Coin: {
+				// The coin doesn't need to wait the brick to finish moving
+				item->Spawn(0);
+				break;
 			}
-			break;
-		}
 		}
 
 	}
@@ -51,13 +50,13 @@ void CQuestionBlock::SetState(int state)
 	case STATE_BRICK_EMPTY:
 		vy = 0;
 		y = baseY;
-		isEmpty = true;
+		 isEmpty = true;
 		if (item->itemType != ItemType::Coin) {
 			item->Spawn(nx);
 		}
 		break;
 	case STATE_BRICK_HIT:
-		vy -= BRICK_MOVING_SPEED;
+		vy = -BRICK_MOVING_SPEED;
 		break;
 	default:
 		isEmpty = false;

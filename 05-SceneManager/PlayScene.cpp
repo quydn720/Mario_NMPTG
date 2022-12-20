@@ -288,10 +288,9 @@ void CPlayScene::LoadAssets(LPCWSTR assetFile)
 		//
 		// data section
 		//
-		switch (section)
-		{
-		case ASSETS_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
-		case ASSETS_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
+		switch (section) {
+			case ASSETS_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
+			case ASSETS_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
 		}
 	}
 
@@ -382,7 +381,8 @@ void CPlayScene::Render()
 	map->Render();
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
-	Hud::GetInstance()->Render();
+
+	// Hud::GetInstance()->Render();
 }
 
 /*

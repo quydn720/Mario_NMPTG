@@ -28,9 +28,16 @@ void CMario::SetInstance(CMario* p)
 }
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	vy += ay * dt;
+	/*if (vy <= -0.5f) {
+		DebugOut(L"MAX SPEED Y\n");
+		ay = 0.002f;
+	}*/
 
-	DebugOut(L"ay: %0.4f	vy: %0.4f\n", ay, vy);
+	//DebugOut(L"ay: %0.4f	vy: %0.4f\n", ay, vy);
+	
+	// Mario reach max speed 
+	
+	// vy += ay * dt;
 	isOnPlatform = false;
 
 	if (state != MARIO_STATE_IDLE)
@@ -41,7 +48,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (level == 3) {
 			DebugOut(L"can fly\n");
 		}
-		DebugOut(L"mario at max speed\n");
+		/*DebugOut(L"mario at max speed\n");*/
 	}
 
 	if (isSitting) {
@@ -140,6 +147,9 @@ void CMario::OnCollisionWithItem(LPCOLLISIONEVENT e) {
 void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e) {
 	CQuestionBlock* qb = dynamic_cast<CQuestionBlock*>(e->obj);
 	if (e->ny > 0) {
+		CCoin* coin = new CCoin(x, qb->y - 40);
+		CPlayScene::GetInstance()->AddNewObject(coin);
+
 		qb->SpawnItem(nx, level);
 	}
 }
@@ -726,31 +736,35 @@ void CMario::SetState(int state)
 			if (isSitting) break;
 			if (isOnPlatform)
 			{
-				if (abs(this->vx) == MARIO_RUNNING_SPEED)
+				if (abs(this->vx) >= MARIO_RUNNING_SPEED)
 				{
-					ay -= 0.0004f;
-
+					//ay -= 0.003f;
+					vy = -MARIO_JUMP_RUN_SPEED_Y;
 				}
-					// ay = -0.0007f;
 				
-					// vy = -MARIO_JUMP_RUN_SPEED_Y;
 				else
 				{
-					ay -= 0.0024f;
-
+					vy = -MARIO_JUMP_SPEED_Y;
 				}
-					// ay = -0.0007f;
 
-					// vy = -MARIO_JUMP_SPEED_Y;
 			}
 		}
 		break;
 
+	//case MARIO_GIU_NUT_S: {
+	//	DebugOut(L"MARIO GIU NUT S\n");
+	//	if (vy <= -0.4f) {
+	//		ay = 0.02f;
+	//	}
+	//	else {
+	//		//ay -= 0.0002f;
+	//	}
+	//	break;
+	//}
+
 	case MARIO_STATE_RELEASE_JUMP:
 		if (isPiping == false) {
-			if (vy < 0) {}
-				//vy += MARIO_JUMP_SPEED_Y / 2;
-				ay = MARIO_GRAVITY;
+			if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
 		}
 		break;
 

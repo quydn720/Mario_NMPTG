@@ -417,6 +417,11 @@ void CPlayScene::Unload()
 
 bool CPlayScene::IsGameObjectDeleted(const LPGAMEOBJECT& o) { return o == NULL; }
 
+void CPlayScene::AddNewObject(LPGAMEOBJECT obj)
+{
+	objects.push_back(obj);
+}
+
 void CPlayScene::PurgeDeletedObjects()
 {
 	vector<LPGAMEOBJECT>::iterator it;

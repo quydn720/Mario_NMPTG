@@ -86,6 +86,9 @@ CSuperItem* CQuestionBlock::SpawnSuperItem() {
 
 void CQuestionBlock::SpawnItem()
 {
+	// TODO: bug:
+	// - thứ tự render, render gạch trước, nấm sau để có cảm giác nấm chui dưới gạch lên
+	// - nấm di chuyến sau khi gạch đã về chỗ cũ, khác với coin
 	Item* item = NULL;
 	switch (itemType)
 	{

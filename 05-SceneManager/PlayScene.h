@@ -22,9 +22,6 @@ public:
 	CMap* map;
 	CCamera* camera;
 
-	vector<CQuestionBlock*> questionBlocks;
-	vector<Item*> items;
-
 	vector<LPGAMEOBJECT> objects;
 
 	void _ParseSection_SPRITES(string line);

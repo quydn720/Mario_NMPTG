@@ -147,10 +147,8 @@ void CMario::OnCollisionWithItem(LPCOLLISIONEVENT e) {
 void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e) {
 	CQuestionBlock* qb = dynamic_cast<CQuestionBlock*>(e->obj);
 	if (e->ny > 0) {
-		CCoin* coin = new CCoin(x, qb->y - 40);
-		CPlayScene::GetInstance()->AddNewObject(coin);
-
-		qb->SpawnItem(nx, level);
+		if (qb->GetState() != STATE_BRICK_EMPTY)
+			qb->SetState(STATE_BRICK_HIT);
 	}
 }
 void CMario::OnCollisionWithPipe(LPCOLLISIONEVENT e) {

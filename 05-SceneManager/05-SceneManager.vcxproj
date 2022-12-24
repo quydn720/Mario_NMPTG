@@ -224,6 +224,22 @@
   <ItemGroup>
     <Text Include="brick.txt" />
     <Text Include="cloud.txt" />
+    <Text Include="coin.txt" />
+    <Text Include="goomba.txt" />
+    <Text Include="hidden-map1-1.txt" />
+    <Text Include="hud.txt" />
+    <Text Include="item.txt" />
+    <Text Include="koopas.txt" />
+    <Text Include="map1-1.txt" />
+    <Text Include="mario-sample.txt" />
+    <Text Include="mario.txt" />
+    <Text Include="pipe.txt" />
+    <Text Include="plant.txt" />
+    <Text Include="question_block.txt" />
+    <Text Include="scene01.txt" />
+    <Text Include="scene02.txt" />
+    <Text Include="scene03.txt" />
+    <Text Include="x64\Debug\05-SceneManager.vcxproj.FileListAbsolute.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

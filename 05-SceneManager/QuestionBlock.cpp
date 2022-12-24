@@ -1,8 +1,10 @@
 ﻿#include "QuestionBlock.h"
 #include "debug.h"
+#include "PlayScene.h"
 
-CQuestionBlock::CQuestionBlock(float x, float y) : CGameObject(x, y) {
+CQuestionBlock::CQuestionBlock(float x, float y, int itemType) : CGameObject(x, y) {
 	state = STATE_BRICK_INIT;
+	this->itemType = itemType;
 	baseY = y;
 }
 
@@ -15,31 +17,29 @@ void CQuestionBlock::Render()
 	else {
 		animations->Get(ID_ANI_QUESTION_BRICK)->Render(x, y);
 	}
+
+	RenderBoundingBox();
 }
 
 void CQuestionBlock::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
-	
+
 	y += vy * dt;
 
 	if (state == STATE_BRICK_HIT) {
 		// gạch nhảy lên khi bị mario đụng
+
 		if (y < baseY - QBRICK_BOUND_OFFSET) {
 			vy = BRICK_MOVING_SPEED;
 			SetState(STATE_BRICK_EMPTY);
 		}
-		
-		switch (item->itemType) {
-			case ItemType::SuperItem: {	
-				break;
-			}
-			case ItemType::Coin: {
-				// The coin doesn't need to wait the brick to finish moving
-				item->Spawn(0);
-				break;
-			}
-		}
-
 	}
+	else if (state == STATE_BRICK_EMPTY) {
+		if (y > baseY) {
+			vy = 0;
+			y = baseY;
+		}
+	}
+
 	CGameObject::Update(dt, coObjects);
 }
 void CQuestionBlock::SetState(int state)
@@ -47,20 +47,23 @@ void CQuestionBlock::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-	case STATE_BRICK_EMPTY:
-		vy = 0;
-		y = baseY;
-		 isEmpty = true;
-		if (item->itemType != ItemType::Coin) {
-			item->Spawn(nx);
+		case STATE_BRICK_EMPTY:
+		{
+			vy = BRICK_MOVING_SPEED;
+			isEmpty = true;
+			break;
 		}
-		break;
-	case STATE_BRICK_HIT:
-		vy = -BRICK_MOVING_SPEED;
-		break;
-	default:
-		isEmpty = false;
-		break;
+		case STATE_BRICK_HIT:
+		{
+			SpawnItem();
+			vy = -BRICK_MOVING_SPEED;
+			break;
+		}
+		default:
+		{
+			isEmpty = false;
+			break;
+		}
 	}
 }
 void CQuestionBlock::GetBoundingBox(float& l, float& t, float& r, float& b)
@@ -71,26 +74,35 @@ void CQuestionBlock::GetBoundingBox(float& l, float& t, float& r, float& b)
 	b = t + QBRICK_BBOX_HEIGHT;
 }
 
-void CQuestionBlock::SpawnItem(int nx, int l)
+CCoin* CQuestionBlock::SpawnCoin()
 {
-	if (state != STATE_BRICK_EMPTY) {
-		SetState(STATE_BRICK_HIT);
-		this->nx = -nx;
-		if (item->itemType == ItemType::SuperItem) {
-			dynamic_cast<CSuperItem*>(item)->type =
-				(l == MARIO_LEVEL_SMALL) ? SuperItemType::RedMushroom : SuperItemType::Leaf;
-		}
-	}
-	if (item->itemType == ItemType::Coin) {
-		CMario::GetInstance()->coin++;
-	}
+	return new CCoin(x, y, 1);
 }
 
-void CQuestionBlock::setItem(Item* i)
-{
-	item = i;
+CSuperItem* CQuestionBlock::SpawnSuperItem() {
+	return new CSuperItem(x, y);
 }
-Item* CQuestionBlock::getItem()
+
+
+void CQuestionBlock::SpawnItem()
 {
-	return item;
+	Item* item = NULL;
+	switch (itemType)
+	{
+		case ItemType::Coin: {
+			item = SpawnCoin();
+			break;
+		}
+		case ItemType::SuperItem: {
+			item = SpawnSuperItem();
+			break;
+		}
+		default:
+		{
+			break;
+		}
+	}
+
+	item->SetState(STATE_ITEM_VISIBLE);
+	CPlayScene::GetInstance()->AddNewObject(item);
 }

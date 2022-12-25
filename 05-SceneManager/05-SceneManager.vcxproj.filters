@@ -261,5 +261,21 @@
   <ItemGroup>
     <Text Include="brick.txt" />
     <Text Include="cloud.txt" />
+    <Text Include="scene01.txt" />
+    <Text Include="mario-sample.txt" />
+    <Text Include="scene03.txt" />
+    <Text Include="coin.txt" />
+    <Text Include="question_block.txt" />
+    <Text Include="x64\Debug\05-SceneManager.vcxproj.FileListAbsolute.txt" />
+    <Text Include="scene02.txt" />
+    <Text Include="pipe.txt" />
+    <Text Include="plant.txt" />
+    <Text Include="mario.txt" />
+    <Text Include="koopas.txt" />
+    <Text Include="map1-1.txt" />
+    <Text Include="goomba.txt" />
+    <Text Include="hidden-map1-1.txt" />
+    <Text Include="hud.txt" />
+    <Text Include="item.txt" />
   </ItemGroup>
 </Project>

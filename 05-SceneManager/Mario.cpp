@@ -28,6 +28,16 @@ void CMario::SetInstance(CMario* p)
 }
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+	/*if (vy <= -0.5f) {
+		DebugOut(L"MAX SPEED Y\n");
+		ay = 0.002f;
+	}*/
+
+	//DebugOut(L"ay: %0.4f	vy: %0.4f\n", ay, vy);
+	
+	// Mario reach max speed 
+	
+	// vy += ay * dt;
 	isOnPlatform = false;
 
 	if (state != MARIO_STATE_IDLE)
@@ -35,6 +45,10 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (abs(vx) > abs(maxVx)) {
 		vx = maxVx;
+		if (level == 3) {
+			DebugOut(L"can fly\n");
+		}
+		/*DebugOut(L"mario at max speed\n");*/
 	}
 
 	if (isSitting) {
@@ -60,7 +74,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			CGame::GetInstance()->InitiateSwitchScene(_switchSceneId);
 		}
 		else {
-			ay = 0.0f;
+			// ay = 0.0f;
 			isOnPlatform = true;
 			y += vy * dt;
 		}
@@ -91,7 +105,7 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	}
 	else if (e->nx != 0 && e->obj->IsBlocking())
 	{
-		//vx = 0;
+		vx = 0;
 	}
 
 	if (dynamic_cast<CGoomba*>(e->obj))
@@ -118,7 +132,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 void CMario::OnCollisionWithItem(LPCOLLISIONEVENT e) {
 	if (dynamic_cast<CCoin*>(e->obj))
 		OnCollisionWithCoin(e);
-	else if (dynamic_cast<CSuperItem*>(e->obj)) {
+	else 
+		if (dynamic_cast<CSuperItem*>(e->obj)) {
 		CSuperItem* superItem = dynamic_cast<CSuperItem*>(e->obj);
 		if (superItem->type == SuperItemType::RedMushroom) {
 			OnCollisionWithMushroom(e);
@@ -132,7 +147,8 @@ void CMario::OnCollisionWithItem(LPCOLLISIONEVENT e) {
 void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e) {
 	CQuestionBlock* qb = dynamic_cast<CQuestionBlock*>(e->obj);
 	if (e->ny > 0) {
-		qb->SpawnItem(nx, level);
+		if (qb->GetState() != STATE_BRICK_EMPTY)
+			qb->SetState(STATE_BRICK_HIT);
 	}
 }
 void CMario::OnCollisionWithPipe(LPCOLLISIONEVENT e) {
@@ -354,7 +370,7 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
-	//if (e->obj->GetState() == STATE_ITEM_VISIBLE) 
+	if (e->obj->GetState() == STATE_ITEM_VISIBLE) 
 	{
 		e->obj->Delete();
 		coin++;
@@ -374,6 +390,7 @@ void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 {
 	CSuperItem* superItem = dynamic_cast<CSuperItem*>(e->obj);
 	if (superItem->IsAlive) {
+		e->obj->IsBlocking();
 		e->obj->SetState(STATE_ITEM_DIE);
 		SetLevel(MARIO_LEVEL_TAIL);
 		e->obj->Delete();
@@ -657,9 +674,6 @@ void CMario::Render()
 	animations->Get(aniId)->Render(x, y);
 	RenderBoundingBox();
 
-	if (ax != 0) {
-		DebugOut(L"[After] a: %f\tvx: %f\tx: %0.2f\Ani:%d\n", ax, vx, x, aniId);
-	}
 	DebugOutTitle(L"Coins: %d", coin);
 }
 
@@ -670,38 +684,46 @@ void CMario::SetState(int state)
 
 	switch (state)
 	{
-	case MARIO_STATE_RUNNING_RIGHT:
+	case MARIO_STATE_RUNNING_RIGHT: {
 		if (isSitting) break;
 		maxVx = MARIO_RUNNING_SPEED;
 		ax = MARIO_ACCEL_RUN_X;
 		nx = 1;
 		break;
-	case MARIO_STATE_RUNNING_LEFT:
+	}
+	
+	case MARIO_STATE_RUNNING_LEFT: {
 		if (isSitting) break;
 		maxVx = -MARIO_RUNNING_SPEED;
 		ax = -MARIO_ACCEL_RUN_X;
 		nx = -1;
 		break;
-	case MARIO_STATE_WALKING_RIGHT:
+	}
+	case MARIO_STATE_WALKING_RIGHT: {
+
 		if (isSitting) break;
 		maxVx = MARIO_WALKING_SPEED;
 		ax = MARIO_ACCEL_WALK_X;
 		nx = 1;
 		break;
-	case MARIO_STATE_WALKING_LEFT:
+	}
+	case MARIO_STATE_WALKING_LEFT:{
 		if (isSitting) break;
 		maxVx = -MARIO_WALKING_SPEED;
 		ax = -MARIO_ACCEL_WALK_X;
 		nx = -1;
 		break;
-	case MARIO_STATE_JUMP:
+	}
+	case MARIO_STATE_JUMP: 
 		if (level == MARIO_LEVEL_TAIL) {
 			if (isSitting) break;
 			if (isOnPlatform)
 			{
-				if (abs(this->vx) == MARIO_RUNNING_SPEED)
+				if (abs(this->vx) >= MARIO_RUNNING_SPEED)
 				{
 					vy = -MARIO_JUMP_RUN_SPEED_Y;
+					// ay += 0.03f;
+
 					//ay = 0.0012f;
 				}
 				else
@@ -712,13 +734,31 @@ void CMario::SetState(int state)
 			if (isSitting) break;
 			if (isOnPlatform)
 			{
-				if (abs(this->vx) == MARIO_RUNNING_SPEED)
+				if (abs(this->vx) >= MARIO_RUNNING_SPEED)
+				{
+					//ay -= 0.003f;
 					vy = -MARIO_JUMP_RUN_SPEED_Y;
+				}
+				
 				else
+				{
 					vy = -MARIO_JUMP_SPEED_Y;
+				}
+
 			}
 		}
 		break;
+
+	//case MARIO_GIU_NUT_S: {
+	//	DebugOut(L"MARIO GIU NUT S\n");
+	//	if (vy <= -0.4f) {
+	//		ay = 0.02f;
+	//	}
+	//	else {
+	//		//ay -= 0.0002f;
+	//	}
+	//	break;
+	//}
 
 	case MARIO_STATE_RELEASE_JUMP:
 		if (isPiping == false) {

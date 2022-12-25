@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "Mario.h"
 #include "SuperItem.h"
+#include "Coin.h"
 
 #define ID_ANI_QUESTION_BRICK 727
 #define ID_ANI_QUESTION_BRICK_EMPTY 728
@@ -19,17 +20,20 @@
 class CQuestionBlock : public CGameObject
 {
 	bool isEmpty = false;
-	Item* item = NULL;
 	float baseY;
+	int itemType = 0;
+	
+	CSuperItem* SpawnSuperItem();
+	CCoin* SpawnCoin();
+
 public:
-	CQuestionBlock(float x, float y);
+	CQuestionBlock(float x, float y, int itemType);
 	void Render();
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
 	virtual void SetState(int state);
 	void GetBoundingBox(float& l, float& t, float& r, float& b);
 
-	void SpawnItem(int nx, int l);
-	void setItem(Item* i);
-	Item* getItem();
+	void SpawnItem();
+
 };
 

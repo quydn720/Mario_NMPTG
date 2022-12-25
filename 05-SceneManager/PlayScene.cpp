@@ -184,12 +184,13 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		float height = (float)atoi(tokens[3].c_str());
 		int hidden = atoi(tokens[4].c_str());
 		int green = atoi(tokens[5].c_str());
+
 		obj = new CWarpPipe(x, y, height, hidden, green);
 		break;
 	}
 	case OBJECT_TYPE_QUESTION_BLOCK: {
-		obj = new CQuestionBlock(x, y);
-		questionBlocks.push_back(dynamic_cast<CQuestionBlock*>(obj));
+		int itemType = atoi(tokens[3].c_str());
+		obj = new CQuestionBlock(x, y, itemType);
 		break; 
 	}
 	case OBJECT_TYPE_ITEM: {
@@ -207,7 +208,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		default:
 			break;
 		}
-		items.push_back(dynamic_cast<Item*>(obj));
+		// items.push_back(dynamic_cast<Item*>(obj));
 		break;
 	}
 	case OBJECT_TYPE_COLOR_BLOCK: {
@@ -288,10 +289,9 @@ void CPlayScene::LoadAssets(LPCWSTR assetFile)
 		//
 		// data section
 		//
-		switch (section)
-		{
-		case ASSETS_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
-		case ASSETS_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
+		switch (section) {
+			case ASSETS_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
+			case ASSETS_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
 		}
 	}
 
@@ -336,12 +336,6 @@ void CPlayScene::Load()
 
 	f.close();
 
-	// Assign item to block, then release the vector objects.
-	for (size_t i = 0; i < questionBlocks.size(); i++) {
-		questionBlocks[i]->setItem(items[i]);
-	}
-	questionBlocks = vector<CQuestionBlock*>();
-	items = vector<Item*>();
 	camera = new CCamera(map->getMapWidth(), map->getMapHeight(), (float) _game->GetBackBufferWidth(), (float)_game->GetBackBufferHeight());
 
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
@@ -382,7 +376,8 @@ void CPlayScene::Render()
 	map->Render();
 	for (int i = 0; i < objects.size(); i++)
 		objects[i]->Render();
-	Hud::GetInstance()->Render();
+
+	// Hud::GetInstance()->Render();
 }
 
 /*
@@ -416,6 +411,11 @@ void CPlayScene::Unload()
 }
 
 bool CPlayScene::IsGameObjectDeleted(const LPGAMEOBJECT& o) { return o == NULL; }
+
+void CPlayScene::AddNewObject(LPGAMEOBJECT obj)
+{
+	objects.push_back(obj);
+}
 
 void CPlayScene::PurgeDeletedObjects()
 {

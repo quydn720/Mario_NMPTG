@@ -52,6 +52,8 @@ HOW TO INSTALL Microsoft.DXSDK.D3DX
 #define SCREEN_WIDTH 320
 #define SCREEN_HEIGHT 240
 
+#define GAME_FILE_TXT L"mario-sample.txt"
+
 LRESULT CALLBACK WinProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message) {
@@ -200,7 +202,7 @@ int WINAPI WinMain(
 	game->Init(hWnd, hInstance);
 	game->InitKeyboard();
 	//IMPORTANT: this is the only place where a hardcoded file name is allowed ! 
-	game->Load(L"mario-sample.txt");  
+	game->Load(GAME_FILE_TXT);  
 	SetWindowPos(hWnd, 0, 50, 150, SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2, SWP_NOZORDER | SWP_SHOWWINDOW);
 	Run();
 

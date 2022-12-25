@@ -19,16 +19,16 @@ class CWarpPipe : public CGameObject
 {
 	float height;
 	int length;
-	int sceneId; // -1: nothing, sceneId
+	int destinationSceneId; // -1: nothing, sceneId
 	int green;
 public:
 	CWarpPipe(float x, float y, float h, int sId, int green) : CGameObject(x, y) {
 		this->green = green;
-		sceneId = sId;
+		destinationSceneId = sId;
 		height = h;
 		length = (int)height / TILE_SIZE;
 	}
-	int canGoThroughtScene() { return sceneId; }
+	int GetDestinationSceneId() { return destinationSceneId; }
 	void Render();
 	void Update(DWORD dt) {}
 	virtual void GetBoundingBox(float& l, float& t, float& r, float& b);

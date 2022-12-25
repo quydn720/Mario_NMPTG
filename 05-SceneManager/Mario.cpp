@@ -153,24 +153,31 @@ void CMario::OnCollisionWithQuestionBlock(LPCOLLISIONEVENT e) {
 }
 void CMario::OnCollisionWithPipe(LPCOLLISIONEVENT e) {
 	CWarpPipe* pipe = dynamic_cast<CWarpPipe*>(e->obj);
-	if (pipe->canGoThroughtScene()) {
+
+	// có sceneId gán vào cái cống
+	bool canTeleport = pipe->GetDestinationSceneId() != -1;
+	
+	if (canTeleport) {
 		float x1, y1;
 		pipe->GetPosition(x1, y1);
+
+		// mario nằm trong vùng có thể bấm S để chui cống
+		bool inRange = x > x1 && x < x1 + PIPE_BBOX_DOWN_RANGE; 
 		if (e->ny < 0) {
-			if (x > x1 && x < x1 + PIPE_BBOX_DOWN_RANGE) {
+			if (inRange) {
 				if (state == MARIO_STATE_SIT) {
 					isPiping = true;
 					vy = MARIO_PIPING_VY;
-					_switchSceneId = pipe->canGoThroughtScene();
+					_switchSceneId = pipe->GetDestinationSceneId();
 					timer = GetTickCount64();
 				}
 			}
 		}
 		else if (e->ny > 0) {
-			if (x > x1 && x < x1 + PIPE_BBOX_DOWN_RANGE) {
+			if (inRange) {
 				isPiping = true;
 				vy = -MARIO_PIPING_VY;
-				_switchSceneId = pipe->canGoThroughtScene();
+				_switchSceneId = pipe->GetDestinationSceneId();
 				timer = GetTickCount64();
 			}
 		}

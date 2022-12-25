@@ -76,7 +76,10 @@ void CQuestionBlock::GetBoundingBox(float& l, float& t, float& r, float& b)
 
 CCoin* CQuestionBlock::SpawnCoin()
 {
-	return new CCoin(x, y, 1);
+	CCoin* coin = new CCoin(x, y);
+	coin->SetState(COIN_STATE_FLY);
+
+	return coin;
 }
 
 CSuperItem* CQuestionBlock::SpawnSuperItem() {
@@ -105,7 +108,5 @@ void CQuestionBlock::SpawnItem()
 			break;
 		}
 	}
-
-	item->SetState(STATE_ITEM_VISIBLE);
 	CPlayScene::GetInstance()->AddNewObject(item);
 }

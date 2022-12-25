@@ -17,13 +17,13 @@ void BreakableBrick::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (state == BRICK_STATE_DIE)
 	{
 		BreakableBrickEffect* piece1 = new BreakableBrickEffect(x, y, -0.08f, -0.25f);
-		_PlayScene->objects.push_back(piece1);
+		_PlayScene->AddNewObject(piece1);
 		BreakableBrickEffect* piece2 = new BreakableBrickEffect(x, y, 0.08f, -0.25f);
-		_PlayScene->objects.push_back(piece2);
+		_PlayScene->AddNewObject(piece2);
 		BreakableBrickEffect* piece3 = new BreakableBrickEffect(x, y, -0.08f, -INNIT_VY_BREAKABLE_BRICK_EFFECT);
-		_PlayScene->objects.push_back(piece3);
+		_PlayScene->AddNewObject(piece3);
 		BreakableBrickEffect* piece4 = new BreakableBrickEffect(x, y, 0.08f, -INNIT_VY_BREAKABLE_BRICK_EFFECT);
-		_PlayScene->objects.push_back(piece4);
+		_PlayScene->AddNewObject(piece4);
 
 		isDeleted = true;
 	}

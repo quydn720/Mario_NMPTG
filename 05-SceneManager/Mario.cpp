@@ -87,7 +87,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable = 0;
 	}
 	CCollision::GetInstance()->Process(this, dt, coObjects);
-	HandleRacoonAttack(dt, coObjects);
+	// HandleRacoonAttack(dt, coObjects);
 }
 
 void CMario::OnNoCollision(DWORD dt)
@@ -110,6 +110,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 
 	if (dynamic_cast<CGoomba*>(e->obj))
 		OnCollisionWithGoomba(e);
+	else if (dynamic_cast<CCoin*>(e->obj))
+		OnCollisionWithCoin(e);
 	else if (dynamic_cast<CPortal*>(e->obj))
 		OnCollisionWithPortal(e);
 	else if (dynamic_cast<CQuestionBlock*>(e->obj))
@@ -131,15 +133,19 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithItem(LPCOLLISIONEVENT e) {
 	if (dynamic_cast<CCoin*>(e->obj))
+	{
 		OnCollisionWithCoin(e);
+	}
 	else 
+	{
 		if (dynamic_cast<CSuperItem*>(e->obj)) {
-		CSuperItem* superItem = dynamic_cast<CSuperItem*>(e->obj);
-		if (superItem->type == SuperItemType::RedMushroom) {
-			OnCollisionWithMushroom(e);
-		}
-		else if (superItem->type == SuperItemType::Leaf) {
-			OnCollisionWithLeaf(e);
+			CSuperItem* superItem = dynamic_cast<CSuperItem*>(e->obj);
+			if (superItem->type == SuperItemType::RedMushroom) {
+				OnCollisionWithMushroom(e);
+			}
+			else if (superItem->type == SuperItemType::Leaf) {
+				OnCollisionWithLeaf(e);
+			}
 		}
 	}
 }
@@ -377,7 +383,10 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
-	if (e->obj->GetState() == STATE_ITEM_VISIBLE) 
+	CCoin* coin = dynamic_cast<CCoin*>(e->obj);
+
+	bool c = coin->GetState() == STATE_ITEM_VISIBLE;
+	if (c) 
 	{
 		e->obj->Delete();
 		coin++;
@@ -903,7 +912,7 @@ void CMario::SetLevel(int l)
 	if (level == MARIO_LEVEL_TAIL && this->render_tail == false)
 	{
 		CTail* tail = new CTail(this->x, this->y + 18);
-		_PlayScene->objects.push_back(tail);
+		_PlayScene->AddNewObject(tail);
 		render_tail = true;
 	}
 	

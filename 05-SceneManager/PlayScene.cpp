@@ -182,10 +182,10 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_PIPE: {
 		float height = (float)atoi(tokens[3].c_str());
-		int hidden = atoi(tokens[4].c_str());
+		int destinationSceneId = atoi(tokens[4].c_str());
 		int green = atoi(tokens[5].c_str());
 
-		obj = new CWarpPipe(x, y, height, hidden, green);
+		obj = new CWarpPipe(x, y, height, destinationSceneId, green);
 		break;
 	}
 	case OBJECT_TYPE_QUESTION_BLOCK: {
@@ -208,7 +208,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		default:
 			break;
 		}
-		// items.push_back(dynamic_cast<Item*>(obj));
 		break;
 	}
 	case OBJECT_TYPE_COLOR_BLOCK: {

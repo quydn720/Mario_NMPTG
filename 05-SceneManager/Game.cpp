@@ -534,24 +534,7 @@ void CGame::SwitchScene()
 
 void CGame::InitiateSwitchScene(int scene_id)
 {
-	if (scene_id == current_scene) return;
-
-	_marioLevel = CMario::GetInstance()->GetLevel();
-	scenes[current_scene]->Unload();
-
-	CSprites::GetInstance()->Clear();
-	CAnimations::GetInstance()->Clear();
-
-	LPSCENE s = scenes[scene_id];
-	this->SetKeyHandler(s->GetKeyEventHandler());
-
-	CPlayScene* scene = (CPlayScene*)s;
-	scene->Load();
-	
-	CMario::GetInstance()->SetLevel(_marioLevel < 0 ? CMario::GetInstance()->GetLevel() : _marioLevel);
-
-	// next_scene = scene_id;
-
+	 next_scene = scene_id;
 }
 
 

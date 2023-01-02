@@ -50,7 +50,7 @@ void ButtonP::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 					CCoin* coin = new CCoin(brick->x, brick->y);
 					coin->isBrickToCoin = true;
 					coin->AppearTime = GetTickCount64();
-					_PlayScene->objects.push_back(coin);
+					_PlayScene->AddNewObject(coin);
 				}
 			}
 		}

@@ -34,7 +34,6 @@ public:
 	void LoadAssets(LPCWSTR assetFile);
 	void LoadMap(LPCWSTR assetFile);
 	
-public: 
 	static CPlayScene* __instance;
 
 	static CPlayScene* GetInstance()

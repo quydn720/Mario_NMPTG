@@ -83,7 +83,7 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			else if (dynamic_cast<CQuestionBlock*>(coObjects->at(i))) {
 				CQuestionBlock* qb = dynamic_cast<CQuestionBlock*>(coObjects->at(i));
-				qb->SpawnItem(CMario::GetInstance()->getNx(), MARIO_LEVEL_TAIL);
+				//qb->SpawnItem(CMario::GetInstance()->getNx(), MARIO_LEVEL_TAIL);
 			}
 			else if (dynamic_cast<CKoopas*>(coObjects->at(i))) {
 				CKoopas* koopas = dynamic_cast<CKoopas*>(coObjects->at(i));
@@ -113,7 +113,8 @@ void CTail::OnCollisionWith(LPCOLLISIONEVENT e) {
 		}
 		else if (dynamic_cast<CQuestionBlock*>(e->obj)) {
 			CQuestionBlock* qb = dynamic_cast<CQuestionBlock*>(e->obj);
-			qb->SpawnItem(CMario::GetInstance()->getNx(), MARIO_LEVEL_TAIL);
+			qb->SetState(STATE_BRICK_HIT);
+			//qb->SpawnItem(CMario::GetInstance()->getNx(), MARIO_LEVEL_TAIL);
 		}
 	}
 
@@ -172,7 +173,7 @@ void CTail::OnCollisionWithBreakableBrick(LPGAMEOBJECT& obj)
 		{
 			breakableBrick->SetState(BRICK_STATE_COLLISION);
 			ButtonP* brickitem = new ButtonP(breakableBrick->x, breakableBrick->y - 16);
-			_PlayScene->objects.push_back(brickitem);
+			_PlayScene->AddNewObject(brickitem);
 		}
 		else
 		{

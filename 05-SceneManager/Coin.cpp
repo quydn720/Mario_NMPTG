@@ -7,7 +7,6 @@ CCoin::CCoin(float x, float y) : Item(x, y, 0)
 	itemType = ItemType::Coin;
 	vx = vy = 0.0f;
 	isBrickToCoin = false;
-	SetPosition(x, y);
 	AppearTime = 0;
 	insideBrick = -1;
 }
@@ -15,10 +14,7 @@ CCoin::CCoin(float x, float y) : Item(x, y, 0)
 void CCoin::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	// TODO: o trong gach thi ko render
 	animations->Get(ID_ANI_COIN)->Render(x, y);
-
-	// RenderBoundingBox();
 }
 
 // Make the coin bouncing before die
@@ -26,34 +22,45 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	y += vy * dt;
 
-	if (insideBrick >= 0) {
-		if (state == STATE_ITEM_VISIBLE) {
-			y -= COIN_DEFLECT_GRAVITY * dt;
-			if (y <= baseY - COIN_OFFSET) {
-				SetState(STATE_ITEM_SPAWN);
-			}
+	switch (state) {
+	case COIN_STATE_FLY: {
+		if (y <= baseY - COIN_OFFSET_UP) {
+			SetState(COIN_STATE_FALL);
 		}
-		else if (state == STATE_ITEM_SPAWN) {
-			y += COIN_DEFLECT_GRAVITY * dt;
-			if (y >= baseY - 20) {
-				SetState(STATE_ITEM_DIE);
-			}
-		}
+		break;
 	}
-	else {
+	case COIN_STATE_FALL: {
+		if (y >= baseY - COIN_OFFSET_DOWN) {
+			SetState(STATE_ITEM_DIE);
+		}
+		break;
+	}
+	case COIN_STATE_NORMAL: {
+		break;
+	}
+	}
+
+	if (state==COIN_STATE_WAIT && GetTickCount64() - AppearTime >= 3000) {
+		this->Delete();
+		CQuestionBlock* item = new CQuestionBlock(x, y, 0);
+		CPlayScene::GetInstance()->AddNewObject(item);
+
+		DebugOut(L"COIN_DELETED_TO_BRICK\n");
+	}
+
+	/*else {
 		SetState(STATE_ITEM_VISIBLE);
 		if (isBrickToCoin == true && GetTickCount64() - AppearTime >= COIN_APPEAR_TIME)
 		{
 			BreakableBrick* itembrick = new BreakableBrick(this->x, this->y, false);
-			
+
 			_PlayScene->objects.push_back(itembrick);
 			this->isDeleted = true;
 			isBrickToCoin = false;
 			AppearTime = 0;
 		}
-	}
+	}*/
 	CGameObject::Update(dt, coObjects);
-	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 void CCoin::SetState(int state) {
@@ -61,11 +68,15 @@ void CCoin::SetState(int state) {
 	switch (state)
 	{
 	case STATE_ITEM_INVISIBLE:
-		vy = 0;
 		break;
-	case STATE_ITEM_VISIBLE:
+	case COIN_STATE_FLY:
+		vy = -COIN_VY;
 		break;
-	case STATE_ITEM_SPAWN:
+	case COIN_STATE_FALL:
+		vy = COIN_VY;
+		break;
+	case COIN_STATE_WAIT:
+		AppearTime = GetTickCount64();
 		break;
 	case STATE_ITEM_DIE:
 		this->Delete();
@@ -81,9 +92,4 @@ void CCoin::GetBoundingBox(float& l, float& t, float& r, float& b)
 	t = y - COIN_BBOX_HEIGHT / 2;
 	r = l + COIN_BBOX_WIDTH;
 	b = t + COIN_BBOX_HEIGHT;
-}
-
-void CCoin::Spawn(int nx)
-{
-	SetState(STATE_ITEM_VISIBLE);
 }

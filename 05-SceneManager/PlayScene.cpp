@@ -266,7 +266,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 void CPlayScene::LoadAssets(LPCWSTR assetFile)
 {
-	DebugOut(L"[INFO] Start loading assets from : %s \n", assetFile);
+	//DebugOut(L"[INFO] Start loading assets from : %s \n", assetFile);
 
 	ifstream f;
 	f.open(assetFile);
@@ -295,12 +295,12 @@ void CPlayScene::LoadAssets(LPCWSTR assetFile)
 
 	f.close();
 
-	DebugOut(L"[INFO] Done loading assets from %s\n", assetFile);
+	//DebugOut(L"[INFO] Done loading assets from %s\n", assetFile);
 }
 
 void CPlayScene::Load()
 {
-	DebugOut(L"[INFO] Start loading scene from : %s \n", sceneFilePath);
+	//DebugOut(L"[INFO] Start loading scene from : %s \n", sceneFilePath);
 
 	ifstream f;
 	f.open(sceneFilePath);

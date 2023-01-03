@@ -153,15 +153,6 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 			if(fallDetector->GetState() == FALL_DETECTOR_STATE_INACTIVE)
 				fallDetector->SetState(FALL_DETECTOR_STATE_ACTIVE);
 	}
-	if (e->ny != 0)
-	{
-		vy = 0;
-	}
-	if (e->nx != 0)
-	{
-		vx = nx * vx;
-		nx = -nx;
-	}
 }
 
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)

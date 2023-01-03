@@ -83,7 +83,10 @@ CCoin* CQuestionBlock::SpawnCoin()
 }
 
 CSuperItem* CQuestionBlock::SpawnSuperItem() {
-	return new CSuperItem(x, y);
+	CSuperItem* item = new CSuperItem(x, y);
+	item->SetState(STATE_ITEM_VISIBLE);
+	return item;
+
 }
 
 

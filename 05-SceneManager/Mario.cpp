@@ -784,9 +784,7 @@ void CMario::SetState(int state)
 	//}
 
 	case MARIO_STATE_RELEASE_JUMP:
-		if (isPiping == false) {
-			if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
-		}
+		if (vy < 0 && isFlying == false) vy += MARIO_JUMP_SPEED_Y / 2;
 		break;
 
 	case MARIO_STATE_SIT:
@@ -819,7 +817,6 @@ void CMario::SetState(int state)
 
 				if (vx < 0 || maxVx < 0) {
 					vx = 0;
-					maxVx = 0;
 				}
 			}
 			else {
@@ -828,7 +825,6 @@ void CMario::SetState(int state)
 
 				if (vx > 0 || maxVx > 0) {
 					vx = 0;
-					maxVx = 0;
 				}
 			}
 		}

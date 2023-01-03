@@ -83,7 +83,12 @@ CCoin* CQuestionBlock::SpawnCoin()
 }
 
 CSuperItem* CQuestionBlock::SpawnSuperItem() {
+
+	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
+	int level = mario->GetLevel();
+
 	CSuperItem* item = new CSuperItem(x, y);
+	item->type = level != MARIO_LEVEL_BIG ? SuperItemType::RedMushroom : SuperItemType::Leaf;
 	item->SetState(STATE_ITEM_VISIBLE);
 	return item;
 

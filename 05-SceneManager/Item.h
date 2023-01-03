@@ -22,9 +22,8 @@ class Item : public CGameObject
 protected:
 	float ay;		// Gravity
 	float baseY;	// For offset calculating when init item
+	float baseX;
 public:
-	float Start_X;
-	float Start_Y;
 	int TypeItem, Score;
 	bool OnGround;
 	ItemType itemType = ItemType::Undefined;

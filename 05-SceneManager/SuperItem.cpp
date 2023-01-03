@@ -4,22 +4,19 @@ CSuperItem::CSuperItem(float x, float y) : Item(x, y, 0)
 {
 	itemType = ItemType::SuperItem;
 	baseY = y;
-	ay = GRAVITY;
 	SetState(STATE_ITEM_INVISIBLE);
 }
 
 void CSuperItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 	if (state == STATE_ITEM_SPAWN) {
-		vy = GRAVITY * dt;
+		vy += GRAVITY * dt;
 		CCollision::GetInstance()->Process(this, dt, coObjects);
 
 			}
 	else if (state == STATE_ITEM_VISIBLE) {
 		y += vy * dt;
 		if (baseY - y > TILE_SIZE) {
-			y -= LEAF_DEFLECT_GRAVITY * dt;
-			if (y <= baseY - TILE_SIZE * 4) {	// How far the leaf will pop up before drop down
 				SetState(STATE_ITEM_SPAWN);
 			}
 		}
@@ -52,11 +49,11 @@ void CSuperItem::OnCollisionWith(LPCOLLISIONEVENT e)
 		if (e->ny != 0 && e->obj->IsBlocking())
 		{
 			vy = 0;
+		if (e->ny < 0) isOnPlatform = true;
 		}
-		if (e->ny != 0) {
-			vy = 0;
-		}
-		else if (e->nx != 0) {
+
+	else if (e->nx != 0 && e->obj->IsBlocking())
+	{
 			vx = -vx;
 		}
 	}
@@ -71,6 +68,7 @@ void CSuperItem::SetState(int state)
 		vy = 0;
 		break;
 	case STATE_ITEM_VISIBLE:
+		vy = -MUSHROOM_SPEED_Y;
 		break;
 	case STATE_ITEM_SPAWN:
 		timer = GetTickCount64();

@@ -3,6 +3,7 @@
 #include "Mario.h"
 #include "Platform.h"
 #include "ColorBlock.h"
+#include "QuestionBlock.h"
 
 CKoopas::CKoopas(float x, float y)
 {
@@ -133,8 +134,24 @@ void CKoopas::OnNoCollision(DWORD dt)
 
 void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (!e->obj->IsBlocking()) return;
-	if (dynamic_cast<CKoopas*>(e->obj)) return;
+	if (e->ny != 0 && e->obj->IsBlocking())
+	{
+		vy = 0;
+		if (e->ny < 0) isOnPlatform = true;
+	}
+	
+	else if (e->nx != 0 && e->obj->IsBlocking())
+	{
+		vx = -vx;
+	}
+
+	if (dynamic_cast<CGoomba*>(e->obj)) {
+
+		CGoomba* goomba = dynamic_cast<CGoomba*>(e->obj);
+		goomba->SetState(GOOMBA_STATE_DIE);
+		DebugOut(L"KOOPAS HIT GOOMBA\n");
+	}
+
 	if (state == KOOPAS_STATE_SHELL_WALKING_RIGHT || state == KOOPAS_STATE_SHELL_WALKING_LEFT) {
 		if (dynamic_cast<CQuestionBlock*>(e->obj)) {
 			CQuestionBlock* block = dynamic_cast<CQuestionBlock*>(e->obj);
@@ -333,5 +350,4 @@ void CKoopas::Render()
 
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
-	RenderBoundingBox();
 }

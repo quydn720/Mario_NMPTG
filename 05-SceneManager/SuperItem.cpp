@@ -9,24 +9,22 @@ CSuperItem::CSuperItem(float x, float y) : Item(x, y, 0)
 }
 
 void CSuperItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
-	if (state == STATE_ITEM_VISIBLE) {
-		if (type != SuperItemType::Leaf) {
-			y -= ITEM_DEFLECT_GRAVITY * dt;
-			if (y <= baseY - TILE_SIZE) {
-				SetState(STATE_ITEM_SPAWN);
+
+	if (state == STATE_ITEM_SPAWN) {
+		vy = GRAVITY * dt;
+		CCollision::GetInstance()->Process(this, dt, coObjects);
+
 			}
-		}
-		// if this a leaf
-		else {
+	else if (state == STATE_ITEM_VISIBLE) {
+		y += vy * dt;
+		if (baseY - y > TILE_SIZE) {
 			y -= LEAF_DEFLECT_GRAVITY * dt;
 			if (y <= baseY - TILE_SIZE * 4) {	// How far the leaf will pop up before drop down
 				SetState(STATE_ITEM_SPAWN);
 			}
 		}
 
-	}
-	if (state == STATE_ITEM_SPAWN) {
-		vy += ay * dt;
+	//DebugOut(L"item spawn x: %0.4f y: %0.4f\n", x, y);
 
 		if (type == SuperItemType::Leaf) {
 			vy = LEAF_SPEED_Y;

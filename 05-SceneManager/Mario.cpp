@@ -15,6 +15,8 @@
 #include "ButtonP.h"
 #include "PlayScene.h"
 
+#define MARIO_FALLING_SPEED_SLOW 0.1f // tốc độ rơi Mario, bị hãm bởi nút S vẫy đuôi
+
 CMario* CMario::__instance = NULL;
 int _switchSceneId = 0;
 
@@ -745,25 +747,19 @@ void CMario::SetState(int state)
 				else
 					vy = -MARIO_JUMP_SPEED_Y;
 			}
-		}
-		else {
-			if (isSitting) break;
-			if (isOnPlatform)
-			{
-				if (abs(this->vx) >= MARIO_RUNNING_SPEED)
-				{
-					//ay -= 0.003f;
-					vy = -MARIO_JUMP_RUN_SPEED_Y;
-				}
-				
-				else
-				{
-					vy = -MARIO_JUMP_SPEED_Y;
-				}
+		break;
 
+	case MARIO_FLY_DOWN: {
+		if (vx >= abs(MARIO_RUNNING_SPEED)) {
+			vy = -3 * MARIO_FALLING_SPEED_SLOW;
 			}
+		else if (vy > 0) {
+			vy = MARIO_FALLING_SPEED_SLOW;
+			isFlying = true;
+			timer = GetTickCount64();
 		}
 		break;
+	}
 
 	//case MARIO_GIU_NUT_S: {
 	//	DebugOut(L"MARIO GIU NUT S\n");

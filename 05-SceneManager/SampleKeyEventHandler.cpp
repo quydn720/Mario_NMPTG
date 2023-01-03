@@ -16,9 +16,15 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_DOWN:
 		mario->SetState(MARIO_STATE_SIT);
 		break;
-	case DIK_S:
-		mario->SetState(MARIO_STATE_JUMP);
+	case DIK_S: {
+		if (mario->GetLevel() == MARIO_LEVEL_TAIL && mario->isOnPlatform == false) {
+			mario->SetState(MARIO_FLY_DOWN);
+		}
+		else {
+			mario->SetState(MARIO_STATE_JUMP);
+		}
 		break;
+	}
 	case DIK_1:
 		mario->SetLevel(MARIO_LEVEL_SMALL);
 		break;

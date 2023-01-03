@@ -22,6 +22,7 @@
 #define ITEM_DEFLECT_GRAVITY 0.04f
 #define LEAF_DEFLECT_GRAVITY 0.08f
 #define MUSHROOM_SPEED_X 0.05f
+#define MUSHROOM_SPEED_Y 0.02f
 #define LEAF_SPEED_Y 0.05f
 
 enum SuperItemType {

@@ -174,7 +174,6 @@ class CMario : public CGameObject
 	
 	int untouchable;
 	ULONGLONG untouchable_start;
-	BOOLEAN isOnPlatform;
 
 	void RenderBoundingBox();
 

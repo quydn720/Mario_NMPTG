@@ -40,6 +40,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// Mario reach max speed 
 	
 	// vy += ay * dt;
+	if (!isFlying) {
+		vy += MARIO_GRAVITY * dt;
+	}
 	isOnPlatform = false;
 
 	if (state != MARIO_STATE_IDLE)
@@ -66,10 +69,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		
 	}
-	if (isPiping == false) {
-		vy += ay * dt;
-	}
-	else {
+	
+	if (isPiping){
 		if (GetTickCount64() - timer >= MARIO_PIPING_TIME) {
 			isPiping = false;
 
@@ -88,6 +89,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable_start = 0;
 		untouchable = 0;
 	}
+
+	if (isFlying)
+	{
+		if (GetTickCount64() - timer > 400)
+		{
+			timer = 0;
+			isFlying = false;
+		}
+	}
+
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 	// HandleRacoonAttack(dt, coObjects);
 }

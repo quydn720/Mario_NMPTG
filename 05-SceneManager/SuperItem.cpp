@@ -4,58 +4,57 @@ CSuperItem::CSuperItem(float x, float y) : Item(x, y, 0)
 {
 	itemType = ItemType::SuperItem;
 	baseY = y;
+	baseX = x;
 	SetState(STATE_ITEM_INVISIBLE);
 }
 
 void CSuperItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
+	//if (x < 0 || x > Get) this->Delete();
 
-	if (state == STATE_ITEM_SPAWN) {
-		vy += GRAVITY * dt;
-		CCollision::GetInstance()->Process(this, dt, coObjects);
+	if (type == SuperItemType::RedMushroom || type == SuperItemType::GreenMushroom) {
+		DebugOut(L"item spawn vx: %0.4f x: %0.4f\n", vx, x);
+		if (state == STATE_ITEM_SPAWN) {
+			vy += GRAVITY * dt;
+			CCollision::GetInstance()->Process(this, dt, coObjects);
 
-			}
-	else if (state == STATE_ITEM_VISIBLE) {
-		y += vy * dt;
-		if (baseY - y > TILE_SIZE) {
+		}
+		else if (state == STATE_ITEM_VISIBLE) {
+			y += -ITEM_SPEED_Y * dt;
+			if (baseY - y > TILE_SIZE) {
 				SetState(STATE_ITEM_SPAWN);
 			}
 		}
+	}
+	else if (type == SuperItemType::Leaf) {
+		DebugOut(L"item spawn vx: %0.4f x: %0.4f\n", vx, x);
 
-	//DebugOut(L"item spawn x: %0.4f y: %0.4f\n", x, y);
-
-		if (type == SuperItemType::Leaf) {
-			vy = LEAF_SPEED_Y;
-			if (GetTickCount64() - timer >= 500) {
+		if (state == STATE_ITEM_SPAWN) {
+			if (abs(x - baseX) >= 1.5 * TILE_SIZE) {
 				vx = -vx;
-				timer = GetTickCount64();
 			}
-
+			x += vx * dt;
+			y += ITEM_SPEED_Y * dt;
+		}
+		else if (state == STATE_ITEM_VISIBLE) {
+			y += 1.5 * -ITEM_SPEED_Y  * dt;
+			if (baseY - y > TILE_SIZE * 3) {
+				SetState(STATE_ITEM_SPAWN); // la' roi
+			}
 		}
 	}
-	CGameObject::Update(dt, coObjects);
-	CCollision::GetInstance()->Process(this, dt, coObjects);
 }
 
 void CSuperItem::OnCollisionWith(LPCOLLISIONEVENT e)
 {
-	if (type == SuperItemType::Leaf) {
-		return;
-	}
-	else {
-		if (!e->obj->IsBlocking()) return;
-		if (dynamic_cast<CGoomba*>(e->obj)) return;
-		if (dynamic_cast<CSuperItem*>(e->obj)) return;
-
-		if (e->ny != 0 && e->obj->IsBlocking())
-		{
-			vy = 0;
+	if (e->ny != 0 && e->obj->IsBlocking())
+	{
+		vy = 0;
 		if (e->ny < 0) isOnPlatform = true;
-		}
+	}
 
 	else if (e->nx != 0 && e->obj->IsBlocking())
 	{
-			vx = -vx;
-		}
+		vx = -vx;
 	}
 }
 
@@ -68,11 +67,10 @@ void CSuperItem::SetState(int state)
 		vy = 0;
 		break;
 	case STATE_ITEM_VISIBLE:
-		vy = -MUSHROOM_SPEED_Y;
 		break;
 	case STATE_ITEM_SPAWN:
 		timer = GetTickCount64();
-		vx = MUSHROOM_SPEED_X * nx;
+		vx = ITEM_SPEED_X * nx;
 		IsAlive = true;
 		break;
 	case STATE_ITEM_DIE:

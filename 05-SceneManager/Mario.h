@@ -47,6 +47,8 @@
 #define MARIO_STATE_HOLDING_RIGHT		1200
 #define MARIO_STATE_HOLDING_LEFT		1300
 
+#define MARIO_FLY_DOWN					1400 // mario dang roi dan`
+
 #pragma region ANIMATION_ID
 // BIG
 #define ID_ANI_MARIO_IDLE_RIGHT 400
@@ -169,12 +171,11 @@ class CMario : public CGameObject
 	BOOLEAN isSitting;
 	float maxVx;
 	float ax;				// acceleration on x 
-	float ay;				// acceleration on y 
 
+	bool isFlying;
 	
 	int untouchable;
 	ULONGLONG untouchable_start;
-	BOOLEAN isOnPlatform;
 
 	void RenderBoundingBox();
 
@@ -200,6 +201,7 @@ public:
 	static CMario* GetInstance();
 
 	bool render_tail; // Đã vẽ đuôi hay chưa để thoát vòng lặp vẽ đuôi bên playscene
+	BOOLEAN isOnPlatform;
 	CTail* tail;
 
 	bool isHolding = false, pressA = false, canKick = false;
@@ -216,9 +218,7 @@ public:
 	CMario(float x, float y) : CGameObject(x, y)
 	{
 		IsAttack = isSitting = false;
-		maxVx = 0.0f;
 		ax = 0.0f;
-		ay = MARIO_GRAVITY;
 
 		level = MARIO_LEVEL_BIG;
 		untouchable = 0;

@@ -135,6 +135,15 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 {
 	if (!e->obj->IsBlocking()) return;
 	if (dynamic_cast<CKoopas*>(e->obj)) return;
+	if (state == KOOPAS_STATE_SHELL_WALKING_RIGHT || state == KOOPAS_STATE_SHELL_WALKING_LEFT) {
+		if (dynamic_cast<CQuestionBlock*>(e->obj)) {
+			CQuestionBlock* block = dynamic_cast<CQuestionBlock*>(e->obj);
+			if (block->GetState() != STATE_BRICK_EMPTY) {
+				block->SetState(STATE_BRICK_HIT);
+				DebugOut(L"HIT QUESTION BLOCK");
+			}
+		}
+	}
 
 	if (GetState() == ENEMY_STATE_INIT)
 		SetState(ENEMY_STATE_WALKING_LEFT);

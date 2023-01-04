@@ -180,7 +180,6 @@ class CMario : public CGameObject
 	int untouchable;
 	ULONGLONG untouchable_start;
 
-	void RenderBoundingBox();
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);

@@ -35,8 +35,6 @@ public:
 	};
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects = NULL);
-	virtual void OnNoCollision(DWORD dt);
-	virtual void OnCollisionWith(LPCOLLISIONEVENT e);
 	void RenderBoundingBox();
 	void SetState(int state);
 	void OnCollisionWithBreakableBrick(LPGAMEOBJECT& obj);

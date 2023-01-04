@@ -47,6 +47,8 @@
 #define MARIO_STATE_HOLDING_RIGHT		1200
 #define MARIO_STATE_HOLDING_LEFT		1300
 
+#define MARIO_FLY_DOWN					1400 // mario dang roi dan`
+
 #pragma region ANIMATION_ID
 // BIG
 #define ID_ANI_MARIO_IDLE_RIGHT 400
@@ -121,6 +123,8 @@
 #define ID_ANI_MARIO_TAIL_JUMP_UP_LEFT 3502
 #define ID_ANI_MARIO_TAIL_JUMP_DOWN_LEFT 3503
 
+#define ID_ANI_FLY_DOWN 2003
+
 #define ID_ANI_MARIO_TAIL_JUMP_RUN_UP_RIGHT 3600
 #define ID_ANI_MARIO_TAIL_JUMP_RUN_DOWN_RIGHT 3601
 
@@ -136,6 +140,7 @@
 #define ID_ANI_MARIO_TAIL_PIPING -2000
 #define ID_ANI_MARIO_TAIL_KICKING_RIGHT -2010
 #define ID_ANI_MARIO_TAIL_KICKING_LEFT -2011
+
 
 #pragma endregion
 
@@ -169,8 +174,8 @@ class CMario : public CGameObject
 	BOOLEAN isSitting;
 	float maxVx;
 	float ax;				// acceleration on x 
-	float ay;				// acceleration on y 
 
+	bool isFlying;
 	
 	int untouchable;
 	ULONGLONG untouchable_start;
@@ -199,6 +204,7 @@ public:
 	static CMario* GetInstance();
 
 	bool render_tail; // Đã vẽ đuôi hay chưa để thoát vòng lặp vẽ đuôi bên playscene
+	BOOLEAN isOnPlatform;
 	CTail* tail;
 
 	bool isHolding = false, pressA = false, canKick = false;
@@ -209,15 +215,15 @@ public:
 	bool IsAttack;
 	DWORD AttackTime;
 	ULONGLONG timer;
+	ULONGLONG flyTimer;
+
 	// Use only one in the initial playscene. not a good practice to put as public method.
 	static void SetInstance(CMario* p);
 
 	CMario(float x, float y) : CGameObject(x, y)
 	{
 		IsAttack = isSitting = false;
-		maxVx = 0.0f;
 		ax = 0.0f;
-		ay = MARIO_GRAVITY;
 
 		level = MARIO_LEVEL_BIG;
 		untouchable = 0;

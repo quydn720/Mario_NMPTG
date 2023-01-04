@@ -15,6 +15,8 @@
 #include "ButtonP.h"
 #include "PlayScene.h"
 
+#define MARIO_FALLING_SPEED_SLOW 0.1f // tốc độ rơi Mario, bị hãm bởi nút S vẫy đuôi
+
 CMario* CMario::__instance = NULL;
 int _switchSceneId = 0;
 
@@ -38,6 +40,9 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	// Mario reach max speed 
 	
 	// vy += ay * dt;
+	if (!isFlying) {
+		vy += MARIO_GRAVITY * dt;
+	}
 	isOnPlatform = false;
 
 	if (state != MARIO_STATE_IDLE)
@@ -64,10 +69,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 		
 	}
-	if (isPiping == false) {
-		vy += ay * dt;
-	}
-	else {
+	
+	if (isPiping) {
 		if (GetTickCount64() - timer >= MARIO_PIPING_TIME) {
 			isPiping = false;
 
@@ -86,6 +89,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		untouchable_start = 0;
 		untouchable = 0;
 	}
+
+	if (isFlying)
+	{
+		if (GetTickCount64() - flyTimer > 400)
+		{
+			timer = 0;
+			isFlying = false;
+		}
+	}
+
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 	// HandleRacoonAttack(dt, coObjects);
 }
@@ -567,7 +580,7 @@ int CMario::GetAniIdBig()
 				else if (ax == MARIO_ACCEL_RUN_X)
 				{
 					aniId = ID_ANI_MARIO_WALKING_RIGHT;
-					if(vx == MARIO_RUNNING_SPEED)
+					if (vx == MARIO_RUNNING_SPEED)
 						aniId = ID_ANI_MARIO_RUNNING_RIGHT;
 				}
 				else //if (ax == MARIO_ACCEL_WALK_X)
@@ -604,9 +617,9 @@ int CMario::GetAniIdTail()
 	int aniId = -1;
 	CAnimations* animations = CAnimations::GetInstance();
 
+	
 	// ON AIR
-	if (!isOnPlatform)
-	{
+	if (!isOnPlatform) {
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
 		{
 			if (nx >= 0) // TODO: && vx >= vxMax
@@ -614,15 +627,22 @@ int CMario::GetAniIdTail()
 			else
 				aniId = (vy < 0) ? ID_ANI_MARIO_TAIL_JUMP_RUN_UP_LEFT : ID_ANI_MARIO_TAIL_JUMP_RUN_DOWN_LEFT;
 		}
-		else
+		else if (abs(ax) <= MARIO_ACCEL_WALK_X)
 		{
 			if (nx >= 0)
 				aniId = (vy < 0) ? ID_ANI_MARIO_TAIL_JUMP_UP_RIGHT : ID_ANI_MARIO_TAIL_JUMP_DOWN_RIGHT;
 			else
 				aniId = (vy < 0) ? ID_ANI_MARIO_TAIL_JUMP_UP_LEFT : ID_ANI_MARIO_TAIL_JUMP_DOWN_LEFT;
 		}
+		if (isFlying) {
+			DebugOut(L"FLY");
+
+			aniId = nx * ID_ANI_FLY_DOWN;
+
+		}
 	}
-	else
+	
+	else {
 		// SIT
 		if (isSitting)
 		{
@@ -662,6 +682,7 @@ int CMario::GetAniIdTail()
 				else if (ax == -MARIO_ACCEL_WALK_X)
 					aniId = ID_ANI_MARIO_TAIL_WALKING_LEFT;
 			}
+	}
 
 	if (isPiping) { // TODO: add another level ani
 		aniId = ID_ANI_MARIO_TAIL_PIPING;
@@ -726,47 +747,41 @@ void CMario::SetState(int state)
 		nx = 1;
 		break;
 	}
-	case MARIO_STATE_WALKING_LEFT:{
+	case MARIO_STATE_WALKING_LEFT: {
 		if (isSitting) break;
 		maxVx = -MARIO_WALKING_SPEED;
 		ax = -MARIO_ACCEL_WALK_X;
 		nx = -1;
 		break;
 	}
-	case MARIO_STATE_JUMP: 
-		if (level == MARIO_LEVEL_TAIL) {
+	case MARIO_STATE_JUMP: {
 			if (isSitting) break;
-			if (isOnPlatform)
-			{
-				if (abs(this->vx) >= MARIO_RUNNING_SPEED)
-				{
+		if (isOnPlatform) {
+			if (abs(this->vx) >= MARIO_RUNNING_SPEED) {
 					vy = -MARIO_JUMP_RUN_SPEED_Y;
 					// ay += 0.03f;
 
 					//ay = 0.0012f;
 				}
-				else
+			else {
 					vy = -MARIO_JUMP_SPEED_Y;
 			}
+		break;
 		}
-		else {
-			if (isSitting) break;
-			if (isOnPlatform)
-			{
-				if (abs(this->vx) >= MARIO_RUNNING_SPEED)
-				{
-					//ay -= 0.003f;
-					vy = -MARIO_JUMP_RUN_SPEED_Y;
-				}
-				
-				else
-				{
-					vy = -MARIO_JUMP_SPEED_Y;
-				}
-
+	}
+	case MARIO_FLY_DOWN: {
+		if (level == MARIO_LEVEL_TAIL) {
+			if (abs(vx) >= abs(MARIO_RUNNING_SPEED)) {
+				vy = -4 * MARIO_FALLING_SPEED_SLOW;
+			}
+		else if (vy > 0) {
+			vy = MARIO_FALLING_SPEED_SLOW;
+			isFlying = true;
+				flyTimer = GetTickCount64();
 			}
 		}
 		break;
+	}
 
 	//case MARIO_GIU_NUT_S: {
 	//	DebugOut(L"MARIO GIU NUT S\n");
@@ -780,9 +795,7 @@ void CMario::SetState(int state)
 	//}
 
 	case MARIO_STATE_RELEASE_JUMP:
-		if (isPiping == false) {
-			if (vy < 0) vy += MARIO_JUMP_SPEED_Y / 2;
-		}
+		if (vy < 0 && isFlying == false) vy += MARIO_JUMP_SPEED_Y / 2;
 		break;
 
 	case MARIO_STATE_SIT:

@@ -1,16 +1,16 @@
 /* =============================================================
 	INTRODUCTION TO GAME PROGRAMMING SE102
-	
+
 	SAMPLE 05 - SCENE MANAGER
 
 	This sample illustrates how to:
 
-		1/ Read scene (textures, sprites, animations and objects) from files 
+		1/ Read scene (textures, sprites, animations and objects) from files
 		2/ Handle multiple scenes in game
 
 	Key classes/functions:
 		CScene
-		CPlayScene		
+		CPlayScene
 
 
 HOW TO INSTALL Microsoft.DXSDK.D3DX
@@ -77,7 +77,7 @@ void Update(DWORD dt)
 }
 
 /*
-	Render a frame 
+	Render a frame
 */
 void Render()
 {
@@ -135,7 +135,7 @@ HWND CreateGameWindow(HINSTANCE hInstance, int nCmdShow, int ScreenWidth, int Sc
 			hInstance,
 			NULL);
 
-	if (!hWnd) 
+	if (!hWnd)
 	{
 		OutputDebugString(L"[ERROR] CreateWindow failed");
 		DWORD ErrCode = GetLastError();
@@ -175,14 +175,14 @@ int Run()
 		{
 			frameStart = now;
 
-			CGame::GetInstance()->ProcessKeyboard();	
+			CGame::GetInstance()->ProcessKeyboard();
 			Update(dt);
 			Render();
 
-			 CGame::GetInstance()->SwitchScene();
+			CGame::GetInstance()->SwitchScene();
 		}
 		else
-			Sleep(tickPerFrame - dt);	
+			Sleep(tickPerFrame - dt);
 	}
 
 	return 1;
@@ -202,7 +202,7 @@ int WINAPI WinMain(
 	game->Init(hWnd, hInstance);
 	game->InitKeyboard();
 	//IMPORTANT: this is the only place where a hardcoded file name is allowed ! 
-	game->Load(GAME_FILE_TXT);  
+	game->Load(GAME_FILE_TXT);
 	SetWindowPos(hWnd, 0, 50, 150, SCREEN_WIDTH * 2, SCREEN_HEIGHT * 2, SWP_NOZORDER | SWP_SHOWWINDOW);
 	Run();
 

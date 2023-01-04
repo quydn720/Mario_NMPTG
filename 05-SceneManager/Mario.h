@@ -222,7 +222,7 @@ public:
 	{
 		IsAttack = isSitting = false;
 		ax = 0.0f;
-
+		isPiping = false;
 		level = MARIO_LEVEL_BIG;
 		untouchable = 0;
 		untouchable_start = -1;

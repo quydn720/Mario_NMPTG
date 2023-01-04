@@ -70,7 +70,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		
 	}
 	
-	if (isPiping){
+	if (isPiping) {
 		if (GetTickCount64() - timer >= MARIO_PIPING_TIME) {
 			isPiping = false;
 
@@ -92,7 +92,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 
 	if (isFlying)
 	{
-		if (GetTickCount64() - timer > 400)
+		if (GetTickCount64() - flyTimer > 400)
 		{
 			timer = 0;
 			isFlying = false;
@@ -577,7 +577,7 @@ int CMario::GetAniIdBig()
 				else if (ax == MARIO_ACCEL_RUN_X)
 				{
 					aniId = ID_ANI_MARIO_WALKING_RIGHT;
-					if(vx == MARIO_RUNNING_SPEED)
+					if (vx == MARIO_RUNNING_SPEED)
 						aniId = ID_ANI_MARIO_RUNNING_RIGHT;
 				}
 				else //if (ax == MARIO_ACCEL_WALK_X)
@@ -736,30 +736,28 @@ void CMario::SetState(int state)
 		nx = 1;
 		break;
 	}
-	case MARIO_STATE_WALKING_LEFT:{
+	case MARIO_STATE_WALKING_LEFT: {
 		if (isSitting) break;
 		maxVx = -MARIO_WALKING_SPEED;
 		ax = -MARIO_ACCEL_WALK_X;
 		nx = -1;
 		break;
 	}
-	case MARIO_STATE_JUMP: 
-		if (level == MARIO_LEVEL_TAIL) {
+	case MARIO_STATE_JUMP: {
 			if (isSitting) break;
-			if (isOnPlatform)
-			{
-				if (abs(this->vx) >= MARIO_RUNNING_SPEED)
-				{
+		if (isOnPlatform) {
+			if (abs(this->vx) >= MARIO_RUNNING_SPEED) {
 					vy = -MARIO_JUMP_RUN_SPEED_Y;
 					// ay += 0.03f;
 
 					//ay = 0.0012f;
 				}
-				else
+			else {
 					vy = -MARIO_JUMP_SPEED_Y;
 			}
 		break;
-
+		}
+	}
 	case MARIO_FLY_DOWN: {
 		if (vx >= abs(MARIO_RUNNING_SPEED)) {
 			vy = -3 * MARIO_FALLING_SPEED_SLOW;

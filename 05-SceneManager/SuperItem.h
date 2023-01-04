@@ -19,10 +19,10 @@
 
 #define GRAVITY 0.002f
 #define TILE_SIZE 16
-#define ITEM_DEFLECT_GRAVITY 0.04f
-#define LEAF_DEFLECT_GRAVITY 0.08f
-#define MUSHROOM_SPEED_X 0.05f
-#define LEAF_SPEED_Y 0.05f
+
+#define MUSHROOM_SPEED_Y 0.02f
+#define ITEM_SPEED_Y  0.03f
+#define ITEM_SPEED_X 0.04f
 
 enum SuperItemType {
 	RedMushroom, GreenMushroom, Leaf,
@@ -35,7 +35,7 @@ class CSuperItem : public Item
 	ULONGLONG timer;
 public:
 	bool IsAlive = false;
-	SuperItemType type = SuperItemType::RedMushroom;
+	SuperItemType type;
 
 	CSuperItem(float x, float y);
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

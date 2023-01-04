@@ -397,7 +397,9 @@ void CMario::OnCollisionWithMushroom(LPCOLLISIONEVENT e)
 	CSuperItem* superItem = dynamic_cast<CSuperItem*>(e->obj);
 	if (superItem->IsAlive) {
 		e->obj->SetState(STATE_ITEM_DIE);
-		SetLevel(MARIO_LEVEL_BIG);
+		if (level != MARIO_LEVEL_TAIL) {
+			SetLevel(MARIO_LEVEL_BIG);
+		}
 		e->obj->Delete();
 	}
 }
@@ -406,9 +408,10 @@ void CMario::OnCollisionWithLeaf(LPCOLLISIONEVENT e)
 {
 	CSuperItem* superItem = dynamic_cast<CSuperItem*>(e->obj);
 	if (superItem->IsAlive) {
-		e->obj->IsBlocking();
 		e->obj->SetState(STATE_ITEM_DIE);
-		SetLevel(MARIO_LEVEL_TAIL);
+		if (level != MARIO_LEVEL_TAIL) {
+			SetLevel(MARIO_LEVEL_TAIL);
+		}
 		e->obj->Delete();
 	}
 }

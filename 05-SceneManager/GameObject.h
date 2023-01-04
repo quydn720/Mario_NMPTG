@@ -30,6 +30,7 @@ public:
 	int objType;
 	bool isInit;
 	bool isDeleted;
+	BOOLEAN isOnPlatform;
 
 public:
 	void SetPosition(float x, float y) { this->x = x, this->y = y; }

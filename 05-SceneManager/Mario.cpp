@@ -99,6 +99,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		}
 	}
 
+	HandleRacoonAttack(dt, coObjects);
+
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 	// HandleRacoonAttack(dt, coObjects);
 }
@@ -697,6 +699,15 @@ int CMario::GetAniIdTail()
 	return aniId;
 }
 
+void CMario::HandleRacoonAttack(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
+{
+	if (GetTickCount64() - AttackTime > MARIO_TAIL_ATTACK_TIME && IsAttack) { 
+		CTail* tail = new CTail(x + nx * MARIO_BIG_BBOX_WIDTH, y);
+		CPlayScene::GetInstance()->AddNewObject(tail);
+		IsAttack = false;
+	}
+}
+
 void CMario::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
@@ -897,11 +908,7 @@ void CMario::GetBoundingBox(float& left, float& top, float& right, float& bottom
 	}
 }
 
-void CMario::HandleRacoonAttack(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
 	
-}
-
 void CMario::SetLevel(int l)
 {
 	// Adjust position to avoid falling off platform

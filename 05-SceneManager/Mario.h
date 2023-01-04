@@ -205,7 +205,6 @@ public:
 
 	bool render_tail; // Đã vẽ đuôi hay chưa để thoát vòng lặp vẽ đuôi bên playscene
 	BOOLEAN isOnPlatform;
-	CTail* tail;
 
 	bool isHolding = false, pressA = false, canKick = false;
 	bool changeDirection = false;
@@ -230,7 +229,6 @@ public:
 		untouchable_start = -1;
 		isOnPlatform = false;
 		coin = 0;
-		tail = NULL;
 		AttackTime = 0;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

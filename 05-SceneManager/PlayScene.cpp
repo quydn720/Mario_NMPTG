@@ -135,7 +135,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 
 	CGameObject* obj = NULL;
 	FallDetector* fallDetector = NULL;
-	CTail* tail = NULL;
 
 	switch (object_type)
 	{
@@ -147,11 +146,6 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 		obj = new CMario(x, y);
 		player = (CMario*)obj;
 		CMario::SetInstance((CMario*)obj);
-
-		tail = new CTail(x, y);
-		objects.push_back(tail);
-		CMario* tempMario = dynamic_cast<CMario*>(obj);
-		tempMario->tail = tail;
 		DebugOut(L"[INFO] Player object has been created!\n");
 		break;
 	}

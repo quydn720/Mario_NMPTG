@@ -9,7 +9,7 @@
 void CSampleKeyHandler::OnKeyDown(int KeyCode)
 {
 	//DebugOut(L"[INFO] KeyDown: %d\n", KeyCode);
-	CMario* mario = (CMario *)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer(); 
+	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
 
 	switch (KeyCode)
 	{
@@ -37,17 +37,12 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_0:
 		mario->SetState(MARIO_STATE_DIE);
 		break;
-	case DIK_A:
-	{
-		DebugOut(L"Down A\n");
-		CMario::GetInstance()->pressA = true;
-		if (CMario::GetInstance()->GetLevel() == MARIO_LEVEL_TAIL)
-		{
+	case DIK_A: {
+		if (CMario::GetInstance()->GetLevel() == MARIO_LEVEL_TAIL) {
 			CMario::GetInstance()->SetState(MARIO_STATE_ATTACK);
 		}
+		break;
 	}
-	break;
-
 	case DIK_R: // reset
 		//Reload();
 		break;
@@ -65,8 +60,6 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 	{
 		DebugOut(L"Up A\n");
 		CMario::GetInstance()->pressA = false;
-		/*if (CMario::GetInstance()->isHolding == true)
-			CMario::GetInstance()->isHolding = false;*/
 		if (CMario::GetInstance()->isHolding == true) // đang giữ rùa, thả nút a thì chuyển sang đá
 		{
 			CMario::GetInstance()->canKick = true;
@@ -83,7 +76,7 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 	}
 }
 
-void CSampleKeyHandler::KeyState(BYTE *states)
+void CSampleKeyHandler::KeyState(BYTE* states)
 {
 	LPGAME game = CGame::GetInstance();
 	CMario* mario = (CMario*)((LPPLAYSCENE)CGame::GetInstance()->GetCurrentScene())->GetPlayer();
@@ -102,10 +95,6 @@ void CSampleKeyHandler::KeyState(BYTE *states)
 		else
 			mario->SetState(MARIO_STATE_WALKING_LEFT);
 	}
-	/*else if (game->IsKeyDown(DIK_S))
-	{
-		mario->SetState(MARIO_GIU_NUT_S);
-	}*/
 	else
 		mario->SetState(MARIO_STATE_IDLE);
 }

@@ -22,59 +22,14 @@ void CTail::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 	bottom = top + MARIO_TAIL_HEIGHT;
 }
 
-void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
-{
-	if (CMario::GetInstance()->level != MARIO_LEVEL_TAIL)
-	{
-		this->isDeleted = true;
-		return;
-	}
-	else
-	{
-		nx = CMario::GetInstance()->nx;
-		if (CMario::GetInstance()->nx == 1)
-		{
-			float temp_x = CMario::GetInstance()->x - 7;
-			if (CMario::GetInstance()->IsAttack == false)
-			{
-				this->x = temp_x;
-				float temp_y = CMario::GetInstance()->y;
-				this->y = temp_y - MARIO_TAIL_HEIGHT + 7;
-			}
-			else
-			{
+void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
-				this->SetPosition(CMario::GetInstance()->x + (MARIO_BIG_BBOX_WIDTH / 2) + (TAIL_BBOX_WIDTH / 2) + 2, CMario::GetInstance()->y + TAIL_BBOX_HEIGHT);
-
-				if (GetTickCount64() - CMario::GetInstance()->AttackTime >= RACOON_ATTACK_TIME)
-				{
-					CMario::GetInstance()->IsAttack = false;
-					IsActive = false;
-				}
-			}
-		}
-		else if (CMario::GetInstance()->nx == -1)
-		{
-			if (CMario::GetInstance()->IsAttack == false)
-			{
-				this->x = CMario::GetInstance()->x + MARIO_BIG_BBOX_WIDTH - 5;
-				float temp_y = CMario::GetInstance()->y;
-				this->y = temp_y - MARIO_TAIL_HEIGHT + 7;
-			}
-			else
-			{
-				this->SetPosition((CMario::GetInstance()->x - MARIO_BIG_BBOX_WIDTH / 2 - TAIL_BBOX_WIDTH / 2) - 2, CMario::GetInstance()->y + TAIL_BBOX_HEIGHT);
-				if (GetTickCount64() - CMario::GetInstance()->AttackTime >= RACOON_ATTACK_TIME)
-				{
-					CMario::GetInstance()->IsAttack = false;
-					IsActive = false;
-				}
-			}
-		}
-	}
+	DebugOut(L"Attacking: %d\n", dt);
 
 	for (int i = 0; i < coObjects->size(); i++) {
-		if (CCollision::GetInstance()->CheckAABB(this, coObjects->at(i)) && CMario::GetInstance()->IsAttack == true)
+		bool isCollide = CCollision::GetInstance()->CheckAABB(this, coObjects->at(i));
+
+		if (isCollide)
 		{
 			if (dynamic_cast<CGoomba*>(coObjects->at(i)))
 			{
@@ -83,7 +38,8 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			}
 			else if (dynamic_cast<CQuestionBlock*>(coObjects->at(i))) {
 				CQuestionBlock* qb = dynamic_cast<CQuestionBlock*>(coObjects->at(i));
-				//qb->SpawnItem(CMario::GetInstance()->getNx(), MARIO_LEVEL_TAIL);
+				if (qb->GetState() != STATE_BRICK_EMPTY)
+					qb->SetState(STATE_BRICK_HIT);
 			}
 			else if (dynamic_cast<CKoopas*>(coObjects->at(i))) {
 				CKoopas* koopas = dynamic_cast<CKoopas*>(coObjects->at(i));
@@ -95,38 +51,12 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				OnCollisionWithBreakableBrick(coObjects->at(i));
 		}
 	}
+	//
+	this->Delete();
+	DebugOut(L"Attack Done %d... Delete\n", dt);
+
 }
 
-void CTail::OnCollisionWith(LPCOLLISIONEVENT e) {
-	if (CMario::GetInstance()->IsAttack == true)
-	{
-		if (dynamic_cast<CGoomba*>(e->obj)) {
-			CGoomba* g = dynamic_cast<CGoomba*>(e->obj);
-			g->SetState(GOOMBA_STATE_DIE);
-		}
-		else if (dynamic_cast<CKoopas*>(e->obj)) {
-			CKoopas* koopas = dynamic_cast<CKoopas*>(e->obj);
-			koopas->SetState(KOOPAS_STATE_SHELL_2);
-			koopas->vy = -0.4f;
-			koopas->ReviveTime = GetTickCount64();
-			
-		}
-		else if (dynamic_cast<CQuestionBlock*>(e->obj)) {
-			CQuestionBlock* qb = dynamic_cast<CQuestionBlock*>(e->obj);
-			qb->SetState(STATE_BRICK_HIT);
-			//qb->SpawnItem(CMario::GetInstance()->getNx(), MARIO_LEVEL_TAIL);
-		}
-	}
-
-	if (!e->obj->IsBlocking()) return;
-}
-
-void CTail::OnNoCollision(DWORD dt)
-{
-	//DebugOut(L"No collision at all\n");
-	x += vx * dt;
-	y += vy * dt;
-}
 void CTail::RenderBoundingBox()
 {
 	D3DXVECTOR3 p(x, y, 0);

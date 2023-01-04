@@ -688,9 +688,8 @@ int CMario::GetAniIdTail()
 		aniId = ID_ANI_MARIO_TAIL_PIPING;
 	}
 	
-	if (IsAttack)
-	{
-		if (nx > 0)aniId = ID_ANI_MARIO_TAIL_ATTACK_RIGHT;
+	if (IsAttack) {
+		if (nx > 0) aniId = ID_ANI_MARIO_TAIL_ATTACK_RIGHT;
 		else aniId = ID_ANI_MARIO_TAIL_ATTACK_LEFT;
 	}
 	if (aniId == -1) aniId = ID_ANI_MARIO_TAIL_IDLE_RIGHT;
@@ -717,13 +716,11 @@ void CMario::Render()
 	DebugOutTitle(L"Coins: %d", coin);
 }
 
-void CMario::SetState(int state)
-{
+void CMario::SetState(int state) {
 	// DIE is the end state, cannot be changed! 
 	if (this->state == MARIO_STATE_DIE) return;
 
-	switch (state)
-	{
+	switch (state) {
 	case MARIO_STATE_RUNNING_RIGHT: {
 		if (isSitting) break;
 		maxVx = MARIO_RUNNING_SPEED;
@@ -782,23 +779,11 @@ void CMario::SetState(int state)
 		}
 		break;
 	}
-
-	//case MARIO_GIU_NUT_S: {
-	//	DebugOut(L"MARIO GIU NUT S\n");
-	//	if (vy <= -0.4f) {
-	//		ay = 0.02f;
-	//	}
-	//	else {
-	//		//ay -= 0.0002f;
-	//	}
-	//	break;
-	//}
-
-	case MARIO_STATE_RELEASE_JUMP:
+	case MARIO_STATE_RELEASE_JUMP: {
 		if (vy < 0 && isFlying == false) vy += MARIO_JUMP_SPEED_Y / 2;
 		break;
-
-	case MARIO_STATE_SIT:
+	}
+	case MARIO_STATE_SIT: {
 		if (isOnPlatform && level != MARIO_LEVEL_SMALL)
 		{
 			state = MARIO_STATE_IDLE;
@@ -807,7 +792,9 @@ void CMario::SetState(int state)
 			y += MARIO_SIT_HEIGHT_ADJUST;
 		}
 		break;
-	case MARIO_STATE_SIT_RELEASE:
+	}
+
+	case MARIO_STATE_SIT_RELEASE: {
 		if (isSitting)
 		{
 			isSitting = false;
@@ -815,6 +802,8 @@ void CMario::SetState(int state)
 			y -= MARIO_SIT_HEIGHT_ADJUST;
 		}
 		break;
+	}
+
 
 	case MARIO_STATE_IDLE:
 		if (vx != 0)
@@ -850,14 +839,11 @@ void CMario::SetState(int state)
 		ax = 0;
 		break;
 
-	case MARIO_STATE_ATTACK:
-		if (level == MARIO_LEVEL_TAIL)
-		{
+	case MARIO_STATE_ATTACK: {
 			IsAttack = true;
 			AttackTime = GetTickCount64();
-			tail->IsActive = true;
-		}
 		break;
+		}
 	}
 
 	CGameObject::SetState(state);

@@ -759,13 +759,15 @@ void CMario::SetState(int state)
 		}
 	}
 	case MARIO_FLY_DOWN: {
-		if (vx >= abs(MARIO_RUNNING_SPEED)) {
-			vy = -3 * MARIO_FALLING_SPEED_SLOW;
+		if (level == MARIO_LEVEL_TAIL) {
+			if (abs(vx) >= abs(MARIO_RUNNING_SPEED)) {
+				vy = -4 * MARIO_FALLING_SPEED_SLOW;
 			}
 		else if (vy > 0) {
 			vy = MARIO_FALLING_SPEED_SLOW;
 			isFlying = true;
-			timer = GetTickCount64();
+				flyTimer = GetTickCount64();
+			}
 		}
 		break;
 	}
@@ -815,6 +817,7 @@ void CMario::SetState(int state)
 
 				if (vx < 0 || maxVx < 0) {
 					vx = 0;
+					maxVx = 0;
 				}
 			}
 			else {
@@ -823,6 +826,7 @@ void CMario::SetState(int state)
 
 				if (vx > 0 || maxVx > 0) {
 					vx = 0;
+					maxVx = 0;
 				}
 			}
 		}

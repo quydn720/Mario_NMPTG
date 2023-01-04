@@ -212,6 +212,8 @@ public:
 	bool IsAttack;
 	DWORD AttackTime;
 	ULONGLONG timer;
+	ULONGLONG flyTimer;
+
 	// Use only one in the initial playscene. not a good practice to put as public method.
 	static void SetInstance(CMario* p);
 

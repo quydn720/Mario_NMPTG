@@ -614,9 +614,9 @@ int CMario::GetAniIdTail()
 	int aniId = -1;
 	CAnimations* animations = CAnimations::GetInstance();
 
+	
 	// ON AIR
-	if (!isOnPlatform)
-	{
+	if (!isOnPlatform) {
 		if (abs(ax) == MARIO_ACCEL_RUN_X)
 		{
 			if (nx >= 0) // TODO: && vx >= vxMax
@@ -624,15 +624,22 @@ int CMario::GetAniIdTail()
 			else
 				aniId = (vy < 0) ? ID_ANI_MARIO_TAIL_JUMP_RUN_UP_LEFT : ID_ANI_MARIO_TAIL_JUMP_RUN_DOWN_LEFT;
 		}
-		else
+		else if (abs(ax) <= MARIO_ACCEL_WALK_X)
 		{
 			if (nx >= 0)
 				aniId = (vy < 0) ? ID_ANI_MARIO_TAIL_JUMP_UP_RIGHT : ID_ANI_MARIO_TAIL_JUMP_DOWN_RIGHT;
 			else
 				aniId = (vy < 0) ? ID_ANI_MARIO_TAIL_JUMP_UP_LEFT : ID_ANI_MARIO_TAIL_JUMP_DOWN_LEFT;
 		}
+		if (isFlying) {
+			DebugOut(L"FLY");
+
+			aniId = nx * ID_ANI_FLY_DOWN;
+
+		}
 	}
-	else
+	
+	else {
 		// SIT
 		if (isSitting)
 		{
@@ -672,6 +679,7 @@ int CMario::GetAniIdTail()
 				else if (ax == -MARIO_ACCEL_WALK_X)
 					aniId = ID_ANI_MARIO_TAIL_WALKING_LEFT;
 			}
+	}
 
 	if (isPiping) { // TODO: add another level ani
 		aniId = ID_ANI_MARIO_TAIL_PIPING;

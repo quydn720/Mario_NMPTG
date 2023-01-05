@@ -17,8 +17,6 @@
 #define KOOPAS_STATE_SHELL_2_HOLD			8
 #define KOOPAS_STATE_SHELL_WALKING_RIGHT	9
 #define KOOPAS_STATE_SHELL_WALKING_LEFT		10
-#define KOOPAS_STATE_SHELL_2_WALKING_RIGHT	11
-#define KOOPAS_STATE_SHELL_2_WALKING_LEFT	12
 #define KOOPAS_STATE_DIE					13
 
 #define KOOPAS_BBOX_WIDTH 16
@@ -69,6 +67,5 @@ public:
 	CKoopas(float x, float y);
 	virtual void SetState(int state);
 	void beingKicked(int n) { nx = -n; x += nx; }
-	void changeFromSmallToBig();
 };
 

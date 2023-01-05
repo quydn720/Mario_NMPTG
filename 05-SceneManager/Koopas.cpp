@@ -186,17 +186,11 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			CMario::GetInstance()->AttackTime = GetTickCount64();
 			if (CMario::GetInstance()->nx == 1)
 			{
-				if (isShell == true)
-					SetState(KOOPAS_STATE_SHELL_WALKING_RIGHT);
-				else
-					SetState(KOOPAS_STATE_SHELL_2_WALKING_RIGHT);
+				if (isShell == true) SetState(KOOPAS_STATE_SHELL_WALKING_RIGHT);
 			}
 			else
 			{
-				if (isShell == true)
-					SetState(KOOPAS_STATE_SHELL_WALKING_LEFT);
-				else
-					SetState(KOOPAS_STATE_SHELL_2_WALKING_LEFT);
+				if (isShell == true) SetState(KOOPAS_STATE_SHELL_WALKING_LEFT);
 			}
 			this->ay = KOOPAS_GRAVITY;
 			return;
@@ -204,8 +198,6 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		// rùa đang bị cầm và nút A đang giữ
 		else
 		{
-			//this->vx = CMario::GetInstance()->vx;
-			//this->nx = CMario::GetInstance()->nx;
 			if (CMario::GetInstance()->nx == 1)
 			{
 				if (isShell == true)
@@ -310,6 +302,12 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			fallDetector->SetPosition(x - 10, y);
 		if (vx > 0)
 			fallDetector->SetPosition(x + 10, y);
+	}
+
+	if (isKicked) {
+		x += 5.0f;
+		isKicked = false;
+		SetState(KOOPAS_STATE_SHELL_WALKING_RIGHT);
 	}
 	
 

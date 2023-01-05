@@ -321,17 +321,11 @@ void CMario::OnCollisionWithKoopas(LPCOLLISIONEVENT e)
 				AttackTime = GetTickCount64();
 				if (this->nx == 1)
 				{
-					if (koopas->isShell == true)
-						koopas->SetState(KOOPAS_STATE_SHELL_WALKING_RIGHT);
-					else
-						koopas->SetState(KOOPAS_STATE_SHELL_2_WALKING_RIGHT);
+					if (koopas->isShell == true) koopas->SetState(KOOPAS_STATE_SHELL_WALKING_RIGHT);
 				}
 				else if (this->nx == -1)
 				{
-					if (koopas->isShell == true)
-						koopas->SetState(KOOPAS_STATE_SHELL_WALKING_LEFT);
-					else
-						koopas->SetState(KOOPAS_STATE_SHELL_2_WALKING_LEFT);
+					if (koopas->isShell == true) koopas->SetState(KOOPAS_STATE_SHELL_WALKING_LEFT);
 				}
 				koopas->vy -= 0.05f;
 			}
@@ -558,11 +552,13 @@ int CMario::GetAniIdBig()
 		else if (canKick == true)
 		{
 			// phải
-			if (nx == 1)
+			if (nx == 1) {
 				aniId = ID_ANI_MARIO_KICKING_RIGHT;
+			}
 			// trái
-			else
+			else {
 				aniId = ID_ANI_MARIO_KICKING_LEFT;
+			}
 		}
 		else
 		{

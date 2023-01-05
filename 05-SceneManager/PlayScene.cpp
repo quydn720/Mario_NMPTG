@@ -156,13 +156,15 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	case OBJECT_TYPE_KOOPAS: {
 		// We adding a [FallDetector] when we instantiate a Red Koopas - to the objects vector
-		obj = new CKoopas(x, y);
-		CKoopas* tempKoopas = dynamic_cast<CKoopas*>(obj);
+		int level = (int)atoi(tokens[3].c_str());
+		obj = new CKoopas(x, y, level);
 
+		CKoopas* tempKoopas = dynamic_cast<CKoopas*>(obj);
 		fallDetector = new FallDetector(x, y);
 		fallDetector->height = KOOPAS_BBOX_HEIGHT;
 		objects.push_back(fallDetector);
 		tempKoopas->fallDetector = fallDetector;
+
 		break;
 	}
 	case OBJECT_TYPE_PLANT: {
@@ -184,7 +186,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	case OBJECT_TYPE_QUESTION_BLOCK: {
 		int itemType = atoi(tokens[3].c_str());
 		obj = new CQuestionBlock(x, y, itemType);
-		break; 
+		break;
 	}
 	case OBJECT_TYPE_ITEM: {
 		int type = (int)atoi(tokens[3].c_str());
@@ -229,15 +231,15 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	break;
 
-	case OBJECT_TYPE_BREAKABLE_BRICK: 
+	case OBJECT_TYPE_BREAKABLE_BRICK:
 	{
 		bool HaveButton = false;
 		int Item = atoi(tokens[3].c_str());
 		obj = new BreakableBrick(x, y, Item);
-		
+
 	}
 	break;
-	
+
 	case OBJECT_TYPE_PORTAL:
 	{
 		float r = (float)atof(tokens[3].c_str());
@@ -247,7 +249,7 @@ void CPlayScene::_ParseSection_OBJECTS(string line)
 	}
 	break;
 
-	
+
 	default:
 		DebugOut(L"[ERROR] Invalid object type: %d\n", object_type);
 		return;
@@ -282,8 +284,8 @@ void CPlayScene::LoadAssets(LPCWSTR assetFile)
 		// data section
 		//
 		switch (section) {
-			case ASSETS_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
-			case ASSETS_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
+		case ASSETS_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
+		case ASSETS_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
 		}
 	}
 
@@ -328,7 +330,7 @@ void CPlayScene::Load()
 
 	f.close();
 
-	camera = new CCamera(map->getMapWidth(), map->getMapHeight(), (float) _game->GetBackBufferWidth(), (float)_game->GetBackBufferHeight());
+	camera = new CCamera(map->getMapWidth(), map->getMapHeight(), (float)_game->GetBackBufferWidth(), (float)_game->GetBackBufferHeight());
 
 	DebugOut(L"[INFO] Done loading scene  %s\n", sceneFilePath);
 }

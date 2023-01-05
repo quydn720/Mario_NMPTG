@@ -24,7 +24,6 @@ void CKoopas::GetBoundingBox(float& left, float& top, float& right, float& botto
 		top = y - KOOPAS_BBOX_HEIGHT / 2;
 		right = left + KOOPAS_BBOX_WIDTH;
 		bottom = top + KOOPAS_BBOX_HEIGHT;
-		// 359.6
 	}
 	else
 	{
@@ -93,7 +92,6 @@ void CKoopas::SetState(int state)
 
 		case KOOPAS_STATE_SHELL_WALKING_LEFT:
 		{
-			//y = y - 5;
 			nx = -1;
 			isHold = false;
 			isShell = true;
@@ -162,8 +160,8 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 		SetState(ENEMY_STATE_WALKING_LEFT);
 	if (dynamic_cast<CPlatform*>(e->obj) || dynamic_cast<CColorBlock*>(e->obj))
 	{
-		if (e->ny < 0 && isShell == false && isShell_2==false)
-			if(fallDetector->GetState() == FALL_DETECTOR_STATE_INACTIVE)
+		if (e->ny < 0 && isShell == false && isShell_2 == false)
+			if (fallDetector->GetState() == FALL_DETECTOR_STATE_INACTIVE)
 				fallDetector->SetState(FALL_DETECTOR_STATE_ACTIVE);
 	}
 }
@@ -171,7 +169,7 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 
-	DebugOut(L"vx: %0.4f, vy: %0.4f\n", vx, vy);
+	//DebugOut(L"vx: %0.4f, vy: %0.4f\n", vx, vy);
 
 
 	isOnPlatform = false;
@@ -314,6 +312,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (isOnPlatform && level == KOOPAS_WINGS) {
 		vy = KOOPAS_WINGS_VY;
 	}
+}
 }
 
 void CKoopas::Render()

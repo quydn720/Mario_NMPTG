@@ -4,8 +4,8 @@
 
 
 #define KOOPAS_WINGS_VY -0.3f
-#define KOOPAS_WINGS 1
-#define KOOPAS_NORMAL 0
+#define KOOPAS_WINGS -1
+#define KOOPAS_NORMAL 1
 
 
 #define KOOPAS_GRAVITY 0.0015f

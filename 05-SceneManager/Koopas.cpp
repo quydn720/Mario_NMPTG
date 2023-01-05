@@ -44,78 +44,78 @@ void CKoopas::SetState(int state)
 	CGameObject::SetState(state);
 	switch (state)
 	{
-		case ENEMY_STATE_WALKING_RIGHT:
-		{
-			nx = 1;
-			vx = nx * KOOPAS_WALKING_SPEED;
-			isHold = isShell = isShell_2 = false;
-		}
-		break;
+	case ENEMY_STATE_WALKING_RIGHT:
+	{
+		nx = 1;
+		vx = nx * KOOPAS_WALKING_SPEED;
+		isHold = isShell = isShell_2 = false;
+	}
+	break;
 
-		case ENEMY_STATE_WALKING_LEFT:
-		{
-			nx = -1;
-			vx = nx * KOOPAS_WALKING_SPEED;
-			isHold = isShell = isShell_2 = false;
-		}
-		break;
+	case ENEMY_STATE_WALKING_LEFT:
+	{
+		nx = -1;
+		vx = nx * KOOPAS_WALKING_SPEED;
+		isHold = isShell = isShell_2 = false;
+	}
+	break;
 
-		case KOOPAS_STATE_SHELL:
-		{
-			isShell = true;
-			isShell_2 = false;
-			isKicked = false;
-			vx = 0;
-			fallDetector->SetState(FALL_DETECTOR_STATE_INACTIVE);
-		}
-		break;
+	case KOOPAS_STATE_SHELL:
+	{
+		isShell = true;
+		isShell_2 = false;
+		if (level == KOOPAS_WINGS) Health--;
+		isKicked = false;
+		vx = 0;
+		fallDetector->SetState(FALL_DETECTOR_STATE_INACTIVE);
+	}
+	break;
 
-		case KOOPAS_STATE_SHELL_2:
-		{
-			isShell = false;
-			isShell_2 = true;
-			isKicked = false;
-			vx = 0;
-			fallDetector->SetState(FALL_DETECTOR_STATE_INACTIVE);
-		}
-		break;
+	case KOOPAS_STATE_SHELL_2:
+	{
+		isShell = false;
+		isShell_2 = true;
+		isKicked = false;
+		vx = 0;
+		fallDetector->SetState(FALL_DETECTOR_STATE_INACTIVE);
+	}
+	break;
 
-		case KOOPAS_STATE_SHELL_WALKING_RIGHT:
-		{
-			//y = y - 5;
-			nx = 1;
-			isHold = false;
-			isShell = true;
-			isShell_2 = false;
-			vx = nx * KOOPAS_SHELL_SPEED;
-		}break;
+	case KOOPAS_STATE_SHELL_WALKING_RIGHT:
+	{
+		nx = 1;
+		isHold = false;
+		isShell = true;
+		isShell_2 = false;
+		vx = nx * KOOPAS_SHELL_SPEED;
+	}break;
 
-		case KOOPAS_STATE_SHELL_WALKING_LEFT:
-		{
-			nx = -1;
-			isHold = false;
-			isShell = true;
-			isShell_2 = false;
-			vx = nx * KOOPAS_SHELL_SPEED;
-		}break;
+	case KOOPAS_STATE_SHELL_WALKING_LEFT:
+	{
+		nx = -1;
+		isHold = false;
+		isShell = true;
+		isShell_2 = false;
+		vx = nx * KOOPAS_SHELL_SPEED;
+	}break;
 
-		case KOOPAS_STATE_SHELL_HOLD:
-		{
-			isHold = true;
-			isShell = true;
-			isShell_2 = false;
-			fallDetector->SetState(FALL_DETECTOR_STATE_INACTIVE);
-		}
-		break;
+	case KOOPAS_STATE_SHELL_HOLD:
+	{
+		isHold = true;
+		isShell = true;
+		isShell_2 = false;
+		fallDetector->SetState(FALL_DETECTOR_STATE_INACTIVE);
+	}
+	break;
 
-		case KOOPAS_STATE_SHELL_2_HOLD:
-		{
-			isHold = true;
-			isShell = false;
-			isShell_2 = true;
-			fallDetector->SetState(FALL_DETECTOR_STATE_INACTIVE);
-		}
-		break;
+	case KOOPAS_STATE_SHELL_2_HOLD:
+	{
+		isHold = true;
+		isShell = false;
+		isShell_2 = true;
+		fallDetector->SetState(FALL_DETECTOR_STATE_INACTIVE);
+	}
+	break;
 
 	}
 }
@@ -133,7 +133,7 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 		vy = 0;
 		if (e->ny < 0) isOnPlatform = true;
 	}
-	
+
 	else if (e->nx != 0 && e->obj->IsBlocking())
 	{
 		vx = -vx;
@@ -310,9 +310,10 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 
 	if (isOnPlatform && level == KOOPAS_WINGS) {
-		vy = KOOPAS_WINGS_VY;
+		if (state == ENEMY_STATE_WALKING_RIGHT || state == ENEMY_STATE_WALKING_LEFT) {
+			vy = KOOPAS_WINGS_VY;
+		}
 	}
-}
 }
 
 void CKoopas::Render()
@@ -347,6 +348,10 @@ void CKoopas::Render()
 		}
 	}
 
+	if (level == -1) {
+		if (Health == 1) aniId = vx > 0 ? 105 : -105;
+		if (Health == 0) aniId = -aniId;
+	}
 
 	CAnimations::GetInstance()->Get(aniId)->Render(x, y);
 }

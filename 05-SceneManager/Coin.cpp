@@ -2,6 +2,9 @@
 #include "debug.h"
 #include "BreakableBrick.h"
 
+#define TIME_TO_COLLECT 3000
+#define ANI_COIN_FREEZED 3001
+
 CCoin::CCoin(float x, float y) : Item(x, y, 0)
 {
 	itemType = ItemType::Coin;
@@ -14,7 +17,10 @@ CCoin::CCoin(float x, float y) : Item(x, y, 0)
 void CCoin::Render()
 {
 	CAnimations* animations = CAnimations::GetInstance();
-	animations->Get(ID_ANI_COIN)->Render(x, y);
+	int ani = ID_ANI_COIN;
+	if (state == COIN_STATE_WAIT)
+		ani = ANI_COIN_FREEZED;
+	animations->Get(ani)->Render(x, y);
 }
 
 // Make the coin bouncing before die
@@ -40,26 +46,13 @@ void CCoin::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	}
 	}
 
-	if (state==COIN_STATE_WAIT && GetTickCount64() - AppearTime >= 3000) {
+	if (state==COIN_STATE_WAIT && GetTickCount64() - AppearTime >= TIME_TO_COLLECT) {
 		this->Delete();
-		CQuestionBlock* item = new CQuestionBlock(x, y, 0);
-		CPlayScene::GetInstance()->AddNewObject(item);
+		BreakableBrick* brick = new BreakableBrick(x, y, 0);
+		CPlayScene::GetInstance()->AddNewObject(brick);
 
 		DebugOut(L"COIN_DELETED_TO_BRICK\n");
 	}
-
-	/*else {
-		SetState(STATE_ITEM_VISIBLE);
-		if (isBrickToCoin == true && GetTickCount64() - AppearTime >= COIN_APPEAR_TIME)
-		{
-			BreakableBrick* itembrick = new BreakableBrick(this->x, this->y, false);
-
-			_PlayScene->objects.push_back(itembrick);
-			this->isDeleted = true;
-			isBrickToCoin = false;
-			AppearTime = 0;
-		}
-	}*/
 	CGameObject::Update(dt, coObjects);
 }
 

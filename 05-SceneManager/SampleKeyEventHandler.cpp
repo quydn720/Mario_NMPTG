@@ -37,17 +37,15 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_0:
 		mario->SetState(MARIO_STATE_DIE);
 		break;
-	case DIK_A:
-	{
-		DebugOut(L"Down A\n");
-		CMario::GetInstance()->pressA = true;
-		if (CMario::GetInstance()->GetLevel() == MARIO_LEVEL_TAIL)
-		{
+	case DIK_9:
+		mario->SetPosition(2010, 300);
+		break;
+	case DIK_A: {
+		if (CMario::GetInstance()->GetLevel() == MARIO_LEVEL_TAIL) {
 			CMario::GetInstance()->SetState(MARIO_STATE_ATTACK);
 		}
+		break;
 	}
-	break;
-
 	case DIK_R: // reset
 		//Reload();
 		break;
@@ -64,8 +62,6 @@ void CSampleKeyHandler::OnKeyUp(int KeyCode)
 	case DIK_A: {
 		DebugOut(L"Up A\n");
 		CMario::GetInstance()->pressA = false;
-		/*if (CMario::GetInstance()->isHolding == true)
-			CMario::GetInstance()->isHolding = false;*/
 		if (CMario::GetInstance()->isHolding == true) // đang giữ rùa, thả nút a thì chuyển sang đá
 		{
 			CMario::GetInstance()->canKick = true;

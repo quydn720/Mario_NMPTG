@@ -180,7 +180,6 @@ class CMario : public CGameObject
 	int untouchable;
 	ULONGLONG untouchable_start;
 
-	void RenderBoundingBox();
 
 	void OnCollisionWithGoomba(LPCOLLISIONEVENT e);
 	void OnCollisionWithKoopas(LPCOLLISIONEVENT e);
@@ -205,7 +204,6 @@ public:
 
 	bool render_tail; // Đã vẽ đuôi hay chưa để thoát vòng lặp vẽ đuôi bên playscene
 	BOOLEAN isOnPlatform;
-	CTail* tail;
 
 	bool isHolding = false, pressA = false, canKick = false;
 	bool changeDirection = false;
@@ -224,13 +222,12 @@ public:
 	{
 		IsAttack = isSitting = false;
 		ax = 0.0f;
-
+		isPiping = false;
 		level = MARIO_LEVEL_BIG;
 		untouchable = 0;
 		untouchable_start = -1;
 		isOnPlatform = false;
 		coin = 0;
-		tail = NULL;
 		AttackTime = 0;
 	}
 	void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);

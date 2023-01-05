@@ -5,6 +5,7 @@
 #include "ColorBlock.h"
 #include "QuestionBlock.h"
 
+
 CKoopas::CKoopas(float x, float y, int level)
 {
 	isKicked = isShell = isShell_2 = isHold = canRevive = false;
@@ -49,7 +50,6 @@ void CKoopas::SetState(int state)
 			nx = 1;
 			vx = nx * KOOPAS_WALKING_SPEED;
 			isHold = isShell = isShell_2 = false;
-			this->ay = KOOPAS_GRAVITY;
 		}
 		break;
 
@@ -58,7 +58,6 @@ void CKoopas::SetState(int state)
 			nx = -1;
 			vx = nx * KOOPAS_WALKING_SPEED;
 			isHold = isShell = isShell_2 = false;
-			this->ay = KOOPAS_GRAVITY;
 		}
 		break;
 
@@ -107,7 +106,6 @@ void CKoopas::SetState(int state)
 			isHold = true;
 			isShell = true;
 			isShell_2 = false;
-			ay = 0;
 			fallDetector->SetState(FALL_DETECTOR_STATE_INACTIVE);
 		}
 		break;
@@ -117,7 +115,6 @@ void CKoopas::SetState(int state)
 			isHold = true;
 			isShell = false;
 			isShell_2 = true;
-			ay = 0;
 			fallDetector->SetState(FALL_DETECTOR_STATE_INACTIVE);
 		}
 		break;
@@ -173,6 +170,13 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
+
+	DebugOut(L"vx: %0.4f, vy: %0.4f\n", vx, vy);
+
+
+	isOnPlatform = false;
+	vy += KOOPAS_GRAVITY * dt;
+
 	if (isHold == true)
 	{
 		canRevive = true;
@@ -197,14 +201,11 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				else
 					SetState(KOOPAS_STATE_SHELL_2_WALKING_LEFT);
 			}
-			this->ay = KOOPAS_GRAVITY;
 			return;
 		}
 		// rùa đang bị cầm và nút A đang giữ
 		else
 		{
-			//this->vx = CMario::GetInstance()->vx;
-			//this->nx = CMario::GetInstance()->nx;
 			if (CMario::GetInstance()->nx == 1)
 			{
 				if (isShell == true)
@@ -297,12 +298,9 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	{
 		// When it moving on top of the color block, it will not fall when reaching edge
 		if (fallDetector->willFall) {
-			vx = -vx;
+			if (level == KOOPAS_NORMAL) vx = -vx; // ko canh' thi` thong minh hon
 			nx = -nx;
 		}
-
-		vy += ay * dt;
-		vx += ax * dt;
 
 		// This will put the fall detector in front of the Koopas
 		if (vx <= 0)
@@ -310,9 +308,12 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		if (vx > 0)
 			fallDetector->SetPosition(x + 10, y);
 	}
-	
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
+
+	if (isOnPlatform && level == KOOPAS_WINGS) {
+		vy = KOOPAS_WINGS_VY;
+	}
 }
 
 void CKoopas::Render()

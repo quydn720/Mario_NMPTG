@@ -2,7 +2,13 @@
 #include "GameObject.h"
 #include "FallDetector.h"
 
-#define KOOPAS_GRAVITY 0.002f
+
+#define KOOPAS_WINGS_VY -0.3f
+#define KOOPAS_WINGS 1
+#define KOOPAS_NORMAL 0
+
+
+#define KOOPAS_GRAVITY 0.0015f
 #define KOOPAS_WALKING_SPEED 0.05f
 #define KOOPAS_SHELL_SPEED 0.1f
 
@@ -50,7 +56,6 @@ private:
 	int level;
 public:
 	float ax;
-	float ay;
 
 	virtual void GetBoundingBox(float& left, float& top, float& right, float& bottom);
 	virtual void Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects);
@@ -68,9 +73,8 @@ public:
 	ULONGLONG ReviveTime;
 	bool isKicked, isShell, isShell_2, isHold;
 	FallDetector* fallDetector;
-	CKoopas(float x, float y, int level = 0);
+	CKoopas(float x, float y, int level = KOOPAS_NORMAL);
 	virtual void SetState(int state);
 	void beingKicked(int n) { nx = -n; x += nx; }
-	void changeFromSmallToBig();
 };
 

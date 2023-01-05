@@ -30,7 +30,7 @@ public:
 
 	virtual void SetState(int state);
 	virtual int IsCollidable() { return 1; };
-	virtual int IsBlocking() { return 1; }
+	virtual int IsBlocking() { return 0; }
 
 public:
 	bool isPressed, ChangeToCoin;

@@ -57,7 +57,6 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 }
 
-void CTail::RenderBoundingBox()
 {
 	D3DXVECTOR3 p(x, y, 0);
 	RECT rect;
@@ -96,8 +95,6 @@ void CTail::SetState(int state)
 
 void CTail::OnCollisionWithBreakableBrick(LPGAMEOBJECT& obj)
 {
-	if (IsActive == true)
-	{
 		BreakableBrick* breakableBrick = dynamic_cast<BreakableBrick*>(obj);
 		if (breakableBrick->hasItem == true)
 		{
@@ -110,6 +107,4 @@ void CTail::OnCollisionWithBreakableBrick(LPGAMEOBJECT& obj)
 			if (breakableBrick->isCollision == false)
 				breakableBrick->SetState(BRICK_STATE_DIE);
 		}
-		IsActive = false;
-	}
 }

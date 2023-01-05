@@ -141,8 +141,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		OnCollisionWithPipe(e);
 	else if (dynamic_cast<ButtonP*>(e->obj))
 	{
-		ButtonP* brickitem = dynamic_cast<ButtonP*>(e->obj);
-		brickitem->SetState(BUTTON_P_STATE_PUSHED);
+		ButtonP* buttonP = dynamic_cast<ButtonP*>(e->obj);
+		buttonP->SetState(BUTTON_P_STATE_PUSHED);
 	}
 }
 
@@ -398,10 +398,10 @@ void CMario::OnCollisionWithGoomba(LPCOLLISIONEVENT e)
 
 void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
-	CCoin* coin = dynamic_cast<CCoin*>(e->obj);
+	int state = (dynamic_cast<CCoin*>(e->obj))->GetState();
 
-	bool c = coin->GetState() == STATE_ITEM_VISIBLE;
-	if (c)
+	bool collision = state == STATE_ITEM_VISIBLE || state == COIN_STATE_WAIT; 
+	if (collision)
 	{
 		e->obj->Delete();
 		coin++;

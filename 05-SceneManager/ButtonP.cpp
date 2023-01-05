@@ -48,6 +48,7 @@ void ButtonP::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 				{
 					brick->isDeleted = true;
 					CCoin* coin = new CCoin(brick->x, brick->y);
+					coin->SetState(COIN_STATE_WAIT);
 					coin->isBrickToCoin = true;
 					coin->AppearTime = GetTickCount64();
 					_PlayScene->AddNewObject(coin);

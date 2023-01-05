@@ -37,6 +37,9 @@ void CSampleKeyHandler::OnKeyDown(int KeyCode)
 	case DIK_0:
 		mario->SetState(MARIO_STATE_DIE);
 		break;
+	case DIK_9:
+		mario->SetPosition(2010, 300);
+		break;
 	case DIK_A: {
 		if (CMario::GetInstance()->GetLevel() == MARIO_LEVEL_TAIL) {
 			CMario::GetInstance()->SetState(MARIO_STATE_ATTACK);

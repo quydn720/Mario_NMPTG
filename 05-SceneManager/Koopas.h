@@ -46,6 +46,8 @@
 
 class CKoopas : public CGameObject
 {
+private:
+	int level;
 public:
 	float ax;
 	float ay;
@@ -66,7 +68,7 @@ public:
 	ULONGLONG ReviveTime;
 	bool isKicked, isShell, isShell_2, isHold;
 	FallDetector* fallDetector;
-	CKoopas(float x, float y);
+	CKoopas(float x, float y, int level = 0);
 	virtual void SetState(int state);
 	void beingKicked(int n) { nx = -n; x += nx; }
 	void changeFromSmallToBig();

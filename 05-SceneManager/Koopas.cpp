@@ -5,14 +5,13 @@
 #include "ColorBlock.h"
 #include "QuestionBlock.h"
 
-CKoopas::CKoopas(float x, float y)
+CKoopas::CKoopas(float x, float y, int level)
 {
 	isKicked = isShell = isShell_2 = isHold = canRevive = false;
 	ReviveTime = 0;
 	Health = 1;
 	SetState(ENEMY_STATE_INIT);
-	this->ax = 0;
-	this->ay = KOOPAS_GRAVITY;
+	this->level = level;
 }
 
 void CKoopas::GetBoundingBox(float& left, float& top, float& right, float& bottom)

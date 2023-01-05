@@ -18,15 +18,13 @@ CKoopas::CKoopas(float x, float y, int level)
 void CKoopas::GetBoundingBox(float& left, float& top, float& right, float& bottom)
 {
 
-	if (isShell == false && isShell_2 == false)
-	{
+	if (isShell == false && isShell_2 == false) {
 		left = x - KOOPAS_BBOX_WIDTH / 2;
 		top = y - KOOPAS_BBOX_HEIGHT / 2;
 		right = left + KOOPAS_BBOX_WIDTH;
 		bottom = top + KOOPAS_BBOX_HEIGHT;
 	}
-	else
-	{
+	else {
 		left = x - KOOPAS_BBOX_WIDTH / 2;
 		top = y - KOOPAS_BBOX_HEIGHT_SHELL / 2;
 		right = left + KOOPAS_BBOX_WIDTH;
@@ -169,10 +167,11 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 
-	//DebugOut(L"vx: %0.4f, vy: %0.4f\n", vx, vy);
+	DebugOut(L"vx: %0.4f, vy: %0.4f\n", vx, vy);
 
 
 	isOnPlatform = false;
+
 	vy += KOOPAS_GRAVITY * dt;
 
 	if (isHold == true)

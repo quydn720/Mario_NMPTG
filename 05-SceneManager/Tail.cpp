@@ -57,54 +57,18 @@ void CTail::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
 }
 
-{
-	D3DXVECTOR3 p(x, y, 0);
-	RECT rect;
-
-	LPTEXTURE bbox = CTextures::GetInstance()->Get(ID_TEX_BBOX);
-
-	float l, t, r, b;
-
-	GetBoundingBox(l, t, r, b);
-	rect.left = 0;
-	rect.top = 0;
-	rect.right = (int)r - (int)l;
-	rect.bottom = (int)b - (int)t;
-
-	float cx, cy;
-	CGame::GetInstance()->GetCamPos(cx, cy);
-
-	CGame::GetInstance()->Draw(x - cx, y - cy + 4, bbox, &rect, BBOX_ALPHA);
-}
-
-void CTail::SetState(int state)
-{
-	CGameObject::SetState(state);
-	switch (state)
-	{
-	case TAIL_ATTACK:
-		vx = (CMario::GetInstance()->getNx() > 0) ? TAIL_VELOCITY : -TAIL_VELOCITY;
-		break;
-	case TAIL_ACTIVE:
-		vx = 0.0f;
-		break;
-	default:
-		break;
-	}
-}
-
 void CTail::OnCollisionWithBreakableBrick(LPGAMEOBJECT& obj)
 {
-		BreakableBrick* breakableBrick = dynamic_cast<BreakableBrick*>(obj);
-		if (breakableBrick->hasItem == true)
-		{
-			breakableBrick->SetState(BRICK_STATE_COLLISION);
-			ButtonP* brickitem = new ButtonP(breakableBrick->x, breakableBrick->y - 16);
-			_PlayScene->AddNewObject(brickitem);
-		}
-		else
-		{
-			if (breakableBrick->isCollision == false)
-				breakableBrick->SetState(BRICK_STATE_DIE);
-		}
+	BreakableBrick* breakableBrick = dynamic_cast<BreakableBrick*>(obj);
+	if (breakableBrick->hasItem == true)
+	{
+		breakableBrick->SetState(BRICK_STATE_COLLISION);
+		ButtonP* brickitem = new ButtonP(breakableBrick->x, breakableBrick->y - 16);
+		_PlayScene->AddNewObject(brickitem);
+	}
+	else
+	{
+		if (breakableBrick->isCollision == false)
+			breakableBrick->SetState(BRICK_STATE_DIE);
+	}
 }

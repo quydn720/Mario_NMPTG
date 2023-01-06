@@ -197,6 +197,8 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		// rùa đang bị cầm và nút A đang giữ
 		else
 		{
+			vy = 0;
+
 			if (CMario::GetInstance()->nx == 1)
 			{
 				if (isShell == true)
@@ -305,7 +307,7 @@ void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 		isKicked = false;
 		SetState(KOOPAS_STATE_SHELL_WALKING_RIGHT);
 	}
-	
+
 
 	CCollision::GetInstance()->Process(this, dt, coObjects);
 

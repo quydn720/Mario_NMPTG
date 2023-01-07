@@ -31,17 +31,7 @@ void CMario::SetInstance(CMario* p)
 }
 void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	/*if (vy <= -0.5f) {
-		DebugOut(L"MAX SPEED Y\n");
-		ay = 0.002f;
-	}*/
-
-	//DebugOut(L"ay: %0.4f	vy: %0.4f\n", ay, vy);
-
-	// Mario reach max speed 
-
-	// vy += ay * dt;
-	if (!isFlying) {
+	if (!isFlying && !isPiping) {
 		vy += MARIO_GRAVITY * dt;
 	}
 	isOnPlatform = false;
@@ -72,15 +62,16 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	}
 
 	if (isPiping) {
-		if (GetTickCount64() - timer >= MARIO_PIPING_TIME) {
+		if (GetTickCount64() - timer >= 2500) {
 			isPiping = false;
 
 			CGame::GetInstance()->InitiateSwitchScene(_switchSceneId);
 		}
 		else {
 			// ay = 0.0f;
-			isOnPlatform = true;
-			y += vy * dt;
+			//isOnPlatform = true;
+			y += ((vy == 0) ? MARIO_PIPING_VY : MARIO_PIPING_VY) * dt;
+			DebugOut(L"y: %0.4f", y);
 		}
 	}
 
@@ -394,7 +385,7 @@ void CMario::OnCollisionWithCoin(LPCOLLISIONEVENT e)
 {
 	int state = (dynamic_cast<CCoin*>(e->obj))->GetState();
 
-	bool collision = state == STATE_ITEM_VISIBLE || state == COIN_STATE_WAIT; 
+	bool collision = state == STATE_ITEM_VISIBLE || state == COIN_STATE_WAIT;
 	if (collision)
 	{
 		e->obj->Delete();
@@ -633,7 +624,7 @@ int CMario::GetAniIdTail()
 				aniId = (vy < 0) ? ID_ANI_MARIO_TAIL_JUMP_UP_LEFT : ID_ANI_MARIO_TAIL_JUMP_DOWN_LEFT;
 		}
 		if (isFlying) {
-			DebugOut(L"FLY");
+			//DebugOut(L"FLY");
 
 			aniId = nx * ID_ANI_FLY_DOWN;
 
@@ -697,7 +688,7 @@ int CMario::GetAniIdTail()
 
 void CMario::HandleRacoonAttack(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
-	if (GetTickCount64() - AttackTime > MARIO_TAIL_ATTACK_TIME && IsAttack) { 
+	if (GetTickCount64() - AttackTime > MARIO_TAIL_ATTACK_TIME && IsAttack) {
 		CTail* tail = new CTail(x + nx * MARIO_BIG_BBOX_WIDTH, y);
 		CPlayScene::GetInstance()->AddNewObject(tail);
 		IsAttack = false;

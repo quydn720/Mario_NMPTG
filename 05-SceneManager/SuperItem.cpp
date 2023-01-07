@@ -12,7 +12,6 @@ void CSuperItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 	//if (x < 0 || x > Get) this->Delete();
 
 	if (type == SuperItemType::RedMushroom || type == SuperItemType::GreenMushroom) {
-		DebugOut(L"item spawn vx: %0.4f x: %0.4f\n", vx, x);
 		if (state == STATE_ITEM_SPAWN) {
 			vy += GRAVITY * dt;
 			CCollision::GetInstance()->Process(this, dt, coObjects);
@@ -26,8 +25,6 @@ void CSuperItem::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		}
 	}
 	else if (type == SuperItemType::Leaf) {
-		DebugOut(L"item spawn vx: %0.4f x: %0.4f\n", vx, x);
-
 		if (state == STATE_ITEM_SPAWN) {
 			if (abs(x - baseX) >= 1.5 * TILE_SIZE) {
 				vx = -vx;

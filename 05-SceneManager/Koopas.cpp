@@ -167,7 +167,7 @@ void CKoopas::OnCollisionWith(LPCOLLISIONEVENT e)
 void CKoopas::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 {
 
-	DebugOut(L"vx: %0.4f, vy: %0.4f\n", vx, vy);
+	// DebugOut(L"vx: %0.4f, vy: %0.4f\n", vx, vy);
 
 
 	isOnPlatform = false;

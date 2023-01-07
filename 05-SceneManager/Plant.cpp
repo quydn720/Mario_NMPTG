@@ -2,8 +2,11 @@
 #include "Textures.h"
 #include "Mario.h"
 #include "debug.h"
+#include "PlayScene.h"
+#include "FireBullet.h"
 
 #define PLANT_SHOOTING_RANGE 160 // half of the screen
+#define BULLET_SPEED 0.04f
 
 CPlant::CPlant(float x, float y) : CGameObject(x, y)
 {
@@ -37,7 +40,7 @@ void CPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 		if (y <= baseY - PLANT_BBOX_HEIGHT) {
 			y = baseY - PLANT_BBOX_HEIGHT;
 			vy = 0;
-			if (GetTickCount64() - timer >= 5000) {
+			if (GetTickCount64() - timer >= 2000) {
 				SetState(PLANT_STATE_DOWN); // shoot
 			}
 		}
@@ -79,9 +82,17 @@ void CPlant::SetState(int state) {
 	switch (state)
 	{
 	case PLANT_STATE_DOWN:
+	{
+		float mx, my;
+		CMario::GetInstance()->GetPosition(mx, my);
+
 		vy = PLANT_VY;
 		timer = GetTickCount64();
+		FireBullet* bullet = new FireBullet(x, y, (x - mx > 0 ? -1 : 1) * BULLET_SPEED, (y - my > 0 ? -1 : 1) * BULLET_SPEED);
+
+		CPlayScene::GetInstance()->AddNewObject(bullet);
 		break;
+	}
 	case PLANT_STATE_UP:
 		vy = -PLANT_VY;
 		timer = GetTickCount64();

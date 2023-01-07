@@ -156,6 +156,7 @@
     <ClCompile Include="ColorBlock.cpp" />
     <ClCompile Include="debug.cpp" />
     <ClCompile Include="FallDetector.cpp" />
+    <ClCompile Include="FireBullet.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Goomba.cpp" />
@@ -195,6 +196,7 @@
     <ClInclude Include="ColorBlock.h" />
     <ClInclude Include="debug.h" />
     <ClInclude Include="FallDetector.h" />
+    <ClInclude Include="FireBullet.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Goomba.h" />
@@ -204,6 +206,7 @@
     <ClInclude Include="Leaf1.h" />
     <ClInclude Include="Mario.h" />
     <ClInclude Include="Plant.h" />
+    <ClInclude Include="resource.h" />
     <ClInclude Include="SuperItem.h" />
     <ClInclude Include="KeyEventHandler.h" />
     <ClInclude Include="Map.h" />

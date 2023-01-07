@@ -16,8 +16,6 @@ CPlant::CPlant(float x, float y) : CGameObject(x, y)
 
 void CPlant::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects) {
 
-	//DebugOut(L"%s\n", (state == 355) ? L"down" : L"up");
-
 	y += vy * dt;
 
 	float mx = CMario::GetInstance()->getX();

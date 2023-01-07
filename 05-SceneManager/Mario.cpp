@@ -14,6 +14,7 @@
 #include "WarpPipe.h"
 #include "ButtonP.h"
 #include "PlayScene.h"
+#include "FireBullet.h"
 
 #define MARIO_FALLING_SPEED_SLOW 0.1f // tốc độ rơi Mario, bị hãm bởi nút S vẫy đuôi
 #define MARIO_TAIL_ATTACK_TIME 250 // 250 = voi tong thoi gian animation
@@ -134,6 +135,19 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 	{
 		ButtonP* buttonP = dynamic_cast<ButtonP*>(e->obj);
 		buttonP->SetState(BUTTON_P_STATE_PUSHED);
+	}
+	else if (dynamic_cast<FireBullet*>(e->obj))
+	{
+		FireBullet* bullet = dynamic_cast<FireBullet*>(e->obj);
+
+		if (level > MARIO_LEVEL_SMALL) {
+			level = MARIO_LEVEL_SMALL;
+			StartUntouchable();
+		}
+		else {
+			DebugOut(L">>> Mario DIE >>> \n");
+			SetState(MARIO_STATE_DIE);
+		}
 	}
 }
 

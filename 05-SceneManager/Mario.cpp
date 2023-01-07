@@ -69,10 +69,8 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			CGame::GetInstance()->InitiateSwitchScene(_switchSceneId);
 		}
 		else {
-			// ay = 0.0f;
-			//isOnPlatform = true;
-			y += ((vy == 0) ? MARIO_PIPING_VY : MARIO_PIPING_VY) * dt;
-			DebugOut(L"y: %0.4f", y);
+			
+			y += ((goingDownPipe) ? MARIO_PIPING_VY : -MARIO_PIPING_VY) * dt;
 		}
 	}
 
@@ -192,6 +190,7 @@ void CMario::OnCollisionWithPipe(LPCOLLISIONEVENT e) {
 		if (e->ny < 0) {
 			if (inRange) {
 				if (state == MARIO_STATE_SIT) {
+					goingDownPipe = true;
 					isPiping = true;
 					vy = MARIO_PIPING_VY;
 					_switchSceneId = pipe->GetDestinationSceneId();
@@ -201,6 +200,7 @@ void CMario::OnCollisionWithPipe(LPCOLLISIONEVENT e) {
 		}
 		else if (e->ny > 0) {
 			if (inRange) {
+				goingDownPipe = false;
 				isPiping = true;
 				vy = -MARIO_PIPING_VY;
 				_switchSceneId = pipe->GetDestinationSceneId();

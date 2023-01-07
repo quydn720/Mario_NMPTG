@@ -176,6 +176,7 @@ class CMario : public CGameObject
 	float ax;				// acceleration on x 
 
 	bool isFlying;
+	bool goingDownPipe = false;
 	
 	int untouchable;
 	ULONGLONG untouchable_start;

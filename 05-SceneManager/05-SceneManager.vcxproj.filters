@@ -141,6 +141,12 @@
     <ClCompile Include="FireBullet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="WorldMapScene.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldMapKeyHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -266,6 +272,12 @@
     <ClInclude Include="FireBullet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="WorldMapScene.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldMapKeyHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="brick.txt" />
@@ -286,5 +298,6 @@
     <Text Include="hidden-map1-1.txt" />
     <Text Include="hud.txt" />
     <Text Include="item.txt" />
+    <Text Include="world-map-1.txt" />
   </ItemGroup>
 </Project>

@@ -180,6 +180,8 @@
     <ClCompile Include="Textures.cpp" />
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="WarpPipe.cpp" />
+    <ClCompile Include="WorldMapKeyHandler.cpp" />
+    <ClCompile Include="WorldMapScene.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h" />
@@ -223,6 +225,8 @@
     <ClInclude Include="Textures.h" />
     <ClInclude Include="Utils.h" />
     <ClInclude Include="WarpPipe.h" />
+    <ClInclude Include="WorldMapKeyHandler.h" />
+    <ClInclude Include="WorldMapScene.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="brick.txt" />
@@ -242,6 +246,7 @@
     <Text Include="scene01.txt" />
     <Text Include="scene02.txt" />
     <Text Include="scene03.txt" />
+    <Text Include="world-map-1.txt" />
     <Text Include="x64\Debug\05-SceneManager.vcxproj.FileListAbsolute.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

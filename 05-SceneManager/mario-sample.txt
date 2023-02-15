@@ -1,5 +1,5 @@
 [SETTINGS]
-start	1
+start	3
 width	320
 height	240
 
@@ -31,3 +31,4 @@ height	240
 35	textures\HUD.png
 36	textures\koopas-shell-moving.png
 40	textures\misc1.png
+41	textures\world-map-1.png

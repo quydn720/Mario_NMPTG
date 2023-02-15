@@ -272,10 +272,10 @@
     <ClInclude Include="FireBullet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WorldMapScene.h">
+    <ClInclude Include="WorldMapKeyHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="WorldMapKeyHandler.h">
+    <ClInclude Include="WorldMapScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

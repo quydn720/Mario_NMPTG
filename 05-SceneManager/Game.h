@@ -8,10 +8,12 @@ using namespace std;
 
 #define DIRECTINPUT_VERSION 0x0800
 #include <dinput.h>
-
+#include <string.h>
 #include "Texture.h"
 #include "KeyEventHandler.h"
 #include "Scene.h"
+#include <string>
+#include "WorldMapScene.h"
 
 #define MAX_FRAME_RATE 40
 #define KEYBOARD_BUFFER_SIZE 1024
@@ -106,7 +108,9 @@ public:
 	void SetCamPos(float x, float y) { cam_x = x; cam_y = y; }
 	void GetCamPos(float& x, float& y) { x = cam_x; y = cam_y; }
 
-	LPSCENE GetCurrentScene() { return scenes[current_scene]; }
+	LPSCENE GetCurrentScene() {
+		return scenes[current_scene]; 
+	}
 	void Load(LPCWSTR gameFile);
 	void SwitchScene();
 	void InitiateSwitchScene(int scene_id);

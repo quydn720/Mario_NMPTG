@@ -2,7 +2,6 @@
 #include <fstream>
 #include "WorldMapPlayer.h"
 #include "WorldMapKeyHandler.h"
-#include "Textures.h"
 
 class WorldMapScene : public CScene {
 private:

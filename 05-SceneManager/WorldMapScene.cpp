@@ -1,5 +1,9 @@
 #include "WorldMapScene.h"
 #include "Sprites.h"
+#include "Textures.h"
+#include "debug.h"
+#include "Utils.h"
+#include "Animations.h"
 
 using namespace std;
 
@@ -13,6 +17,7 @@ using namespace std;
 #define SCENE_SECTION_MAP	3
 
 #define WORLD_MAP_TEXTURE 41
+#define WORLD_MAP_MARIO_TEXTURE 42
 #define WORLD_MAP_SPRITE_ID -28127
 
 void WorldMapScene::LoadAssets(LPCWSTR assetPath)
@@ -50,7 +55,8 @@ void WorldMapScene::LoadAssets(LPCWSTR assetPath)
 
 WorldMapScene::WorldMapScene()
 {
-	key_handler = new WorldMapKeyHandler(this);
+	player = new WorldMapPlayer();
+	key_handler = new WorldMapKeyHandler(this, player);
 }
 
 void WorldMapScene::_ParseSection_SPRITES(string line){
@@ -206,15 +212,12 @@ void WorldMapScene::GoRight() {
 
 void WorldMapScene::Render()
 {
-	LPTEXTURE tex = CTextures::GetInstance()->Get(WORLD_MAP_TEXTURE);
-
-	CSprites::GetInstance()->Add(WORLD_MAP_SPRITE_ID, 0, 0, 234, 162, tex);
-
 	int height = CGame::GetInstance()->GetBackBufferHeight();
 	int width = CGame::GetInstance()->GetBackBufferWidth();
 	//DebugOut(L"Width: %d Height: %d\n", width, height);
 
 	CSprites::GetInstance()->Get(WORLD_MAP_SPRITE_ID)->Draw(150, 100);
+	player->Render();
 }
 
 void WorldMapScene::Unload()

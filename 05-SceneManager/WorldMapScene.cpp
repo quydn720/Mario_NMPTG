@@ -97,7 +97,112 @@ void WorldMapScene::Load()
 
 void WorldMapScene::Update(DWORD dt)
 {
+	player->Update(dt, currentY, currentX, movedUnit);
 }
+
+void WorldMapScene::GoUp() {
+	
+	int next = maps[currentX - 1][currentY];
+	int moved = 0;
+	DebugOut(L"From Position: %d, %d\t", currentX, currentY);
+
+	while (next > 0) {
+
+		if (currentX - 1 < 0) // out of bound
+			break;
+
+		currentX -= 1;
+		movedUnit += 1;
+		moved += 1;
+
+
+		if (next == 0) break;
+		if (next == 2) break;
+
+		next = maps[currentX - 1][currentY];
+	}
+	
+	DebugOut(L"To Position: %d, %d\t", currentX, currentY);
+	if (moved > 0) player->GoUp();
+}
+
+void WorldMapScene::GoDown() {
+
+	int next = maps[currentX + 1][currentY];
+	int moved = 0;
+	DebugOut(L"[DOWN] From Position: %d, %d\t", currentX, currentY);
+
+	while (next > 0) {
+
+		if (currentX + 1 > 9) // out of bound
+			break;
+
+		currentX += 1;
+		movedUnit += 1;
+		moved += 1;
+
+		if (next == 0) break;
+		if (next == 2) break;
+
+		next = maps[currentX + 1][currentY];
+	}
+	DebugOut(L"[DOWN] To Position: %d, %d\t", currentX, currentY);
+
+	if (moved > 0) player->GoDown();
+}
+
+void WorldMapScene::GoLeft() {
+
+	int next = maps[currentX][currentY - 1];
+	int moved = 0;
+	DebugOut(L"[DOWN] From Position: %d, %d\t", currentX, currentY);
+
+	while (next > 0) {
+
+		if (currentY - 1 < 0) // out of bound
+			break;
+
+		currentY -= 1;
+		movedUnit += 1;
+		moved += 1;
+
+		if (next == 0) break;
+		if (next == 2) break;
+
+		next = maps[currentX][currentY - 1];
+	}
+	DebugOut(L"[DOWN] To Position: %d, %d\t", currentX, currentY);
+
+	if (moved > 0) player->GoLeft();
+}
+
+
+void WorldMapScene::GoRight() {
+
+	int next = maps[currentX][currentY + 1];
+	int moved = 0;
+	DebugOut(L"[DOWN] From Position: %d, %d\t", currentX, currentY);
+
+	while (next > 0) {
+
+		if (currentY + 1 > 14) // out of bound
+			break;
+
+		currentY += 1;
+		movedUnit += 1;
+		moved += 1;
+
+		if (next == 0) break;
+		if (next == 2) break;
+
+		next = maps[currentX][currentY + 1];
+	}
+	DebugOut(L"[DOWN] To Position: %d, %d\t", currentX, currentY);
+
+	if (moved > 0)
+		player->GoRight();
+}
+
 
 void WorldMapScene::Render()
 {

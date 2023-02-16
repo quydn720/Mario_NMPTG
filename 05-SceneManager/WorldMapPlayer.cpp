@@ -49,7 +49,7 @@ void WorldMapPlayer::Update(DWORD dt, int currentY, int currentX, int& moved)
 		if (y > startY + ((moved) * 16)) {
 			Stop();
 			moved = 0;
-	}
+		}
 	}
 	if (vy < 0) {
 		if (y < startY - ((moved) * 16)) {

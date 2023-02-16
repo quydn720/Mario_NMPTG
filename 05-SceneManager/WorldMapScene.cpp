@@ -129,7 +129,12 @@ void WorldMapScene::GoUp() {
 	}
 	
 	DebugOut(L"To Position: %d, %d\t", currentX, currentY);
-	if (moved > 0) player->GoUp();
+	if (moved > 0)
+	{
+		player->startY = player->GetY();
+		player->GoUp();
+		DebugOut(L"[BaseY]: %f,\n", player->startY);
+	}
 }
 
 void WorldMapScene::GoDown() {
@@ -154,7 +159,12 @@ void WorldMapScene::GoDown() {
 	}
 	DebugOut(L"[DOWN] To Position: %d, %d\t", currentX, currentY);
 
-	if (moved > 0) player->GoDown();
+	if (moved > 0)
+	{
+		player->startY = player->GetY();
+		player->GoDown();
+		DebugOut(L"[BaseY]: %f,\n", player->startY);
+	}
 }
 
 void WorldMapScene::GoLeft() {
@@ -179,7 +189,12 @@ void WorldMapScene::GoLeft() {
 	}
 	DebugOut(L"[DOWN] To Position: %d, %d\t", currentX, currentY);
 
-	if (moved > 0) player->GoLeft();
+	if (moved > 0) 
+	{
+		player->GoLeft();
+		player->startX = player->GetX();
+		DebugOut(L"[BaseX]: %f,\n", player->startX);
+	}
 }
 
 
@@ -187,7 +202,6 @@ void WorldMapScene::GoRight() {
 
 	int next = maps[currentX][currentY + 1];
 	int moved = 0;
-	DebugOut(L"[DOWN] From Position: %d, %d\t", currentX, currentY);
 
 	while (next > 0) {
 
@@ -203,10 +217,12 @@ void WorldMapScene::GoRight() {
 
 		next = maps[currentX][currentY + 1];
 	}
-	DebugOut(L"[DOWN] To Position: %d, %d\t", currentX, currentY);
 
-	if (moved > 0)
+	if (moved > 0) {
 		player->GoRight();
+		player->startX = player->GetX();
+		DebugOut(L"[BaseX]: %f,\n", player->startX);
+	}
 }
 
 

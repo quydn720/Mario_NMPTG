@@ -20,6 +20,12 @@ void WorldMapPlayer::KeyState(BYTE* state)
 void WorldMapPlayer::OnKeyUp(int KeyCode)
 {
 }
+void WorldMapPlayer::Stop()
+{
+	vx = 0; vy = 0; isMoving = false; mx = x; my = y;
+	x = round(x); y = round(y);
+}
+
 
 void WorldMapPlayer::Update(DWORD dt, int currentY, int currentX, int& moved)
 {

@@ -34,7 +34,7 @@ public:
 	void GoRight() {
 		vx = 0.1f; vy = 0; isMoving = true; 
 	}
-	void Stop() { vx = 0; vy = 0; isMoving = false;}
+	void Stop();
 
 	void Render();
 	void Update(DWORD dt, int currentY, int currentX, int& moved);

@@ -181,6 +181,7 @@
     <ClCompile Include="Utils.cpp" />
     <ClCompile Include="WarpPipe.cpp" />
     <ClCompile Include="WorldMapKeyHandler.cpp" />
+    <ClCompile Include="WorldMapPlayer.cpp" />
     <ClCompile Include="WorldMapScene.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -226,6 +227,7 @@
     <ClInclude Include="Utils.h" />
     <ClInclude Include="WarpPipe.h" />
     <ClInclude Include="WorldMapKeyHandler.h" />
+    <ClInclude Include="WorldMapPlayer.h" />
     <ClInclude Include="WorldMapScene.h" />
   </ItemGroup>
   <ItemGroup>

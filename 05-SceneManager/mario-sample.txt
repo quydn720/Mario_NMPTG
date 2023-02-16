@@ -32,3 +32,4 @@ height	240
 36	textures\koopas-shell-moving.png
 40	textures\misc1.png
 41	textures\world-map-1.png
+42	textures\wmap-sprite.png

@@ -77,7 +77,21 @@ void WorldMapScene::_ParseSection_SPRITES(string line){
 
 void WorldMapScene::Load()
 {
-	DebugOut(L"[ERROR] Texture ID %d not found!\n", 1);
+	LPTEXTURE tex = CTextures::GetInstance()->Get(WORLD_MAP_TEXTURE);
+
+	CSprites::GetInstance()->Add(WORLD_MAP_SPRITE_ID, 0, 0, 234, 162, tex);
+
+	tex = CTextures::GetInstance()->Get(WORLD_MAP_MARIO_TEXTURE);
+	// small mario running
+	CSprites::GetInstance()->Add(WORLD_MAP_SPRITE_ID + 1, 4, 116, 18, 132, tex);
+	CSprites::GetInstance()->Add(WORLD_MAP_SPRITE_ID + 2, 24, 116, 38, 132, tex);
+	
+	LPANIMATION ani = new CAnimation();
+	ani->Add(WORLD_MAP_SPRITE_ID + 1, 100);
+	ani->Add(WORLD_MAP_SPRITE_ID + 2, 100);
+
+	
+	CAnimations::GetInstance()->Add(WORLD_MAP_SPRITE_ID + 200, ani);
 
 }
 

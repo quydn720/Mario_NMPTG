@@ -8,15 +8,16 @@ private:
 	float vx, vy;
 	bool isMoving;
 
-	float my;
 public:
+	float startY, startX;
+
 	WorldMapPlayer() {
-		x = 62; y = 64; my = 0;
+		x = 62; y = 64; startX = 0; startY = 0;
 		vx = 0.0f; vy = 0.0f;
 		isMoving = false;
 	}
 	WorldMapPlayer(float x, float y) {
-		this->x = x; this->y = y;  this->my = y;
+		this->x = x; this->y = y;  this->startY = y;
 		vx = 0.0f; vy = 0.0f;
 		isMoving = false;
 	}

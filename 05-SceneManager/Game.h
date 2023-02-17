@@ -19,6 +19,10 @@ using namespace std;
 #define KEYBOARD_BUFFER_SIZE 1024
 #define KEYBOARD_STATE_SIZE 256
 
+
+#define WORLD_MAP_SCENE_ID  3
+#define TITLE_SCENE_ID 31
+
 #define _PlayScene CPlayScene::GetInstance()
 
 /*

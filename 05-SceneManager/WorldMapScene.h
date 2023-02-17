@@ -1,7 +1,7 @@
 #pragma once
 #include <fstream>
 #include "WorldMapPlayer.h"
-#include "WorldMapKeyHandler.h"
+#include "Scene.h"
 
 class WorldMapScene : public CScene {
 private:

@@ -4,6 +4,7 @@
 #include "debug.h"
 #include "Utils.h"
 #include "Animations.h"
+#include "WorldMapKeyHandler.h"
 
 using namespace std;
 
@@ -20,10 +21,8 @@ using namespace std;
 
 #define WORLD_MAP_TEXTURE 41
 #define WORLD_MAP_MARIO_TEXTURE 42
-#define TITLE_SCREEN_TEXTURE 43
 
 #define WORLD_MAP_SPRITE_ID -28127
-#define TITLE_SCREEN_SPRITE_ID -28027
 
 
 #define WMAP_INFO_SECTION 1

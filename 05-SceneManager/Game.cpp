@@ -7,8 +7,7 @@
 #include "Texture.h"
 #include "Animations.h"
 #include "PlayScene.h"
-
-#define WORLD_MAP_SCENE_ID  3
+#include "StartScene.h"
 
 CGame* CGame::__instance = NULL;
 int _marioLevel = 2;
@@ -463,6 +462,7 @@ void CGame::_ParseSection_SCENES(string line)
 	LPSCENE scene;
 	
 	if (id == WORLD_MAP_SCENE_ID) scene = new WorldMapScene(id, path);
+	else if (id == TITLE_SCENE_ID) scene = new StartScene(id, path);
 	else scene = new CPlayScene(id, path);
 	
 	scenes[id] = scene;

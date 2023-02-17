@@ -153,13 +153,12 @@ void WorldMapScene::Load()
 	CSprites::GetInstance()->Add(WORLD_MAP_SPRITE_ID + 1, 4, 116, 18, 132, tex);
 	CSprites::GetInstance()->Add(WORLD_MAP_SPRITE_ID + 2, 24, 116, 38, 132, tex);
 	
-	LPANIMATION ani = new CAnimation();
-	ani->Add(WORLD_MAP_SPRITE_ID + 1, 100);
-	ani->Add(WORLD_MAP_SPRITE_ID + 2, 100);
-
-	
-	CAnimations::GetInstance()->Add(WORLD_MAP_SPRITE_ID + 200, ani);
-
+void WorldMapScene::_ParseSection_ASSETS(string line)
+{
+	vector<string> tokens = split(line);
+	if (tokens.size() < 1) return;
+	wstring path = ToWSTR(tokens[0]);
+	LoadAssets(path.c_str());
 }
 
 void WorldMapScene::Update(DWORD dt)
@@ -205,7 +204,7 @@ void WorldMapScene::GoDown() {
 
 	while (next != 0) {
 
-		if (currentX + 1 > 9) // out of bound
+		if (currentX + 1 > wmapRow) // out of bound
 			break;
 
 		currentX += 1;
@@ -262,7 +261,7 @@ void WorldMapScene::GoRight() {
 
 	while (next != 0) {
 
-		if (currentY + 1 > 14) // out of bound
+		if (currentY + 1 > wmapColumn) // out of bound
 			break;
 
 		currentY += 1;

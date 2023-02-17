@@ -1,6 +1,7 @@
 # list of object assets to load in this scene
 [ASSETS]
 wm-assets.txt
+wm-sprites.txt
 #
 [MAP]
 world-map-1.txt

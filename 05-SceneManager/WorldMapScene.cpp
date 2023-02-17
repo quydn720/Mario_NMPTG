@@ -136,7 +136,6 @@ void WorldMapScene::GoUp() {
 		DebugOut(L"[BaseY]: %f,\n", player->startY);
 	}
 }
-
 void WorldMapScene::GoDown() {
 
 	int next = maps[currentX + 1][currentY];
@@ -166,7 +165,6 @@ void WorldMapScene::GoDown() {
 		DebugOut(L"[BaseY]: %f,\n", player->startY);
 	}
 }
-
 void WorldMapScene::GoLeft() {
 
 	int next = maps[currentX][currentY - 1];
@@ -196,8 +194,6 @@ void WorldMapScene::GoLeft() {
 		DebugOut(L"[BaseX]: %f,\n", player->startX);
 	}
 }
-
-
 void WorldMapScene::GoRight() {
 
 	int next = maps[currentX][currentY + 1];
@@ -230,9 +226,8 @@ void WorldMapScene::Render()
 {
 	int height = CGame::GetInstance()->GetBackBufferHeight();
 	int width = CGame::GetInstance()->GetBackBufferWidth();
-	//DebugOut(L"Width: %d Height: %d\n", width, height);
 
-	CSprites::GetInstance()->Get(WORLD_MAP_SPRITE_ID)->Draw(150, 100);
+	CSprites::GetInstance()->Get(WORLD_MAP_SPRITE_ID)->Draw(width / 2, height / 2);
 	player->Render();
 }
 

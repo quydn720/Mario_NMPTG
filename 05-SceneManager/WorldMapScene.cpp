@@ -149,9 +149,63 @@ void WorldMapScene::Load()
 	CSprites::GetInstance()->Add(WORLD_MAP_SPRITE_ID, 0, 0, 234, 162, tex);
 
 	tex = CTextures::GetInstance()->Get(WORLD_MAP_MARIO_TEXTURE);
-	// small mario running
-	CSprites::GetInstance()->Add(WORLD_MAP_SPRITE_ID + 1, 4, 116, 18, 132, tex);
-	CSprites::GetInstance()->Add(WORLD_MAP_SPRITE_ID + 2, 24, 116, 38, 132, tex);
+}
+
+
+void WorldMapScene::_ParseSection_MAP(string line) {
+	vector<string> tokens = split(line);
+	if (tokens.size() < 1) return;
+	wstring path = ToWSTR(tokens[0]);
+
+	ifstream f;
+	f.open(path);
+
+	// current resource section flag
+	int section = MAP_UNKNOWN_SECTION;
+	char str[MAX_SCENE_LINE];
+	while (f.getline(str, MAX_SCENE_LINE)) {
+		string line(str);
+		if (line[0] == '#') continue;
+		if (line == "[Info]") {
+			section = WMAP_INFO_SECTION;
+			continue;
+		}
+		if (line == "[Map]") {
+			section = MAP_TILE_SECTION;
+			continue;
+		}
+		if (line[0] == '[') {
+			section = MAP_UNKNOWN_SECTION;
+			continue;
+		}
+
+		switch (section) {
+			case WMAP_INFO_SECTION: {
+				vector<string> tokens = split(line);
+				size_t size = tokens.size();
+
+				if (size < 2) return;
+				wmapRow = atoi(tokens[0].c_str());
+				wmapColumn = atoi(tokens[1].c_str());
+				break;
+			}
+			case MAP_TILE_SECTION: {
+				vector<string> tokens = split(line);
+
+				size_t size = tokens.size();
+				if (size < wmapColumn) return;
+				for (int i = 0; i < wmapColumn; i++) {
+					int info = stoi(tokens[i]);
+					maps[curRow][i] = info;
+				}
+				curRow++;
+				break;
+			}
+		}
+	}
+	f.close();
+
+}
 	
 void WorldMapScene::_ParseSection_ASSETS(string line)
 {

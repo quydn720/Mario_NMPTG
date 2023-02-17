@@ -11,11 +11,7 @@ private:
 public:
 	float startY, startX;
 
-	WorldMapPlayer() {
-		x = 62; y = 64; startX = 0; startY = 0;
-		vx = 0.0f; vy = 0.0f;
-		isMoving = false;
-	}
+	WorldMapPlayer();
 	WorldMapPlayer(float x, float y) {
 		this->x = x; this->y = y;  this->startY = y;
 		vx = 0.0f; vy = 0.0f;

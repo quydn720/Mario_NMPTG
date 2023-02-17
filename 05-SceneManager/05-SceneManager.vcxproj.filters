@@ -147,6 +147,9 @@
     <ClCompile Include="WorldMapKeyHandler.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="WorldMapPlayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Animation.h">
@@ -278,13 +281,16 @@
     <ClInclude Include="WorldMapScene.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="WorldMapPlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="brick.txt" />
     <Text Include="cloud.txt" />
     <Text Include="scene01.txt" />
     <Text Include="mario-sample.txt" />
-    <Text Include="scene03.txt" />
+    <Text Include="wm-scene.txt" />
     <Text Include="coin.txt" />
     <Text Include="question_block.txt" />
     <Text Include="x64\Debug\05-SceneManager.vcxproj.FileListAbsolute.txt" />
@@ -299,5 +305,6 @@
     <Text Include="hud.txt" />
     <Text Include="item.txt" />
     <Text Include="world-map-1.txt" />
+    <Text Include="wm-assets.txt" />
   </ItemGroup>
 </Project>

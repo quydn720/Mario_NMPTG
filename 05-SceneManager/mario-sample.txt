@@ -10,7 +10,7 @@ height	240
 0	intro.txt
 1	scene01.txt
 2	scene02.txt
-3	scene03.txt
+3	wm-scene.txt
 
 # id	file 
 [TEXTURES]

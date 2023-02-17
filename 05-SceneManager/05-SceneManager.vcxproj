@@ -247,7 +247,8 @@
     <Text Include="question_block.txt" />
     <Text Include="scene01.txt" />
     <Text Include="scene02.txt" />
-    <Text Include="scene03.txt" />
+    <Text Include="wm-scene.txt" />
+    <Text Include="wm-assets.txt" />
     <Text Include="world-map-1.txt" />
     <Text Include="x64\Debug\05-SceneManager.vcxproj.FileListAbsolute.txt" />
   </ItemGroup>

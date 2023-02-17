@@ -4,7 +4,7 @@
 #include "Collision.h"
 
 #define TILE_SIZE 16
-#define WORLD_MAP_PLAYER_MOVING_ID -27927
+#define WORLD_MAP_PLAYER_MOVING_ANI_ID -27927
 
 WorldMapPlayer::WorldMapPlayer()
 {
@@ -15,7 +15,7 @@ WorldMapPlayer::WorldMapPlayer()
 
 void WorldMapPlayer::Render()
 {
-	CAnimations::GetInstance()->Get(WORLD_MAP_PLAYER_MOVING_ID)->Render(x, y);
+	CAnimations::GetInstance()->Get(WORLD_MAP_PLAYER_MOVING_ANI_ID)->Render(x, y);
 }
 
 void WorldMapPlayer::OnKeyDown(int KeyCode)

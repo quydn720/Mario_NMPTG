@@ -24,6 +24,7 @@ public:
 	void GoLeft();
 	void GoUp();
 	void GoDown();
+	int getCurrentPosition();
 
 	int currentX = 2;
 	int currentY = 1;

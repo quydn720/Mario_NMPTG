@@ -112,7 +112,7 @@ void WorldMapScene::GoUp() {
 	int moved = 0;
 	DebugOut(L"From Position: %d, %d\t", currentX, currentY);
 
-	while (next > 0) {
+	while (next != 0) {
 
 		if (currentX - 1 < 0) // out of bound
 			break;
@@ -123,7 +123,7 @@ void WorldMapScene::GoUp() {
 
 
 		if (next == 0) break;
-		if (next == 2) break;
+		if (next != 1) break;
 
 		next = maps[currentX - 1][currentY];
 	}
@@ -142,7 +142,7 @@ void WorldMapScene::GoDown() {
 	int moved = 0;
 	DebugOut(L"[DOWN] From Position: %d, %d\t", currentX, currentY);
 
-	while (next > 0) {
+	while (next != 0) {
 
 		if (currentX + 1 > 9) // out of bound
 			break;
@@ -152,7 +152,7 @@ void WorldMapScene::GoDown() {
 		moved += 1;
 
 		if (next == 0) break;
-		if (next == 2) break;
+		if (next != 1) break;
 
 		next = maps[currentX + 1][currentY];
 	}
@@ -171,7 +171,7 @@ void WorldMapScene::GoLeft() {
 	int moved = 0;
 	DebugOut(L"[DOWN] From Position: %d, %d\t", currentX, currentY);
 
-	while (next > 0) {
+	while (next != 0) {
 
 		if (currentY - 1 < 0) // out of bound
 			break;
@@ -181,7 +181,7 @@ void WorldMapScene::GoLeft() {
 		moved += 1;
 
 		if (next == 0) break;
-		if (next == 2) break;
+		if (next != 1) break;
 
 		next = maps[currentX][currentY - 1];
 	}
@@ -199,7 +199,7 @@ void WorldMapScene::GoRight() {
 	int next = maps[currentX][currentY + 1];
 	int moved = 0;
 
-	while (next > 0) {
+	while (next != 0) {
 
 		if (currentY + 1 > 14) // out of bound
 			break;
@@ -209,7 +209,7 @@ void WorldMapScene::GoRight() {
 		moved += 1;
 
 		if (next == 0) break;
-		if (next == 2) break;
+		if (next != 1) break;
 
 		next = maps[currentX][currentY + 1];
 	}
@@ -221,6 +221,9 @@ void WorldMapScene::GoRight() {
 	}
 }
 
+int WorldMapScene::getCurrentPosition() {
+	return maps[currentX][currentY];
+}
 
 void WorldMapScene::Render()
 {

@@ -8,6 +8,8 @@
 #include "Animations.h"
 #include "PlayScene.h"
 
+#define WORLD_MAP_SCENE_ID  3
+
 CGame* CGame::__instance = NULL;
 int _marioLevel = 2;
 int score = 0;
@@ -458,8 +460,11 @@ void CGame::_ParseSection_SCENES(string line)
 	if (tokens.size() < 2) return;
 	int id = atoi(tokens[0].c_str());
 	LPCWSTR path = ToLPCWSTR(tokens[1]);   // file: ASCII format (single-byte char) => Wide Char
-
-	LPSCENE scene = new CPlayScene(id, path);
+	LPSCENE scene;
+	
+	if (id == WORLD_MAP_SCENE_ID) scene = new WorldMapScene();
+	else scene = new CPlayScene(id, path);
+	
 	scenes[id] = scene;
 }
 
@@ -529,7 +534,7 @@ void CGame::SwitchScene()
 	s->Load();
 
 	// lan dau load mario - k goi InitiateSwitchScene
-	CMario::GetInstance()->SetLevel(_marioLevel < 0 ? CMario::GetInstance()->GetLevel() : _marioLevel);
+	//CMario::GetInstance()->SetLevel(_marioLevel < 0 ? CMario::GetInstance()->GetLevel() : _marioLevel);
 }
 
 void CGame::InitiateSwitchScene(int scene_id)

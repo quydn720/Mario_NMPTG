@@ -249,6 +249,7 @@
     <Text Include="scene02.txt" />
     <Text Include="wm-scene.txt" />
     <Text Include="wm-assets.txt" />
+    <Text Include="wm-sprites.txt" />
     <Text Include="world-map-1.txt" />
     <Text Include="x64\Debug\05-SceneManager.vcxproj.FileListAbsolute.txt" />
   </ItemGroup>

@@ -8,7 +8,8 @@
 using namespace std;
 
 #define ASSETS_SECTION_UNKNOWN -2
-#define ASSETS_SECTION_SPRITES 1
+#define ASSETS_SECTION_SPRITES 10
+#define ASSETS_SECTION_ANIMATIONS 20
 #define MAX_SCENE_LINE 1024
 
 #define SCENE_SECTION_UNKNOWN -1
@@ -16,9 +17,15 @@ using namespace std;
 #define SCENE_SECTION_OBJECTS	2
 #define SCENE_SECTION_MAP	3
 
+
 #define WORLD_MAP_TEXTURE 41
 #define WORLD_MAP_MARIO_TEXTURE 42
 #define WORLD_MAP_SPRITE_ID -28127
+
+
+#define WMAP_INFO_SECTION 1
+#define MAP_TILE_SECTION 2
+#define MAP_UNKNOWN_SECTION -1
 
 void WorldMapScene::LoadAssets(LPCWSTR assetPath)
 {
@@ -37,7 +44,7 @@ void WorldMapScene::LoadAssets(LPCWSTR assetPath)
 		if (line[0] == '#') continue;	// skip comment lines	
 
 		if (line == "[SPRITES]") { section = ASSETS_SECTION_SPRITES; continue; };
-		//if (line == "[ANIMATIONS]") { section = ASSETS_SECTION_ANIMATIONS; continue; };
+		if (line == "[ANIMATIONS]") { section = ASSETS_SECTION_ANIMATIONS; continue; };
 		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }
 
 		//
@@ -45,6 +52,7 @@ void WorldMapScene::LoadAssets(LPCWSTR assetPath)
 		//
 		switch (section) {
 			case ASSETS_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
+			case ASSETS_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
 		}
 	}
 
@@ -53,7 +61,7 @@ void WorldMapScene::LoadAssets(LPCWSTR assetPath)
 	//DebugOut(L"[INFO] Done loading assets from %s\n", assetFile);
 }
 
-WorldMapScene::WorldMapScene()
+WorldMapScene::WorldMapScene(int id, LPCWSTR filePath) : CScene(id, filePath)
 {
 	player = new WorldMapPlayer();
 	key_handler = new WorldMapKeyHandler(this, player);
@@ -81,8 +89,61 @@ void WorldMapScene::_ParseSection_SPRITES(string line){
 	CSprites::GetInstance()->Add(ID, l, t, r, b, tex);
 }
 
+
+void WorldMapScene::_ParseSection_ANIMATIONS(string line)
+{
+	vector<string> tokens = split(line);
+
+	if (tokens.size() < 3) return; // skip invalid lines - an animation must at least has 1 frame and 1 frame time
+
+	LPANIMATION ani = new CAnimation();
+
+	int ani_id = atoi(tokens[0].c_str());
+	for (size_t i = 1; i < tokens.size(); i += 2)	// why i+=2 ?  sprite_id | frame_time  
+	{
+		int sprite_id = atoi(tokens[i].c_str());
+		int frame_time = atoi(tokens[i + 1].c_str());
+		ani->Add(sprite_id, frame_time);
+	}
+
+	CAnimations::GetInstance()->Add(ani_id, ani);
+}
+
 void WorldMapScene::Load()
 {
+	ifstream f;
+	f.open(sceneFilePath);
+
+	// current resource section flag
+	int section = SCENE_SECTION_UNKNOWN;
+
+	char str[MAX_SCENE_LINE];
+	while (f.getline(str, MAX_SCENE_LINE))
+	{
+		string line(str);
+
+		if (line[0] == '#') continue;	// skip comment lines	
+		if (line == "[ASSETS]") { section = SCENE_SECTION_ASSETS; continue; };
+		if (line == "[OBJECTS]") { section = SCENE_SECTION_OBJECTS; continue; };
+		if (line == "[MAP]") {
+			section = SCENE_SECTION_MAP; continue;
+		};
+		if (line[0] == '[') { section = SCENE_SECTION_UNKNOWN; continue; }
+
+		//
+		// data section
+		//
+		switch (section)
+		{
+			case SCENE_SECTION_ASSETS: _ParseSection_ASSETS(line); break;
+			/*case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;*/
+			case SCENE_SECTION_MAP: _ParseSection_MAP(line); break;
+		}
+	}
+
+	f.close();
+
+
 	LPTEXTURE tex = CTextures::GetInstance()->Get(WORLD_MAP_TEXTURE);
 
 	CSprites::GetInstance()->Add(WORLD_MAP_SPRITE_ID, 0, 0, 234, 162, tex);

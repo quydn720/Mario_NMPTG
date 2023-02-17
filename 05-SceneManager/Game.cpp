@@ -462,7 +462,7 @@ void CGame::_ParseSection_SCENES(string line)
 	LPCWSTR path = ToLPCWSTR(tokens[1]);   // file: ASCII format (single-byte char) => Wide Char
 	LPSCENE scene;
 	
-	if (id == WORLD_MAP_SCENE_ID) scene = new WorldMapScene();
+	if (id == WORLD_MAP_SCENE_ID) scene = new WorldMapScene(id, path);
 	else scene = new CPlayScene(id, path);
 	
 	scenes[id] = scene;

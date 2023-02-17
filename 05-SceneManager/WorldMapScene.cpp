@@ -206,7 +206,7 @@ void WorldMapScene::_ParseSection_MAP(string line) {
 	f.close();
 
 }
-	
+
 void WorldMapScene::_ParseSection_ASSETS(string line)
 {
 	vector<string> tokens = split(line);

@@ -20,7 +20,10 @@ using namespace std;
 
 #define WORLD_MAP_TEXTURE 41
 #define WORLD_MAP_MARIO_TEXTURE 42
+#define TITLE_SCREEN_TEXTURE 43
+
 #define WORLD_MAP_SPRITE_ID -28127
+#define TITLE_SCREEN_SPRITE_ID -28027
 
 
 #define WMAP_INFO_SECTION 1
@@ -142,13 +145,6 @@ void WorldMapScene::Load()
 	}
 
 	f.close();
-
-
-	LPTEXTURE tex = CTextures::GetInstance()->Get(WORLD_MAP_TEXTURE);
-
-	CSprites::GetInstance()->Add(WORLD_MAP_SPRITE_ID, 0, 0, 234, 162, tex);
-
-	tex = CTextures::GetInstance()->Get(WORLD_MAP_MARIO_TEXTURE);
 }
 
 
@@ -204,7 +200,6 @@ void WorldMapScene::_ParseSection_MAP(string line) {
 		}
 	}
 	f.close();
-
 }
 
 void WorldMapScene::_ParseSection_ASSETS(string line)

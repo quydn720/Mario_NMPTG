@@ -6,7 +6,6 @@
 #include "FireBullet.h"
 
 #define PLANT_SHOOTING_RANGE 160 // half of the screen
-#define BULLET_SPEED 0.04f
 
 CPlant::CPlant(float x, float y) : CGameObject(x, y)
 {
@@ -81,13 +80,10 @@ void CPlant::SetState(int state) {
 	{
 	case PLANT_STATE_DOWN:
 	{
-		float mx, my;
-		CMario::GetInstance()->GetPosition(mx, my);
-
 		vy = PLANT_VY;
 		timer = GetTickCount64();
-		FireBullet* bullet = new FireBullet(x, y, (x - mx > 0 ? -1 : 1) * BULLET_SPEED, (y - my > 0 ? -1 : 1) * BULLET_SPEED);
 
+		FireBullet* bullet = new FireBullet(x, y, 0, 0);
 		CPlayScene::GetInstance()->AddNewObject(bullet);
 		break;
 	}

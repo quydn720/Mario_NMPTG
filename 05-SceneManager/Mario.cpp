@@ -139,7 +139,8 @@ void CMario::OnCollisionWith(LPCOLLISIONEVENT e)
 		FireBullet* bullet = dynamic_cast<FireBullet*>(e->obj);
 
 		if (level > MARIO_LEVEL_SMALL) {
-			level = MARIO_LEVEL_SMALL;
+			// TODO: BUG Mario TAIL -> Mario Small
+			level--;
 			StartUntouchable();
 		}
 		else {

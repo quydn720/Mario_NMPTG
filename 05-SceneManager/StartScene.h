@@ -9,7 +9,13 @@ public:
 	virtual void Load();
 	virtual void Update(DWORD dt){}
 	virtual void Render();
-	virtual void Unload(){}
+	virtual void Unload() {}
+
+	void updateOption() {
+		option = !option;
+	}
+	void _ParseSection_ASSETS(string line);
+	void _ParseSection_OBJECTS(string line);
 };
 
 

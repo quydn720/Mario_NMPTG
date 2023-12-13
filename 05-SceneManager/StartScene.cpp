@@ -1,9 +1,4 @@
-#include "StartScene.h"
-#include <dinput.h>
-#include "Scene.h"
-#include "Game.h"
-#include "Sprites.h"
-#include "Textures.h"
+﻿#include "StartScene.h"
 
 #define TITLE_SCREEN_TEXTURE 43
 #define TITLE_SCREEN_SPRITE_ID -28027
@@ -15,7 +10,7 @@
 #define SCENE_SECTION_MAP	3
 
 StartScene::StartScene(int id, LPCWSTR filePath) : CScene(id, filePath)
-{	
+{
 	key_handler = new StartScreenKeyHandler(this);
 }
 
@@ -49,6 +44,38 @@ void StartScene::Load()
 
 	auto tex = CTextures::GetInstance()->Get(TITLE_SCREEN_TEXTURE);
 	CSprites::GetInstance()->Add(TITLE_SCREEN_SPRITE_ID, 0, 0, 256, 226, tex);
+
+	auto tex2 = CTextures::GetInstance()->Get(44);
+	// Background
+	//CSprites::GetInstance()->Add(-28039, 0, 0, 256, 224, tex2);
+	//// Mario Bros 3
+	//CSprites::GetInstance()->Add(-28030, 295, 31, 477, 71, tex2);
+	//// Super
+	//CSprites::GetInstance()->Add(-28035, 343, 0, 433, 34, tex2);
+	//// 1 dòng của cái màn
+	//CSprites::GetInstance()->Add(-28036, 257, 110, 513, 124, tex2);
+
+	//// Chon Players
+	//CSprites::GetInstance()->Add(-28037, 257, 265, 369, 305, tex2);
+	//CSprites::GetInstance()->Add(-28038, 382, 265, 494, 305, tex2);
+
+	//// Số 3 sprites
+	//CSprites::GetInstance()->Add(-28031, 257, 125, 299, 167, tex2);
+	//CSprites::GetInstance()->Add(-28032, 303, 125, 345, 167, tex2);
+	//CSprites::GetInstance()->Add(-28033, 350, 125, 392, 167, tex2);
+	//CSprites::GetInstance()->Add(-28034, 396, 125, 438, 167, tex2);
+
+	//LPANIMATION ani = new CAnimation();
+
+	//ani->Add(-28031, 100);
+	//ani->Add(-28032, 100);
+	//ani->Add(-28033, 100);
+	//ani->Add(-28034, 100);
+
+	//// Số 3 Animations
+	//CAnimations::GetInstance()->Add(-28036, ani);
+
+
 }
 
 void StartScene::Render()
@@ -110,7 +137,7 @@ void StartScreenKeyHandler::OnKeyDown(int KeyCode)
 	}
 }
 
-StartScreenKeyHandler::StartScreenKeyHandler(LPSCENE s) 
+StartScreenKeyHandler::StartScreenKeyHandler(LPSCENE s)
 	: CSceneKeyHandler(s)
 {
 

@@ -1,4 +1,4 @@
-# id	left	top	right	bottom	texture_id
+﻿# id	left	top	right	bottom	texture_id
 [SPRITES]
 # title screen
 -28027	0	0	256	226	43

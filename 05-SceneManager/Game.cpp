@@ -571,3 +571,10 @@ CGame* CGame::GetInstance()
 	return __instance;
 }
 
+D3DXCOLOR CGame::getBackgroundColor() {
+	return bgColor;
+}
+
+void CGame::setBackgroundColor(D3DXCOLOR newBgColor) {
+	bgColor = newBgColor;
+}

@@ -20,6 +20,7 @@ using namespace std;
 #define KEYBOARD_STATE_SIZE 256
 
 
+#define BACKGROUND_COLOR D3DXCOLOR(0,0,0,100)
 #define WORLD_MAP_SCENE_ID  3
 #define TITLE_SCENE_ID 31
 
@@ -64,6 +65,7 @@ class CGame
 
 	void _ParseSection_SETTINGS(string line);
 	void _ParseSection_SCENES(string line);
+	D3DXCOLOR bgColor = BACKGROUND_COLOR;
 
 public:
 	// Init DirectX, Sprite Handler
@@ -123,6 +125,8 @@ public:
 
 	void _ParseSection_TEXTURES(string line);
 
+	D3DXCOLOR getBackgroundColor();
+	void setBackgroundColor(D3DXCOLOR newBgColor);
 
 	~CGame();
 };

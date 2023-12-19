@@ -80,6 +80,7 @@ void StartScene::Load()
 
 void StartScene::Render()
 {
+	CGame::GetInstance()->setBackgroundColor(D3DXCOLOR(1, 0.86, 0.63, 1));
 	float height = (float)CGame::GetInstance()->GetBackBufferHeight();
 	float width = (float)CGame::GetInstance()->GetBackBufferWidth();
 

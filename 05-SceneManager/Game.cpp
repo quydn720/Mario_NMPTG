@@ -460,11 +460,11 @@ void CGame::_ParseSection_SCENES(string line)
 	int id = atoi(tokens[0].c_str());
 	LPCWSTR path = ToLPCWSTR(tokens[1]);   // file: ASCII format (single-byte char) => Wide Char
 	LPSCENE scene;
-	
+
 	if (id == WORLD_MAP_SCENE_ID) scene = new WorldMapScene(id, path);
 	else if (id == TITLE_SCENE_ID) scene = new StartScene(id, path);
 	else scene = new CPlayScene(id, path);
-	
+
 	scenes[id] = scene;
 }
 
@@ -539,7 +539,7 @@ void CGame::SwitchScene()
 
 void CGame::InitiateSwitchScene(int scene_id)
 {
-	 next_scene = scene_id;
+	next_scene = scene_id;
 }
 
 

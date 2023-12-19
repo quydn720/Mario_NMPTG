@@ -53,8 +53,8 @@ void WorldMapScene::LoadAssets(LPCWSTR assetPath)
 		// data section
 		//
 		switch (section) {
-			case ASSETS_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
-			case ASSETS_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
+		case ASSETS_SECTION_SPRITES: _ParseSection_SPRITES(line); break;
+		case ASSETS_SECTION_ANIMATIONS: _ParseSection_ANIMATIONS(line); break;
 		}
 	}
 
@@ -69,7 +69,7 @@ WorldMapScene::WorldMapScene(int id, LPCWSTR filePath) : CScene(id, filePath)
 	key_handler = new WorldMapKeyHandler(this, player);
 }
 
-void WorldMapScene::_ParseSection_SPRITES(string line){
+void WorldMapScene::_ParseSection_SPRITES(string line) {
 	vector<string> tokens = split(line);
 
 	if (tokens.size() < 6) return; // skip invalid lines
@@ -137,11 +137,13 @@ void WorldMapScene::Load()
 		//
 		switch (section)
 		{
-			case SCENE_SECTION_ASSETS: _ParseSection_ASSETS(line); break;
+		case SCENE_SECTION_ASSETS: _ParseSection_ASSETS(line); break;
 			/*case SCENE_SECTION_OBJECTS: _ParseSection_OBJECTS(line); break;*/
-			case SCENE_SECTION_MAP: _ParseSection_MAP(line); break;
+		case SCENE_SECTION_MAP: _ParseSection_MAP(line); break;
 		}
 	}
+	// enter the bg color in the file
+	CGame::GetInstance()->setBackgroundColor(D3DXCOLOR(0, 0, 0, 100));
 
 	f.close();
 }
@@ -175,27 +177,27 @@ void WorldMapScene::_ParseSection_MAP(string line) {
 		}
 
 		switch (section) {
-			case WMAP_INFO_SECTION: {
-				vector<string> tokens = split(line);
-				size_t size = tokens.size();
+		case WMAP_INFO_SECTION: {
+			vector<string> tokens = split(line);
+			size_t size = tokens.size();
 
-				if (size < 2) return;
-				wmapRow = atoi(tokens[0].c_str());
-				wmapColumn = atoi(tokens[1].c_str());
-				break;
-			}
-			case MAP_TILE_SECTION: {
-				vector<string> tokens = split(line);
+			if (size < 2) return;
+			wmapRow = atoi(tokens[0].c_str());
+			wmapColumn = atoi(tokens[1].c_str());
+			break;
+		}
+		case MAP_TILE_SECTION: {
+			vector<string> tokens = split(line);
 
-				size_t size = tokens.size();
-				if (size < wmapColumn) return;
-				for (int i = 0; i < wmapColumn; i++) {
-					int info = stoi(tokens[i]);
-					maps[curRow][i] = info;
-				}
-				curRow++;
-				break;
+			size_t size = tokens.size();
+			if (size < wmapColumn) return;
+			for (int i = 0; i < wmapColumn; i++) {
+				int info = stoi(tokens[i]);
+				maps[curRow][i] = info;
 			}
+			curRow++;
+			break;
+		}
 		}
 	}
 	f.close();
@@ -215,7 +217,7 @@ void WorldMapScene::Update(DWORD dt)
 }
 
 void WorldMapScene::GoUp() {
-	
+
 	int next = maps[currentX - 1][currentY];
 	int moved = 0;
 	DebugOut(L"From Position: %d, %d\t", currentX, currentY);
@@ -235,7 +237,7 @@ void WorldMapScene::GoUp() {
 
 		next = maps[currentX - 1][currentY];
 	}
-	
+
 	DebugOut(L"To Position: %d, %d\t", currentX, currentY);
 	if (moved > 0)
 	{
@@ -295,7 +297,7 @@ void WorldMapScene::GoLeft() {
 	}
 	DebugOut(L"[DOWN] To Position: %d, %d\t", currentX, currentY);
 
-	if (moved > 0) 
+	if (moved > 0)
 	{
 		player->GoLeft();
 		player->startX = player->GetX();

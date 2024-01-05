@@ -1,5 +1,5 @@
 [SETTINGS]
-start	31
+start	1
 width	320
 height	240
 
@@ -35,3 +35,4 @@ height	240
 41	textures\world-map-1.png
 42	textures\wmap-sprite.png
 43	textures\title-sreen.png
+44	textures\

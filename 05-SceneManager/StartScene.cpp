@@ -42,10 +42,10 @@ void StartScene::Load()
 
 	f.close();
 
-	auto tex = CTextures::GetInstance()->Get(TITLE_SCREEN_TEXTURE);
-	CSprites::GetInstance()->Add(TITLE_SCREEN_SPRITE_ID, 0, 0, 256, 226, tex);
+	//auto tex = CTextures::GetInstance()->Get(TITLE_SCREEN_TEXTURE);
+	//CSprites::GetInstance()->Add(TITLE_SCREEN_SPRITE_ID, 0, 0, 256, 226, tex);
 
-	auto tex2 = CTextures::GetInstance()->Get(44);
+	//auto tex2 = CTextures::GetInstance()->Get(44);
 	// Background
 	//CSprites::GetInstance()->Add(-28039, 0, 0, 256, 224, tex2);
 	//// Mario Bros 3

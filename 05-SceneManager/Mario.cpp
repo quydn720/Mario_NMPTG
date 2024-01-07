@@ -43,7 +43,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 	if (abs(vx) > abs(maxVx)) {
 		vx = maxVx;
 		if (level == 3) {
-			DebugOut(L"can fly\n");
+			//DebugOut(L"can fly\n");
 		}
 		/*DebugOut(L"mario at max speed\n");*/
 	}
@@ -69,7 +69,7 @@ void CMario::Update(DWORD dt, vector<LPGAMEOBJECT>* coObjects)
 			CGame::GetInstance()->InitiateSwitchScene(_switchSceneId);
 		}
 		else {
-			
+
 			y += ((goingDownPipe) ? MARIO_PIPING_VY : -MARIO_PIPING_VY) * dt;
 		}
 	}
@@ -717,6 +717,9 @@ void CMario::Render()
 
 	if (state == MARIO_STATE_DIE)
 		aniId = ID_ANI_MARIO_DIE;
+	else if (untouchable != 0) {
+		aniId = 3312;
+	}
 	else if (level == MARIO_LEVEL_BIG)
 		aniId = GetAniIdBig();
 	else if (level == MARIO_LEVEL_SMALL)
@@ -724,7 +727,7 @@ void CMario::Render()
 	else if (level == MARIO_LEVEL_TAIL)
 		aniId = GetAniIdTail();
 	animations->Get(aniId)->Render(x, y);
-	RenderBoundingBox();
+	//RenderBoundingBox();
 
 	DebugOutTitle(L"Coins: %d", coin);
 }

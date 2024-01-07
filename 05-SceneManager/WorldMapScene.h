@@ -2,6 +2,7 @@
 #include <fstream>
 #include "WorldMapPlayer.h"
 #include "Scene.h"
+#include "Camera.h"
 
 class WorldMapScene : public CScene {
 private:
@@ -22,8 +23,10 @@ private:
 	virtual void Unload();
 
 public:
+	CCamera* camera;
+
 	WorldMapScene(int id, LPCWSTR filePath);
-	
+
 	void GoRight();
 	void GoLeft();
 	void GoUp();

@@ -20,7 +20,7 @@ void WorldMapPlayer::Render()
 
 void WorldMapPlayer::OnKeyDown(int KeyCode)
 {
-	
+
 }
 
 void WorldMapPlayer::KeyState(BYTE* state)
@@ -32,14 +32,15 @@ void WorldMapPlayer::OnKeyUp(int KeyCode)
 }
 void WorldMapPlayer::Stop()
 {
+
 	vx = 0; vy = 0; isMoving = false; startX = x; startY = y;
-	x = round(x); y = round(y);
+	//x = round(x); y = round(y);
 }
 
 
 void WorldMapPlayer::Update(DWORD dt, int currentY, int currentX, int& moved)
 {
-
+	DebugOut(L"x: %0.2f, y: %0.2f\n", x, y);
 	x += vx * dt;
 	y += vy * dt;
 
@@ -47,24 +48,28 @@ void WorldMapPlayer::Update(DWORD dt, int currentY, int currentX, int& moved)
 
 	if (vx > 0) {
 		if (x > (distance + startX)) {
+			x = distance + startX + 0.5f;
 			Stop();
 			moved = 0;
 		}
 	}
 	if (vx < 0) {
 		if (x < startX - (distance)) {
+			x = startX - distance - 0.5f;
 			Stop();
 			moved = 0;
 		}
 	}
 	if (vy > 0) {
 		if (y > startY + (distance)) {
+			y = startY + distance;
 			Stop();
 			moved = 0;
 		}
 	}
 	if (vy < 0) {
 		if (y < startY - distance) {
+			y = startY - distance;
 			Stop();
 			moved = 0;
 		}

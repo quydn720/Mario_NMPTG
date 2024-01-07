@@ -34,4 +34,6 @@ height	240
 40	textures\misc1.png
 41	textures\world-map-1.png
 42	textures\wmap-sprite.png
-43	textures\title-sreen.png
+43	textures\title-screen.png
+44	textures\title-screen-2.png
+45	textures\wmap.png

@@ -92,7 +92,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>d3d10.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>d3d10.lib;dxguid.lib;dinput8.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -249,6 +249,7 @@
     <Text Include="question_block.txt" />
     <Text Include="scene01.txt" />
     <Text Include="scene02.txt" />
+    <Text Include="start-scene.txt" />
     <Text Include="wm-scene.txt" />
     <Text Include="wm-assets.txt" />
     <Text Include="wm-sprites.txt" />

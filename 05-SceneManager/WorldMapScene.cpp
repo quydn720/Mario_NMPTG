@@ -201,6 +201,7 @@ void WorldMapScene::_ParseSection_MAP(string line) {
 		}
 	}
 	f.close();
+	camera = new CCamera(162, 144, 304, 200);
 }
 
 void WorldMapScene::_ParseSection_ASSETS(string line)
@@ -213,6 +214,8 @@ void WorldMapScene::_ParseSection_ASSETS(string line)
 
 void WorldMapScene::Update(DWORD dt)
 {
+	float a, b = 0;
+	camera->SetPosition(a, b);
 	player->Update(dt, currentY, currentX, movedUnit);
 }
 
